@@ -1,0 +1,22 @@
+{
+  "name": "@meteor/platform",
+  "version": "0.0.1",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "workspaces": [
+      "apps/*",
+      "packages/*"
+    ],
+  "scripts": {
+      "dev:platform": "bun --filter @meteor/platform dev",
+      "build:platform": "bun --filter @meteor/platform build",
+      "preview:platform": "bun --filter @meteor/platform preview"
+    },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^7"
+  }
+}
