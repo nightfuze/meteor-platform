@@ -12,18 +12,17 @@ COPY apps/platform/ ./apps/platform/
 
 RUN bun run build:platform
 
-FROM oven/bun:1.4.2-alpine AS runner
+FROM node:26.10.0-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
 ENV HOST=0.0.0.0
 ENV PORT=8000
-ENV ASTRO_NODE_LOGGING=disabled
 
 COPY --from=builder /app/apps/platform/dist ./dist
 COPY --from=builder /app/apps/platform/package.json ./package.json
 
-USER bun
+USER node
 EXPOSE 8000/tcp
 
-CMD ["sh", "-c", "echo 'Server listening on http://localhost:8000' && bun ./dist/server/entry.mjs"]
+CMD ["node", "./dist/server/entry.mjs"]
