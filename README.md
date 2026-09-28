@@ -7,4 +7,4 @@
 
 ```bash
 docker pull nightfuze/mispisit-lab1:0.0.1
-docker run --rm --name meteor -p 8000:8000 mispisit-lab1:0.0.1
+docker run --rm --name meteor -p 8000:8000 nightfuze/mispisit-lab1:0.0.1
