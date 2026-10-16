@@ -1,0 +1,61 @@
+---
+interface Props {
+  universeId: number;
+  tab: 'about' | 'store' | 'servers';
+}
+
+const { universeId, tab } = Astro.props;
+---
+
+<nav class="game-tabs" aria-label="Вкладки карточки игры">
+  <a
+    class:list={['game-tabs__link', tab === 'about' && 'game-tabs__link--active']}
+    href={`/games/${universeId}?tab=about`}
+    aria-current={tab === 'about' ? 'page' : undefined}
+  >
+    Об игре
+  </a>
+  <a
+    class:list={['game-tabs__link', tab === 'store' && 'game-tabs__link--active']}
+    href={`/games/${universeId}?tab=store`}
+    aria-current={tab === 'store' ? 'page' : undefined}
+  >
+    Магазин
+  </a>
+  <a
+    class:list={['game-tabs__link', tab === 'servers' && 'game-tabs__link--active']}
+    href={`/games/${universeId}?tab=servers`}
+    aria-current={tab === 'servers' ? 'page' : undefined}
+  >
+    Серверы
+  </a>
+</nav>
+
+<style>
+  .game-tabs {
+    display: flex;
+    gap: var(--space-1);
+    margin-top: var(--space-7);
+    border-bottom: var(--border-width) solid var(--border);
+  }
+
+  .game-tabs__link {
+    padding: var(--space-2-5) var(--space-4-5);
+    border-bottom: var(--border-width-accent) solid transparent;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    color: var(--muted-foreground);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .game-tabs__link:hover {
+    color: var(--foreground);
+    text-decoration: none;
+  }
+
+  .game-tabs__link--active {
+    border-bottom-color: var(--foreground);
+    color: var(--foreground);
+  }
+</style>

@@ -1,0 +1,171 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ShieldAlert from '@lucide/astro/icons/shield-alert';
+import Users from '@lucide/astro/icons/users';
+import Share2 from '@lucide/astro/icons/share-2';
+import { games, formatNumber } from '@/api/games';
+import Button from '@/components/ui/Button.astro';
+import Card from '@/components/ui/Card.astro';
+import CardContent from '@/components/ui/CardContent.astro';
+import CardDescription from '@/components/ui/CardDescription.astro';
+import CardHeader from '@/components/ui/CardHeader.astro';
+import CardTitle from '@/components/ui/CardTitle.astro';
+import StatusPage from '@/components/StatusPage.astro';
+import GameHero from '@/components/GameHero.astro';
+import GameTabs from '@/components/GameTabs.astro';
+import GameAboutTab from '@/components/GameAboutTab.astro';
+
+interface PageError {
+  status: 400 | 404;
+  title: string;
+  message: string;
+}
+
+const rawId = Astro.params.universeId ?? '';
+const universeId = Number(rawId);
+const isValidId = Number.isInteger(universeId) && universeId > 0;
+
+let error: PageError | null = null;
+
+if (!isValidId) {
+  Astro.response.status = 400;
+  error = {
+    status: 400,
+    title: 'Некорректный идентификатор',
+    message: `Параметр ${rawId} не является положительным целым числом. Запрос отклонен до обращения к каталогу.`,
+  };
+}
+
+const details = !error ? games.getDetails(universeId) : undefined;
+const catalogItem = !error ? games.getCatalogItem(universeId) : undefined;
+
+if (!error && (!details || !catalogItem)) {
+  Astro.response.status = 404;
+  error = {
+    status: 404,
+    title: 'Запись не найдена',
+    message: `Игра с идентификатором ${universeId} отсутствует в каталоге платформы.`,
+  };
+}
+
+const TABS = ['about', 'store', 'servers'] as const;
+type Tab = (typeof TABS)[number];
+const rawTab = Astro.url.searchParams.get('tab') ?? 'about';
+const tab: Tab = (TABS as readonly string[]).includes(rawTab) ? (rawTab as Tab) : 'about';
+---
+
+<BaseLayout
+  title={catalogItem?.name ?? 'Игра'}
+  description={`Карточка игры ${catalogItem?.name} в каталоге платформы Meteor.`}
+>
+  {
+    error ? (
+      <StatusPage status={error.status} title={error.title} message={error.message}>
+        <ShieldAlert slot="icon" size={24} stroke-width={2} />
+        <Button href="/games">Вернуться в каталог</Button>
+      </StatusPage>
+    ) : (
+      details && catalogItem && (
+        <article class="game-page">
+          <GameHero details={details} catalogItem={catalogItem} />
+
+          <GameTabs universeId={details.universeId} tab={tab} />
+
+          <div class="game-body">
+            {tab === 'about' && <GameAboutTab details={details} />}
+
+            {tab === 'store' && (
+              <Card class="game-panel-card">
+                <CardHeader>
+                  <CardTitle>Магазин игры</CardTitle>
+                  <CardDescription>
+                    Игра бесплатна, платных предметов нет.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button variant="outline" href={`/games/${details.universeId}?tab=about`}>
+                    Вернуться к описанию
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+
+            {tab === 'servers' && (
+              <Card class="game-panel-card">
+                <CardHeader>
+                  <CardTitle>Серверы</CardTitle>
+                  <CardDescription>
+                    Лимит игроков в текущей сессии - {details.maxPlayers}.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button variant="outline" href={`/games/${details.universeId}?tab=about`}>
+                    Вернуться к описанию
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+
+          <footer class="game-foot">
+            <span class="game-foot__item">
+              <Users size={16} stroke-width={2} />
+              {formatNumber(catalogItem.playing)} играют прямо сейчас
+            </span>
+            <span class="game-foot__item">
+              <Share2 size={16} stroke-width={2} />
+              <a class="game-foot__link" href={`/games/${details.universeId}?tab=about`}>
+                Поделиться
+              </a>
+            </span>
+          </footer>
+        </article>
+      )
+    )
+  }
+</BaseLayout>
+
+<style>
+  .game-page {
+    max-width: var(--container-xl);
+    margin-inline: auto;
+  }
+
+  .game-panel-card {
+    --panel-card-max: 37.5rem;
+    max-width: var(--panel-card-max);
+    margin-top: var(--space-6);
+  }
+
+  .game-body {
+    max-width: var(--container-content);
+  }
+
+  .game-foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin-top: var(--space-9);
+    padding-top: var(--space-4-5);
+    border-top: var(--border-width) solid var(--border);
+    font-size: var(--text-xs);
+    color: var(--muted-foreground);
+  }
+
+  .game-foot__item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1-5);
+  }
+
+  .game-foot__link {
+    color: var(--muted-foreground);
+    text-decoration: underline;
+  }
+
+  .game-foot__code {
+    padding: var(--space-0-5) var(--space-1-5);
+    border-radius: var(--radius-sm);
+    background: var(--muted);
+  }
+</style>

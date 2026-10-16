@@ -1,0 +1,44 @@
+---
+interface Props {
+  title: string;
+  text?: string;
+}
+
+const { title, text } = Astro.props;
+---
+
+<section class="empty">
+  <h2 class="empty__title">{title}</h2>
+  {text && <p class="empty__text">{text}</p>}
+  <div class="empty__actions">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .empty {
+    margin-top: var(--space-6);
+    padding: var(--space-12) var(--space-6);
+    border: var(--border-width) dashed var(--input);
+    border-radius: var(--radius-lg);
+    background: var(--card);
+    text-align: center;
+  }
+
+  .empty__title {
+    font-size: var(--text-xl);
+  }
+
+  .empty__text {
+    margin-top: var(--space-1-5);
+    color: var(--muted-foreground);
+  }
+
+  .empty__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2-5);
+    margin-top: var(--space-4-5);
+  }
+</style>

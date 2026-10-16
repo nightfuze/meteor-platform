@@ -1,0 +1,50 @@
+---
+interface Props {
+  title: string;
+  lead?: string;
+}
+
+const { title, lead } = Astro.props;
+---
+
+<div class="head">
+  <div class="head__text">
+    <h1 class="head__title">{title}</h1>
+    {lead && <p class="head__lead">{lead}</p>}
+  </div>
+  {Astro.slots.has('action') && <div class="head__action"><slot name="action" /></div>}
+</div>
+
+<style>
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-3-5);
+  }
+
+  .head__text {
+    min-width: 0;
+  }
+
+  .head__title {
+    font-size: var(--text-3xl);
+  }
+
+  .head__lead {
+    margin-top: var(--space-1);
+    color: var(--muted-foreground);
+    font-size: var(--text-sm);
+  }
+
+  .head__action {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .head__action :global(.btn) {
+    text-decoration: none;
+  }
+</style>

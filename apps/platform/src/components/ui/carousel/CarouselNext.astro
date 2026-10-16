@@ -1,0 +1,11 @@
+---
+import CarouselButton from './CarouselButton.astro';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<CarouselButton direction="next" class={className} />

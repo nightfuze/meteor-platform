@@ -1,0 +1,266 @@
+---
+import Carousel from '@/components/ui/carousel/Carousel.astro';
+import CarouselContent from '@/components/ui/carousel/CarouselContent.astro';
+import CarouselItem from '@/components/ui/carousel/CarouselItem.astro';
+import CarouselPrevious from '@/components/ui/carousel/CarouselPrevious.astro';
+import CarouselNext from '@/components/ui/carousel/CarouselNext.astro';
+import Play from '@lucide/astro/icons/play';
+import Heart from '@lucide/astro/icons/heart';
+import Bell from '@lucide/astro/icons/bell';
+import ThumbsUp from '@lucide/astro/icons/thumbs-up';
+import ThumbsDown from '@lucide/astro/icons/thumbs-down';
+import BadgeCheck from '@lucide/astro/icons/badge-check';
+import { asset, formatNumber, getRating } from '@/api/games';
+import type { CatalogEntry, GameEntry } from '@/api/games';
+import Badge from '@/components/ui/Badge.astro';
+import Button from '@/components/ui/Button.astro';
+import GameStats from '@/components/GameStats.astro';
+
+interface Props {
+  details: GameEntry;
+  catalogItem: CatalogEntry;
+}
+
+const { details, catalogItem } = Astro.props;
+
+const slides = details.images.carousel.length > 0 ? details.images.carousel : [details.images.banner];
+const rating = getRating(details.universeId);
+const likes = Math.round((details.favoritedCount * rating) / 100);
+const dislikes = likes ? Math.round(likes / 8) : 0;
+---
+
+<nav class="game-crumbs" aria-label="Навигация">
+  <a class="game-crumbs__link" href="/games">Каталог</a>
+  <span class="game-crumbs__separator" aria-hidden="true">/</span>
+  <span class="game-crumbs__current">{catalogItem.name}</span>
+</nav>
+
+<header class="game-hero">
+  <div class="game-hero__media">
+    <Carousel class="game-hero__carousel">
+      <CarouselContent class="game-hero__carousel-content">
+        {slides.map((slide, index) => (
+          <CarouselItem class="game-hero__carousel-item">
+            <img
+              class="game-hero__carousel-img"
+              src={asset(slide)}
+              alt={`Слайд ${index + 1} игры ${details.name}`}
+              loading={index === 0 ? 'eager' : 'lazy'}
+              decoding="async"
+            />
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+      {slides.length > 1 && (
+        <div class="game-hero__carousel-nav">
+          <CarouselPrevious class="game-hero__carousel-btn game-hero__carousel-btn--prev" />
+          <CarouselNext class="game-hero__carousel-btn game-hero__carousel-btn--next" />
+        </div>
+      )}
+    </Carousel>
+  </div>
+
+  <div class="game-hero__info">
+    <h1 class="game-hero__title">{details.name}</h1>
+
+    <div class="game-hero__author">
+      <span class="game-hero__author-name">От {catalogItem.creator.name}</span>
+      {catalogItem.creator.type === 'Group' && (
+        <BadgeCheck class="game-hero__verified" size={16} stroke-width={2.4} />
+      )}
+    </div>
+
+    <div class="game-hero__badges">
+      <Badge variant="success">Рейтинг {rating}%</Badge>
+      <Badge variant="secondary">{details.genre}</Badge>
+    </div>
+
+    <div class="game-hero__actions">
+      <Button size="lg" block>
+        <Play size={22} stroke-width={2.6} />
+        Играть
+      </Button>
+
+      <div class="game-hero__reactions">
+        <button type="button" class="game-reaction favorite-button" data-favorite-button data-game-id={details.universeId} aria-pressed="false">
+          <Heart size={18} stroke-width={2} />
+          <span class="game-reaction__label" data-favorite-label>В избранное</span>
+        </button>
+        <button type="button" class="game-reaction">
+          <Bell size={18} stroke-width={2} />
+          <span class="game-reaction__label">Уведомить</span>
+        </button>
+        <button type="button" class="game-reaction game-reaction--stat">
+          <ThumbsUp size={18} stroke-width={2} />
+          <span class="game-reaction__label">{formatNumber(likes)}+</span>
+        </button>
+        <button type="button" class="game-reaction game-reaction--stat">
+          <ThumbsDown size={18} stroke-width={2} />
+          <span class="game-reaction__label">{formatNumber(dislikes)}+</span>
+        </button>
+      </div>
+    </div>
+
+    <GameStats details={details} catalogItem={catalogItem} />
+  </div>
+</header>
+
+<style>
+  .game-crumbs {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1-5);
+    margin-bottom: var(--space-4);
+    font-size: var(--text-xs);
+    color: var(--muted-foreground);
+  }
+
+  .game-crumbs__link {
+    color: var(--muted-foreground);
+    text-decoration: none;
+  }
+
+  .game-crumbs__link:hover {
+    color: var(--foreground);
+    text-decoration: underline;
+  }
+
+  .game-crumbs__separator {
+    opacity: 0.6;
+  }
+
+  .game-crumbs__current {
+    color: var(--foreground);
+    font-weight: var(--weight-semibold);
+  }
+
+  .game-hero {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  @media (min-width: --bp-lg) {
+    .game-hero {
+      grid-template-columns: minmax(0, var(--container-content)) minmax(0, 27.5rem);
+    }
+  }
+
+  .game-hero__media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--muted);
+  }
+
+  .game-hero__carousel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .game-hero__carousel-content {
+    gap: 0;
+    height: 100%;
+  }
+
+  .game-hero__carousel-item {
+    height: 100%;
+  }
+
+  .game-hero__carousel-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .game-hero__carousel-nav {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--space-2-5);
+    pointer-events: none;
+  }
+
+  :global(.game-hero__carousel-btn) {
+    pointer-events: auto;
+    box-shadow: var(--shadow-md);
+  }
+
+  .game-hero__info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .game-hero__title {
+    font-size: var(--text-4xl);
+    line-height: var(--leading-tight);
+    margin: 0;
+  }
+
+  .game-hero__author {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1-5);
+    margin-top: var(--space-2);
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+  }
+
+  .game-hero__verified {
+    color: var(--primary);
+  }
+
+  .game-hero__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1-5);
+    margin-top: var(--space-2-5);
+  }
+
+  .game-hero__actions {
+    margin-top: var(--space-4-5);
+  }
+
+  .game-hero__reactions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+  }
+
+  .game-reaction {
+    --reaction-min: 3.75rem;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+    min-width: var(--reaction-min);
+    padding: var(--space-2) var(--space-2-5);
+    border: 0;
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--foreground);
+    font: inherit;
+    font-size: var(--text-xs);
+    cursor: pointer;
+    transition: background var(--transition-fast);
+  }
+
+  .game-reaction:hover {
+    background: var(--accent);
+  }
+
+  .favorite-button--active {
+    color: var(--destructive);
+  }
+
+  .game-reaction--stat {
+    min-width: 0;
+  }
+</style>

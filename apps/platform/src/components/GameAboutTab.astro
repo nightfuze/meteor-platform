@@ -1,0 +1,162 @@
+---
+import Card from '@/components/ui/Card.astro';
+import CardContent from '@/components/ui/CardContent.astro';
+import CardDescription from '@/components/ui/CardDescription.astro';
+import CardHeader from '@/components/ui/CardHeader.astro';
+import CardTitle from '@/components/ui/CardTitle.astro';
+import Badge from '@/components/ui/Badge.astro';
+import Button from '@/components/ui/Button.astro';
+import { asset } from '@/api/games';
+import type { GameEntry } from '@/api/games';
+
+interface Props {
+  details: GameEntry;
+}
+
+const { details } = Astro.props;
+---
+
+<div class="game-panel">
+  <section class="game-section">
+    <h2 class="game-section__title">События</h2>
+    <Card class="game-event">
+      <div class="game-event__media">
+        <img
+          class="game-event__img"
+          src={asset(details.images.banner)}
+          alt={`Событие в ${details.name}`}
+          loading="lazy"
+          decoding="async"
+        />
+        <Badge variant="default" class="game-event__badge">Новое событие</Badge>
+      </div>
+      <div class="game-event__info">
+        <CardHeader class="game-event__header">
+          <CardTitle class="game-event__title">Сезон {details.genre}</CardTitle>
+          <CardDescription class="game-event__desc">
+            Обновление открывает новый режим и временные награды. Пройдите испытания,
+            чтобы получить эксклюзивные предметы.
+          </CardDescription>
+        </CardHeader>
+        <CardContent class="game-event__footer">
+          <Button block>Присоединиться</Button>
+        </CardContent>
+      </div>
+    </Card>
+  </section>
+
+  <section class="game-section">
+    <h2 class="game-section__title">Описание</h2>
+    <p class="game-section__text">{details.description}</p>
+  </section>
+
+  {details.images.carousel.length > 0 && (
+    <section class="game-section">
+      <h2 class="game-section__title">Скриншоты</h2>
+      <div class="game-gallery">
+        {details.images.carousel.slice(0, 6).map((slide, idx) => (
+          <div class="game-gallery__item">
+            <img
+              class="game-gallery__img"
+              src={asset(slide)}
+              alt={`Скриншот ${idx + 1} игры ${details.name}`}
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
+</div>
+
+<style>
+  .game-panel {
+    max-width: var(--container-panel);
+    margin-top: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-7);
+  }
+
+  .game-section__title {
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+    margin: 0 0 var(--space-3);
+  }
+
+  .game-section__text {
+    margin: 0;
+    white-space: pre-line;
+    line-height: var(--leading-relaxed);
+    color: var(--muted-foreground);
+  }
+
+  .game-event {
+    --event-width: 22.5rem;
+    display: grid;
+    max-width: var(--event-width);
+    overflow: hidden;
+  }
+
+  .game-event__media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: var(--muted);
+  }
+
+  .game-event__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .game-event__badge {
+    position: absolute;
+    top: var(--space-2);
+    left: var(--space-2);
+  }
+
+  .game-event__header {
+    padding: var(--space-3-5) var(--space-4) var(--space-2);
+  }
+
+  .game-event__title {
+    font-size: var(--text-base);
+  }
+
+  .game-event__desc {
+    margin-top: var(--space-1-5);
+    line-height: var(--leading-snug);
+  }
+
+  .game-event__footer {
+    padding: 0 var(--space-4) var(--space-4);
+  }
+
+  .game-gallery {
+    --gallery-min: 12.5rem;
+    display: grid;
+    gap: var(--space-3);
+    grid-template-columns: repeat(auto-fill, minmax(var(--gallery-min), 1fr));
+  }
+
+  .game-gallery__item {
+    aspect-ratio: 16 / 9;
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--muted);
+  }
+
+  .game-gallery__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-base);
+  }
+
+  .game-gallery__item:hover .game-gallery__img {
+    transform: scale(1.04);
+  }
+</style>

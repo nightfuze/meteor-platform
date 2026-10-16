@@ -1,0 +1,181 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import GameTile from '@/components/GameTile.astro';
+import GameSection from '@/components/GameSection.astro';
+import EmptyState from '@/components/EmptyState.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import Button from '@/components/ui/Button.astro';
+import Search from '@lucide/astro/icons/search';
+import ChevronDown from '@lucide/astro/icons/chevron-down';
+import { games } from '@/api/games';
+
+const search = Astro.url.searchParams.get('search')?.trim() ?? '';
+const genre = Astro.url.searchParams.get('genre')?.trim() ?? 'all';
+
+const genres = games.getGenres();
+
+const genreFilter = genre === 'all' ? '' : genre;
+const trending = games.getCatalog({ search, genre: genreFilter, sort: 'playing' });
+const upAndComing = games.getCatalog({ search, genre: genreFilter, sort: 'newest' });
+const topPlaying = games.getCatalog({ search, genre: genreFilter, sort: 'visits' });
+---
+
+<BaseLayout
+  title="Каталог игр"
+  description="Каталог опубликованных игр платформы Meteor: поиск, фильтр по жанру и сортировка по онлайну, визитам и дате."
+>
+  <PageHeader title="Каталог">
+  </PageHeader>
+
+  <form class="filters" method="get" action="/games">
+    <div class="filters__field filters__field--grow">
+      <label class="filters__label" for="search">Поиск</label>
+      <span class="search">
+        <Search class="search__icon" size={16} stroke-width={2} />
+        <input
+          id="search"
+          type="search"
+          name="search"
+          value={search}
+          placeholder="Название игры или студия"
+        />
+      </span>
+    </div>
+
+    <div class="filters__field">
+      <label class="filters__label" for="genre">Жанр</label>
+      <span class="pill">
+        <select id="genre" name="genre">
+          {genres.map((item) => (
+            <option value={item} selected={item === genre}>{item === 'all' ? 'Все жанры' : item}</option>
+          ))}
+        </select>
+        <ChevronDown class="pill__chevron" size={15} stroke-width={2.5} />
+      </span>
+    </div>
+
+    <Button variant="secondary" type="submit">Применить</Button>
+  </form>
+
+  {
+    trending.length === 0 ? (
+      <EmptyState
+        title="Игр не найдено"
+        text={`По запросу ${search || genre} в каталоге нет ни одной записи.`}
+      >
+        <Button href="/games">Показать все игры</Button>
+      </EmptyState>
+    ) : (
+      <>
+        <GameSection title="Топ по онлайну">
+          {trending.map((game) => <GameTile game={game} />)}
+        </GameSection>
+
+        <GameSection title="Набирают популярность">
+          {upAndComing.map((game) => <GameTile game={game} />)}
+        </GameSection>
+
+        <GameSection title="Топ по посещаемости">
+          {topPlaying.map((game) => <GameTile game={game} />)}
+        </GameSection>
+      </>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+    padding: var(--space-3-5) var(--space-4);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--card);
+  }
+
+  .filters__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .filters__field--grow {
+    --filter-search-min: 15rem;
+    flex: 1;
+    min-width: var(--filter-search-min);
+  }
+
+  .filters__label {
+    font-size: var(--text-2xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+
+  .search {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .search__icon {
+    position: absolute;
+    left: var(--space-3);
+    color: var(--muted-foreground);
+    pointer-events: none;
+  }
+
+  .search input {
+    width: 100%;
+    height: var(--control-md);
+    padding: 0 var(--space-3-5) 0 var(--space-9);
+    font: inherit;
+    font-size: var(--text-sm);
+    color: var(--foreground);
+    background: var(--background);
+    border: var(--border-width) solid var(--input);
+    border-radius: var(--radius-pill);
+  }
+
+  .search input:focus {
+    border-color: var(--ring);
+    box-shadow: var(--focus-ring);
+    outline: none;
+  }
+
+  .pill {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .pill select {
+    appearance: none;
+    height: var(--control-md);
+    padding: 0 var(--space-9) 0 var(--space-4);
+    font: inherit;
+    font-size: var(--text-xs);
+    font-weight: var(--weight-bold);
+    color: var(--neutral-foreground);
+    background: var(--neutral);
+    border: var(--border-width) solid var(--neutral);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+  }
+
+  .pill select:hover {
+    background: var(--neutral-hover);
+    border-color: var(--neutral-hover);
+  }
+
+  .pill__chevron {
+    position: absolute;
+    right: var(--space-3);
+    color: var(--neutral-foreground);
+    pointer-events: none;
+  }
+</style>

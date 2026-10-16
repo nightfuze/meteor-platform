@@ -1,0 +1,36 @@
+---
+interface Props {
+  variant?: 'default' | 'info' | 'success' | 'destructive';
+  class?: string;
+  [key: string]: unknown;
+}
+
+const { variant = 'default', class: className, ...rest } = Astro.props;
+---
+
+<div role="alert" class:list={['alert', `alert--${variant}`, className]} {...rest}>
+  <span class="alert__icon"><slot name="icon" /></span>
+  <div class="alert__body"><slot /></div>
+</div>
+
+<style>
+  .alert {
+    display: flex;
+    gap: var(--space-3);
+    padding: var(--space-3-5) var(--space-4);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--muted);
+  }
+
+  .alert__icon { flex-shrink: 0; display: inline-flex; padding-top: var(--space-px); }
+
+  .alert--info { background: var(--primary-soft); border-color: color-mix(in oklch, var(--primary) 22%, transparent); }
+  .alert--info .alert__icon { color: var(--primary); }
+
+  .alert--success { background: var(--success-soft); border-color: color-mix(in oklch, var(--success) 26%, transparent); }
+  .alert--success .alert__icon { color: var(--success); }
+
+  .alert--destructive { background: var(--destructive-soft); border-color: color-mix(in oklch, var(--destructive) 26%, transparent); }
+  .alert--destructive .alert__icon { color: var(--destructive); }
+</style>

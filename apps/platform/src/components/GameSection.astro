@@ -1,0 +1,61 @@
+---
+import SectionHead from '@/components/SectionHead.astro';
+import Carousel from '@/components/ui/carousel/Carousel.astro';
+import CarouselContent from '@/components/ui/carousel/CarouselContent.astro';
+import CarouselPrevious from '@/components/ui/carousel/CarouselPrevious.astro';
+import CarouselNext from '@/components/ui/carousel/CarouselNext.astro';
+
+interface Props {
+  title: string;
+  href?: string;
+  layout?: 'rail' | 'grid';
+}
+
+const { title, href, layout = 'grid' } = Astro.props;
+---
+
+<section class="section">
+  <SectionHead title={title} href={href} />
+  {layout === 'rail' ? (
+    <Carousel class="rail-shell">
+      <CarouselContent class="rail">
+        <slot />
+      </CarouselContent>
+      <div class="rail-nav">
+        <CarouselPrevious />
+        <CarouselNext />
+      </div>
+    </Carousel>
+  ) : (
+    <div class="grid">
+      <slot />
+    </div>
+  )}
+</section>
+
+<style>
+  .section {
+    margin-top: var(--space-8);
+  }
+
+  .rail-shell {
+    position: relative;
+  }
+
+  .rail-nav {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--space-1-5);
+  }
+
+  .grid {
+    --grid-tile-min: 9.125rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--grid-tile-min), 1fr));
+    gap: var(--space-4-5) var(--space-3);
+  }
+</style>

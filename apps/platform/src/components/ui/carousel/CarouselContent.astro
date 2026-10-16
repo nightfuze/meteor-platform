@@ -1,0 +1,38 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class="carousel__viewport">
+  <div class:list={['carousel__content', className]}>
+    <slot />
+  </div>
+</div>
+
+<style>
+  .carousel__viewport {
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    cursor: grab;
+    user-select: none;
+  }
+
+  .carousel__viewport.is-dragging {
+    cursor: grabbing;
+  }
+
+  .carousel__viewport::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carousel__content {
+    display: flex;
+    gap: var(--space-4);
+  }
+</style>

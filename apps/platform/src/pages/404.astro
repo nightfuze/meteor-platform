@@ -1,0 +1,23 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import StatusPage from '@/components/StatusPage.astro';
+import Button from '@/components/ui/Button.astro';
+import SearchX from '@lucide/astro/icons/search-x';
+
+Astro.response.status = 404;
+---
+
+<BaseLayout
+  title="Страница не найдена"
+  description="Запрошенная страница больше не существует или адрес указан неверно."
+>
+  <StatusPage
+    status={404}
+    title="Страница не найдена"
+    message="Возможно, адрес изменился или запись была удалена. Проверьте адрес или вернитесь в каталог."
+  >
+    <SearchX slot="icon" size={24} stroke-width={2} />
+    <Button href="/games">Вернуться в каталог</Button>
+    <Button variant="ghost" href="/">На главную</Button>
+  </StatusPage>
+</BaseLayout>
