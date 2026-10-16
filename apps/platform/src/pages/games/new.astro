@@ -1,0 +1,390 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import Button from '@/components/ui/Button.astro';
+import Field from '@/components/ui/Field.astro';
+import Input from '@/components/ui/Input.astro';
+import Label from '@/components/ui/Label.astro';
+import Select from '@/components/ui/Select.astro';
+import Textarea from '@/components/ui/Textarea.astro';
+import FormMessage from '@/components/ui/FormMessage.astro';
+import Notice from '@/components/Notice.astro';
+import { actions, isInputError } from 'astro:actions';
+import { games, GENRES, EMPTY_PAYLOAD, FIELD_KEYS, FIELD_LABELS, readForm } from '@/api/games';
+import type { GameFormInput } from '@/api/games';
+import type { CreateGameErrors } from '@meteor/types';
+
+let payload: GameFormInput = { ...EMPTY_PAYLOAD };
+let errors: CreateGameErrors = {};
+let created: { universeId: number; name: string } | null = null;
+
+const result = Astro.getActionResult(actions.createGame);
+
+if (result?.error && isInputError(result.error)) {
+  for (const [field, messages] of Object.entries(result.error.fields)) {
+    const first = messages?.[0];
+    if (first && (FIELD_KEYS as readonly string[]).includes(field)) {
+      errors[field as keyof CreateGameErrors] = first;
+    }
+  }
+  Astro.response.status = 422;
+  payload = readForm(await Astro.request.formData());
+}
+
+if (result?.data?.success && result.data.universeId) {
+  return Astro.redirect(`/games/new?created=${result.data.universeId}`, 303);
+}
+
+const createdId = Number(Astro.url.searchParams.get('created'));
+if (Number.isInteger(createdId) && createdId > 0) {
+  const game = games.getCatalogItem(createdId);
+  if (game) {
+    created = { universeId: game.universeId, name: game.name };
+  }
+}
+
+const descriptionLength = payload.description.trim().length;
+const hasErrors = Object.keys(errors).length > 0;
+---
+
+<BaseLayout
+  title="Опубликовать игру"
+  description="Форма публикации новой игры в каталоге платформы Meteor с проверкой полей по схеме zod."
+>
+  <PageHeader
+    title="Опубликовать игру"
+    lead="Добавьте новую игру в каталог."
+  >
+  </PageHeader>
+
+  {
+    created && (
+      <div class="result" aria-live="polite">
+        <Notice tone="success" title="Игра опубликована">
+          {created.name} добавлена в каталог
+        </Notice>
+        <div class="result__actions">
+          <Button href={`/games/${created.universeId}`}>Открыть карточку игры</Button>
+          <Button variant="ghost" href="/games">Посмотреть каталог</Button>
+        </div>
+      </div>
+    )
+  }
+
+  <div class="result" data-error-summary hidden={!hasErrors} aria-live="polite">
+    <Notice tone="error" title="Проверьте поля формы">
+      <ul class="summary" data-error-list>
+        {FIELD_KEYS.filter((key) => errors[key]).map((key) => (
+          <li data-summary-for={key}>
+            <a href={`#${key}`}>{FIELD_LABELS[key]}: {errors[key]}</a>
+          </li>
+        ))}
+      </ul>
+    </Notice>
+  </div>
+
+  <form class="form card" method="POST" action={actions.createGame} data-game-form novalidate>
+    <div class="card__head">
+      <h2 class="card__title">Данные игры</h2>
+      <p class="card__sub">Все поля обязательны</p>
+    </div>
+
+    <div class="card__body form">
+      <Field data-field="name">
+        <Label for="name">Название игры <span class="req">*</span></Label>
+        <Input
+          id="name"
+          name="name"
+          type="text"
+          value={payload.name}
+          placeholder="Например: Неоновая пустошь"
+          aria-invalid={Boolean(errors.name)}
+          aria-describedby="name-hint name-error"
+        />
+        <FormMessage tone="hint" id="name-hint">
+          От 3 до 50 символов. Название должно быть уникальным.
+        </FormMessage>
+        <FormMessage tone="error" id="name-error">{errors.name ?? ''}</FormMessage>
+      </Field>
+
+      <Field data-field="description">
+        <Label for="description">Описание <span class="req">*</span></Label>
+        <Textarea
+          id="description"
+          name="description"
+          rows="6"
+          placeholder="Что делает игрок, сколько длится сессия, какие есть режимы"
+          aria-invalid={Boolean(errors.description)}
+          aria-describedby="description-hint description-error"
+        >{payload.description}</Textarea>
+        <FormMessage tone="hint" id="description-hint">
+          От 30 до 1200 символов. Введено: <span data-counter="description">{descriptionLength}</span>.
+        </FormMessage>
+        <FormMessage tone="error" id="description-error">{errors.description ?? ''}</FormMessage>
+      </Field>
+
+      <div class="form-row">
+        <Field data-field="genre">
+          <Label for="genre">Жанр <span class="req">*</span></Label>
+          <Select id="genre" name="genre" aria-invalid={Boolean(errors.genre)} aria-describedby="genre-error">
+            <option value="" selected={!payload.genre}>- выберите жанр -</option>
+            {GENRES.map((genre) => (
+              <option value={genre} selected={payload.genre === genre}>{genre}</option>
+            ))}
+          </Select>
+          <FormMessage tone="error" id="genre-error">{errors.genre ?? ''}</FormMessage>
+        </Field>
+
+        <Field data-field="maxPlayers">
+          <Label for="maxPlayers">Игроков в сессии <span class="req">*</span></Label>
+          <Input
+            id="maxPlayers"
+            name="maxPlayers"
+            type="number"
+            step="1"
+            inputmode="numeric"
+            value={payload.maxPlayers}
+            placeholder="30"
+            aria-invalid={Boolean(errors.maxPlayers)}
+            aria-describedby="maxPlayers-hint maxPlayers-error"
+          />
+          <FormMessage tone="hint" id="maxPlayers-hint">От 2 до 50 игроков.</FormMessage>
+          <FormMessage tone="error" id="maxPlayers-error">{errors.maxPlayers ?? ''}</FormMessage>
+        </Field>
+      </div>
+
+      <Field data-field="creatorName">
+        <Label for="creatorName">Разработчик или студия <span class="req">*</span></Label>
+        <Input
+          id="creatorName"
+          name="creatorName"
+          type="text"
+          value={payload.creatorName}
+          placeholder="Northern Lights Studio"
+          aria-invalid={Boolean(errors.creatorName)}
+          aria-describedby="creatorName-hint creatorName-error"
+        />
+        <FormMessage tone="hint" id="creatorName-hint">От 2 до 40 символов.</FormMessage>
+        <FormMessage tone="error" id="creatorName-error">{errors.creatorName ?? ''}</FormMessage>
+      </Field>
+
+      <div class="form__actions">
+        <Button type="submit" data-submit>Опубликовать игру</Button>
+        <Button variant="ghost" href="/games">Отмена</Button>
+      </div>
+    </div>
+  </form>
+</BaseLayout>
+
+<script>
+  import { actions, isInputError } from 'astro:actions';
+
+  const labels: Record<string, string> = {
+    name: 'Название игры',
+    description: 'Описание',
+    genre: 'Жанр',
+    maxPlayers: 'Игроков в сессии',
+    creatorName: 'Разработчик или студия',
+  };
+
+  type Control = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+
+  const form = document.querySelector<HTMLFormElement>('[data-game-form]');
+
+  if (form) {
+    const submit = form.querySelector<HTMLButtonElement>('[data-submit]');
+    const summary = document.querySelector<HTMLElement>('[data-error-summary]');
+    const list = document.querySelector<HTMLUListElement>('[data-error-list]');
+    let submitting = false;
+
+    const entries = Array.from(form.querySelectorAll<HTMLElement>('[data-field]')).flatMap((field) => {
+      const control = field.querySelector<Control>('input[name], textarea[name], select[name]');
+      if (!control) return [];
+      return [{ control, error: field.querySelector<HTMLElement>('.form-message--error') }];
+    });
+
+    const setError = (control: Control, message: string) => {
+      control.setAttribute('aria-invalid', message ? 'true' : 'false');
+
+      const entry = entries.find((item) => item.control === control);
+      if (entry?.error) entry.error.textContent = message;
+
+      if (!list) return;
+
+      const selector = `[data-summary-for="${control.name}"]`;
+      if (message) {
+        let item = list.querySelector<HTMLLIElement>(selector);
+        if (!item) {
+          item = document.createElement('li');
+          item.dataset.summaryFor = control.name;
+          list.append(item);
+        }
+        const link = item.querySelector('a') ?? item.appendChild(document.createElement('a'));
+        link.setAttribute('href', `#${control.id}`);
+        link.textContent = `${labels[control.name] ?? control.name}: ${message}`;
+      } else {
+        list.querySelector(selector)?.remove();
+      }
+
+      if (summary) summary.hidden = list.children.length === 0;
+    };
+
+    const clearAll = () => {
+      for (const entry of entries) setError(entry.control, '');
+    };
+
+    const applyInputError = (error: { fields: Record<string, string[] | undefined> }, only?: Control) => {
+      let first: Control | null = null;
+      for (const entry of entries) {
+        const message = error.fields[entry.control.name]?.[0] ?? '';
+        if (only && entry.control !== only) continue;
+        setError(entry.control, message);
+        if (message && !first) first = entry.control;
+      }
+      return first;
+    };
+
+    for (const entry of entries) {
+      const clear = () => setError(entry.control, '');
+
+      entry.control.addEventListener('input', clear);
+      entry.control.addEventListener('change', clear);
+      entry.control.addEventListener('blur', async () => {
+        if (submitting || entry.control.getAttribute('aria-invalid') === 'true') return;
+        const { error } = await actions.validateGame(new FormData(form));
+        if (isInputError(error)) applyInputError(error, entry.control);
+      });
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      submitting = true;
+      if (submit) submit.disabled = true;
+      clearAll();
+
+      const { data, error } = await actions.createGame(new FormData(form));
+
+      if (error) {
+        if (isInputError(error)) {
+          const first = applyInputError(error);
+          first?.focus();
+          first?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else if (list && summary) {
+          list.replaceChildren();
+          const item = document.createElement('li');
+          item.textContent = 'Не удалось отправить форму. Попробуйте ещё раз.';
+          list.append(item);
+          summary.hidden = false;
+        }
+        if (submit) submit.disabled = false;
+        submitting = false;
+        return;
+      }
+
+      if (data?.success && data.universeId) {
+        window.location.assign(`/games/new?created=${data.universeId}`);
+      }
+    });
+
+    const counter = form.querySelector<HTMLElement>('[data-counter="description"]');
+    const description = form.querySelector<HTMLTextAreaElement>('#description');
+    if (counter && description) {
+      const update = () => {
+        counter.textContent = String(description.value.length);
+      };
+      description.addEventListener('input', update);
+      update();
+    }
+  }
+</script>
+
+<style>
+  :global(.field .form-message--error) {
+    display: none;
+  }
+
+  :global(.field:has([aria-invalid='true']) .form-message--error) {
+    display: block;
+  }
+
+  :global(.field:has([aria-invalid='true']) .form-message--hint) {
+    display: none;
+  }
+
+  .card {
+    width: 100%;
+    max-width: var(--container-form);
+    margin: var(--space-5) auto 0;
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--card);
+    color: var(--card-foreground);
+  }
+
+  .card__head {
+    padding: var(--space-3-5) var(--space-5);
+    border-bottom: var(--border-width) solid var(--border);
+  }
+
+  .card__body {
+    padding: var(--space-5);
+  }
+
+  .card__title {
+    font-size: var(--text-base);
+  }
+
+  .card__sub {
+    margin-top: var(--space-0-5);
+    font-size: var(--text-xs);
+    color: var(--muted-foreground);
+  }
+
+  .result {
+    margin-top: var(--space-5);
+  }
+
+  .result__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2-5);
+    margin-top: var(--space-3);
+  }
+
+  .summary {
+    margin: 0;
+    padding-left: var(--space-4-5);
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .summary a {
+    font-weight: var(--weight-semibold);
+  }
+
+  .form {
+    gap: var(--space-4);
+  }
+
+  .form-row {
+    display: grid;
+    gap: var(--space-4);
+    align-items: stretch;
+  }
+
+  @media (min-width: --bp-md) {
+    .form-row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .req {
+    color: var(--destructive);
+  }
+
+  .form__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2-5);
+  }
+</style>

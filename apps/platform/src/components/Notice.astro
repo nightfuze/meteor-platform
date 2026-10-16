@@ -1,0 +1,81 @@
+---
+import Info from '@lucide/astro/icons/info';
+import CircleCheck from '@lucide/astro/icons/circle-check';
+import TriangleAlert from '@lucide/astro/icons/triangle-alert';
+
+interface Props {
+  tone?: 'info' | 'success' | 'error';
+  title: string;
+}
+
+const { tone = 'info', title } = Astro.props;
+---
+
+<div class:list={['notice', `notice--${tone}`]}>
+  <span class="notice__icon">
+    {tone === 'success' && <CircleCheck size={20} stroke-width={2} />}
+    {tone === 'error' && <TriangleAlert size={20} stroke-width={2} />}
+    {tone === 'info' && <Info size={20} stroke-width={2} />}
+  </span>
+  <div>
+    <p class="notice__title">{title}</p>
+    <div class="notice__body"><slot /></div>
+  </div>
+</div>
+
+<style>
+  .notice {
+    display: flex;
+    gap: var(--space-3);
+    padding: var(--space-3-5) var(--space-4);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--muted);
+  }
+
+  .notice--info {
+    background: var(--primary-soft);
+    border-color: color-mix(in oklch, var(--primary) 22%, transparent);
+  }
+
+  .notice--success {
+    background: var(--success-soft);
+    border-color: color-mix(in oklch, var(--success) 26%, transparent);
+  }
+
+  .notice--error {
+    background: var(--destructive-soft);
+    border-color: color-mix(in oklch, var(--destructive) 26%, transparent);
+  }
+
+  .notice__icon {
+    flex-shrink: 0;
+    display: inline-flex;
+    padding-top: var(--space-px);
+  }
+
+  .notice--info .notice__icon { color: var(--primary); }
+  .notice--success .notice__icon { color: var(--success); }
+  .notice--error .notice__icon { color: var(--destructive); }
+
+  .notice__title {
+    font-size: var(--text-base);
+    font-weight: var(--weight-bold);
+  }
+
+  .notice__body {
+    margin-top: var(--space-1);
+    font-size: var(--text-sm);
+    color: var(--muted-foreground);
+  }
+
+  .notice__body :global(code) {
+    padding: var(--space-px) var(--space-1);
+    border-radius: var(--radius-sm);
+    background: color-mix(in oklch, var(--foreground) 8%, transparent);
+  }
+
+  .notice__body :global(a) {
+    font-weight: var(--weight-semibold);
+  }
+</style>

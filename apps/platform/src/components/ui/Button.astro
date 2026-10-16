@@ -1,0 +1,77 @@
+---
+interface Props {
+  variant?: 'default' | 'secondary' | 'outline' | 'ghost' | 'destructive';
+  size?: 'default' | 'sm' | 'lg' | 'icon';
+  block?: boolean;
+  type?: 'button' | 'reset' | 'submit';
+  href?: string;
+  class?: string;
+  [key: string]: unknown;
+}
+
+const {
+  variant = 'default',
+  size = 'default',
+  block = false,
+  type = 'button',
+  href,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const classes = [
+  'btn',
+  `btn--${variant}`,
+  `btn--size-${size}`,
+  block && 'btn--block',
+  className,
+];
+---
+
+{href ? (
+  <a href={href} class:list={classes} {...rest}><slot /></a>
+) : (
+  <button type={type} class:list={classes} {...rest}><slot /></button>
+)}
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    border: 0;
+    border-radius: var(--radius-md);
+    font: inherit;
+    font-weight: var(--weight-bold);
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+  }
+
+  .btn:hover { text-decoration: none; }
+  .btn:disabled { opacity: 0.5; pointer-events: none; }
+
+  .btn--default { background: var(--primary); color: var(--primary-foreground); }
+  .btn--default:hover { background: var(--primary-hover); }
+
+  .btn--secondary { background: var(--neutral); color: var(--neutral-foreground); }
+  .btn--secondary:hover { background: var(--neutral-hover); }
+
+  .btn--outline { background: var(--card); color: var(--foreground); box-shadow: inset 0 0 0 var(--border-width) var(--input); }
+  .btn--outline:hover { background: var(--accent); }
+
+  .btn--ghost { background: transparent; color: var(--foreground); }
+  .btn--ghost:hover { background: var(--accent); }
+
+  .btn--destructive { background: var(--destructive); color: var(--destructive-foreground); }
+  .btn--destructive:hover { filter: brightness(0.92); }
+
+  .btn--size-sm { height: var(--control-sm); padding: 0 var(--space-3); font-size: var(--text-xs); }
+  .btn--size-default { height: var(--control-lg); padding: 0 var(--space-4-5); font-size: var(--text-sm); }
+  .btn--size-lg { height: var(--control-xl); padding: 0 var(--space-6); font-size: var(--text-lg); border-radius: var(--radius-lg); }
+  .btn--size-icon { width: var(--control-lg); height: var(--control-lg); padding: 0; }
+
+  .btn--block { width: 100%; }
+</style>

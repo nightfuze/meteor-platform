@@ -1,0 +1,135 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<astro-carousel class:list={['carousel', className]}>
+  <slot />
+</astro-carousel>
+
+<script>
+  class AstroCarousel extends HTMLElement {
+    private viewport: HTMLElement | null = null;
+    private prevBtn: HTMLButtonElement | null = null;
+    private nextBtn: HTMLButtonElement | null = null;
+    private dragging = false;
+    private startX = 0;
+    private startScroll = 0;
+    private hasMoved = false;
+    private moveThreshold = 5;
+
+    connectedCallback() {
+      this.viewport = this.querySelector('.carousel__viewport');
+      this.prevBtn = this.querySelector('[data-carousel-nav="prev"]');
+      this.nextBtn = this.querySelector('[data-carousel-nav="next"]');
+
+      if (!this.viewport) return;
+
+      this.prevBtn?.addEventListener('click', this.handlePrev);
+      this.nextBtn?.addEventListener('click', this.handleNext);
+      this.viewport.addEventListener('scroll', this.updateButtons, { passive: true });
+      window.addEventListener('resize', this.updateButtons);
+
+      this.viewport.addEventListener('pointerdown', this.onPointerDown);
+
+      this.updateButtons();
+    }
+
+    disconnectedCallback() {
+      this.prevBtn?.removeEventListener('click', this.handlePrev);
+      this.nextBtn?.removeEventListener('click', this.handleNext);
+      this.viewport?.removeEventListener('scroll', this.updateButtons);
+      window.removeEventListener('resize', this.updateButtons);
+      this.viewport?.removeEventListener('pointerdown', this.onPointerDown);
+      window.removeEventListener('pointermove', this.onPointerMove);
+      window.removeEventListener('pointerup', this.onPointerUp);
+      window.removeEventListener('pointercancel', this.onPointerUp);
+    }
+
+    private onPointerDown = (event: PointerEvent) => {
+      if (!this.viewport || event.button !== 0) return;
+      this.dragging = true;
+      this.hasMoved = false;
+      this.startX = event.clientX;
+      this.startScroll = this.viewport.scrollLeft;
+      window.addEventListener('pointermove', this.onPointerMove, { passive: false });
+      window.addEventListener('pointerup', this.onPointerUp, { passive: false });
+      window.addEventListener('pointercancel', this.onPointerUp, { passive: false });
+    };
+
+    private onPointerMove = (event: PointerEvent) => {
+      if (!this.dragging || !this.viewport) return;
+      const delta = event.clientX - this.startX;
+      if (!this.hasMoved && Math.abs(delta) > this.moveThreshold) {
+        this.hasMoved = true;
+        this.viewport.classList.add('is-dragging');
+      }
+      if (!this.hasMoved) return;
+      this.viewport.scrollLeft = this.startScroll - delta;
+      event.preventDefault();
+    };
+
+    private onPointerUp = () => {
+      if (!this.dragging || !this.viewport) return;
+      this.dragging = false;
+      window.removeEventListener('pointermove', this.onPointerMove);
+      window.removeEventListener('pointerup', this.onPointerUp);
+      window.removeEventListener('pointercancel', this.onPointerUp);
+      this.viewport.classList.remove('is-dragging');
+      if (this.hasMoved) {
+        const suppress = (clickEvent: Event) => {
+          clickEvent.preventDefault();
+          clickEvent.stopPropagation();
+        };
+        this.viewport.addEventListener('click', suppress, { capture: true, once: true });
+        window.setTimeout(() => this.viewport?.removeEventListener('click', suppress, { capture: true }), 100);
+      }
+      this.hasMoved = false;
+      window.requestAnimationFrame(() => this.updateButtons());
+    };
+
+    private getStep(): number {
+      if (!this.viewport) return 0;
+      const firstItem = this.viewport.querySelector('.carousel__item') as HTMLElement | null;
+      return firstItem ? firstItem.offsetWidth : this.viewport.clientWidth;
+    }
+
+    private handlePrev = () => {
+      this.viewport?.scrollBy({ left: -this.getStep(), behavior: 'smooth' });
+    };
+
+    private handleNext = () => {
+      this.viewport?.scrollBy({ left: this.getStep(), behavior: 'smooth' });
+    };
+
+    private updateButtons = () => {
+      if (!this.viewport) return;
+
+      const { scrollLeft, scrollWidth, clientWidth } = this.viewport;
+      const isStart = scrollLeft <= 1;
+      const isEnd = scrollLeft + clientWidth >= scrollWidth - 1;
+
+      if (this.prevBtn) {
+        this.prevBtn.disabled = isStart;
+      }
+      if (this.nextBtn) {
+        this.nextBtn.disabled = isEnd;
+      }
+    };
+  }
+
+  if (!customElements.get('astro-carousel')) {
+    customElements.define('astro-carousel', AstroCarousel);
+  }
+</script>
+
+<style>
+  .carousel {
+    position: relative;
+    display: block;
+    width: 100%;
+  }
+</style>

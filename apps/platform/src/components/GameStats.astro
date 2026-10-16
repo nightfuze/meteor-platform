@@ -1,0 +1,75 @@
+---
+import { formatDate, formatNumber } from '@/api/games';
+import type { CatalogEntry, GameEntry } from '@/api/games';
+
+interface Props {
+  details: GameEntry;
+  catalogItem: CatalogEntry;
+}
+
+const { details, catalogItem } = Astro.props;
+---
+
+<dl class="game-stats">
+  <div class="game-stats__item">
+    <dt class="game-stats__term">Активных игроков</dt>
+    <dd class="game-stats__desc">{formatNumber(catalogItem.playing)}</dd>
+  </div>
+  <div class="game-stats__item">
+    <dt class="game-stats__term">Посещаемость</dt>
+    <dd class="game-stats__desc">{formatNumber(catalogItem.visits)}</dd>
+  </div>
+  <div class="game-stats__item">
+    <dt class="game-stats__term">В избранном</dt>
+    <dd class="game-stats__desc">{formatNumber(details.favoritedCount)}</dd>
+  </div>
+  <div class="game-stats__item">
+    <dt class="game-stats__term">Лимит игроков</dt>
+    <dd class="game-stats__desc">{details.maxPlayers}</dd>
+  </div>
+  <div class="game-stats__item">
+    <dt class="game-stats__term">Цена</dt>
+    <dd class="game-stats__desc">
+      {details.price === null ? 'Бесплатно' : `${details.price} ₽`}
+    </dd>
+  </div>
+  <div class="game-stats__item">
+    <dt class="game-stats__term">Опубликована</dt>
+    <dd class="game-stats__desc">{formatDate(details.created)}</dd>
+  </div>
+  <div class="game-stats__item">
+    <dt class="game-stats__term">Обновлена</dt>
+    <dd class="game-stats__desc">{formatDate(details.updated)}</dd>
+  </div>
+</dl>
+
+<style>
+  .game-stats {
+    --stat-min: 11.25rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(var(--stat-min), 1fr));
+    gap: 0 var(--space-5);
+    margin: var(--space-5) 0 0;
+    padding-top: var(--space-4);
+    border-top: var(--border-width) solid var(--border);
+  }
+
+  .game-stats__item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-1-5) 0;
+  }
+
+  .game-stats__term {
+    font-size: var(--text-xs);
+    color: var(--muted-foreground);
+  }
+
+  .game-stats__desc {
+    margin: 0;
+    font-size: var(--text-xs);
+    font-weight: var(--weight-bold);
+  }
+</style>

@@ -1,0 +1,29 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={['carousel__item', className]}>
+  <slot />
+</div>
+
+<style>
+  .carousel__item {
+    flex: 0 0 100%;
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+
+  .carousel__item img {
+    -webkit-user-drag: none;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .carousel__content * {
+    -webkit-user-drag: none;
+  }
+</style>
