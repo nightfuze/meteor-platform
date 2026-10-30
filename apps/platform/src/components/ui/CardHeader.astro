@@ -1,0 +1,12 @@
+---
+const { class: className, ...rest } = Astro.props;
+---
+
+<div class:list={['card-header', className]} {...rest}><slot /></div>
+
+<style>
+  .card-header {
+    padding: var(--space-3-5) var(--space-5);
+    border-bottom: var(--border-width) solid var(--border);
+  }
+</style>

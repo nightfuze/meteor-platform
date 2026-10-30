@@ -1,0 +1,48 @@
+---
+import ChevronLeft from '@lucide/astro/icons/chevron-left';
+import ChevronRight from '@lucide/astro/icons/chevron-right';
+
+interface Props {
+  direction: 'prev' | 'next';
+  class?: string;
+}
+
+const { direction, class: className } = Astro.props;
+const Icon = direction === 'prev' ? ChevronLeft : ChevronRight;
+---
+
+<button
+  type="button"
+  aria-label={direction === 'prev' ? 'Предыдущий слайд' : 'Следующий слайд'}
+  data-carousel-nav={direction}
+  class:list={['carousel__btn', className]}
+>
+  <Icon size={20} stroke-width={2} />
+</button>
+
+<style>
+  .carousel__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--control-lg);
+    height: var(--control-lg);
+    padding: 0;
+    border-radius: var(--radius-circle);
+    border: var(--border-width) solid var(--border);
+    background-color: var(--card);
+    color: var(--foreground);
+    cursor: pointer;
+    pointer-events: auto;
+    transition: opacity var(--transition-base), background-color var(--transition-base);
+  }
+
+  .carousel__btn:hover:not(:disabled) {
+    background-color: var(--accent);
+  }
+
+  .carousel__btn:disabled {
+    visibility: hidden;
+    cursor: not-allowed;
+  }
+</style>

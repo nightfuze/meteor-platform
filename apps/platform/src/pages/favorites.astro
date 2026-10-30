@@ -1,0 +1,44 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Button from '@/components/ui/Button.astro';
+import EmptyState from '@/components/EmptyState.astro';
+import GameCard from '@/components/GameCard.astro';
+import GameSection from '@/components/GameSection.astro';
+import { games } from '@/api/games';
+
+const catalog = games.getCatalog();
+---
+
+<BaseLayout
+  title="Избранное"
+  description="Сохранённые игры Meteor"
+>
+  <GameSection title="Избранное" href="/games" layout="grid">
+    <div class="favorites-empty" data-favorites-empty hidden>
+      <EmptyState
+        title="Здесь пока пусто"
+        text="Добавьте свою любимую игру в избранное."
+      >
+        <Button href="/games">Перейти в каталог</Button>
+      </EmptyState>
+    </div>
+
+    {catalog.map((game) => <GameCard game={game} withPlayers={true} />)}
+  </GameSection>
+</BaseLayout>
+
+<script>
+  import { favorites } from '@/api/favorites';
+
+  favorites.mount(document, { filterCards: true });
+</script>
+
+<style>
+  .favorites-empty {
+    grid-column: 1 / -1;
+  }
+
+  :global(.grid .game-card) {
+    width: 100%;
+  }
+</style>

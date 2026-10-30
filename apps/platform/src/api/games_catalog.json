@@ -1,0 +1,172 @@
+[
+  {
+    "universeId": 10563114921,
+    "rootPlaceId": 107778070777162,
+    "name": "Украсть яйцо",
+    "locale": "ru_ru",
+    "creator": {
+      "id": 825735094,
+      "name": "and Collect Rare Pets",
+      "type": "Group"
+    },
+    "playing": 1642537,
+    "visits": 6836895335,
+    "images": {
+      "icon": "images/10563114921/icon.png",
+      "banner": "images/10563114921/banner.png"
+    }
+  },
+  {
+    "universeId": 1686885941,
+    "rootPlaceId": 4924922222,
+    "name": "Брукхейвен 🏡 RP",
+    "locale": "ru_ru",
+    "creator": {
+      "id": 3104358,
+      "name": "Brookhaven by Voldex",
+      "type": "Group"
+    },
+    "playing": 249937,
+    "visits": 88258289905,
+    "images": {
+      "icon": "images/1686885941/icon.png",
+      "banner": "images/1686885941/banner.png"
+    }
+  },
+  {
+    "universeId": 7326934954,
+    "rootPlaceId": 79546208627805,
+    "name": "99 ночей в лесу 🔦",
+    "locale": "ru_ru",
+    "creator": {
+      "id": 6042520,
+      "name": "Grandma's Favourite Games",
+      "type": "Group"
+    },
+    "playing": 208544,
+    "visits": 29884294469,
+    "images": {
+      "icon": "images/7326934954/icon.png",
+      "banner": "images/7326934954/banner.png"
+    }
+  },
+  {
+    "universeId": 383310974,
+    "rootPlaceId": 920587237,
+    "name": "[🎃] Прими меня!",
+    "locale": "ru_ru",
+    "creator": {
+      "id": 295182,
+      "name": "Uplift Games",
+      "type": "Group"
+    },
+    "playing": 188467,
+    "visits": 44948724339,
+    "images": {
+      "icon": "images/383310974/icon.png",
+      "banner": "images/383310974/banner.png"
+    }
+  },
+  {
+    "universeId": 994732206,
+    "rootPlaceId": 2753915549,
+    "name": "Фрукты Блокса",
+    "locale": "ru_ru",
+    "creator": {
+      "id": 4372130,
+      "name": "Gamer Robot Inc",
+      "type": "Group"
+    },
+    "playing": 172908,
+    "visits": 64823833860,
+    "images": {
+      "icon": "images/994732206/icon.png",
+      "banner": "images/994732206/banner.png"
+    }
+  },
+  {
+    "universeId": 10035204815,
+    "rootPlaceId": 124216119978534,
+    "name": "[⚡] Прокатить питомца ",
+    "locale": "ru_ru",
+    "creator": {
+      "id": 434582823,
+      "name": "this game is gud",
+      "type": "Group"
+    },
+    "playing": 137962,
+    "visits": 301700908,
+    "images": {
+      "icon": "images/10035204815/icon.png",
+      "banner": "images/10035204815/banner.png"
+    }
+  },
+  {
+    "universeId": 6035872082,
+    "rootPlaceId": 17625359962,
+    "name": "СОПЕРНИКИ",
+    "locale": "ru_ru",
+    "creator": {
+      "id": 3461453,
+      "name": "Nosniy Games",
+      "type": "Group"
+    },
+    "playing": 136282,
+    "visits": 18542641347,
+    "images": {
+      "icon": "images/6035872082/icon.png",
+      "banner": "images/6035872082/banner.png"
+    }
+  },
+  {
+    "universeId": 66654135,
+    "rootPlaceId": 142823291,
+    "name": "Загадка убийства 2",
+    "locale": "ru_ru",
+    "creator": {
+      "id": 1848960,
+      "name": "Nikilis",
+      "type": "User"
+    },
+    "playing": 134707,
+    "visits": 31060057097,
+    "images": {
+      "icon": "images/66654135/icon.png",
+      "banner": "images/66654135/banner.png"
+    }
+  },
+  {
+    "universeId": 5569032992,
+    "rootPlaceId": 16116270224,
+    "name": "🎃 Мир Дэнди [АЛЬФА] ",
+    "locale": "ru_ru",
+    "creator": {
+      "id": 14576965,
+      "name": "BlushCrunch Studio",
+      "type": "Group"
+    },
+    "playing": 109553,
+    "visits": 7536689669,
+    "images": {
+      "icon": "images/5569032992/icon.png",
+      "banner": "images/5569032992/banner.png"
+    }
+  },
+  {
+    "universeId": 9584852943,
+    "rootPlaceId": 95082159892680,
+    "name": "[X10] +1 Скорость сбега с клавиатуры | Конфеты и шоколад",
+    "locale": "ru_ru",
+    "creator": {
+      "id": 1074557114,
+      "name": "SecretVerse Studio",
+      "type": "Group"
+    },
+    "playing": 92978,
+    "visits": 6296929394,
+    "images": {
+      "icon": "images/9584852943/icon.png",
+      "banner": "images/9584852943/banner.png"
+    }
+  }
+]

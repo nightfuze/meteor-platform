@@ -1,0 +1,11 @@
+---
+const { tone = 'hint', class: className, ...rest } = Astro.props;
+---
+
+<p class:list={['form-message', `form-message--${tone}`, className]} {...rest}><slot /></p>
+
+<style>
+  .form-message { font-size: var(--text-xs); }
+  .form-message--hint { color: var(--muted-foreground); }
+  .form-message--error { font-weight: var(--weight-bold); color: var(--destructive); }
+</style>

@@ -1,0 +1,169 @@
+:root {
+  color-scheme: light;
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.625rem;
+  --radius-xl: 0.875rem;
+  --radius-2xl: 1.125rem;
+  --radius-pill: 9999px;
+  --radius-circle: 50%;
+
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.2134 0 0);
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2134 0 0);
+
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2134 0 0);
+
+  --primary: oklch(0.495 0.2102 260.71);
+  --primary-foreground: oklch(0.985 0 0);
+  --primary-hover: oklch(0.422 0.1796 260.75);
+  --primary-soft: oklch(0.9528 0.0224 260.72);
+
+  --secondary: oklch(0.9642 0 0);
+  --secondary-foreground: oklch(0.2134 0 0);
+
+  --muted: oklch(0.9642 0 0);
+  --muted-foreground: oklch(0.4979 0.0094 253.91);
+
+  --accent: oklch(0.9461 0 0);
+  --accent-foreground: oklch(0.2134 0 0);
+
+  --neutral: oklch(0.3511 0.0044 247.95);
+  --neutral-foreground: oklch(0.985 0 0);
+  --neutral-hover: oklch(0.29 0.0044 247.95);
+
+  --destructive: oklch(0.5766 0.2078 24.04);
+  --destructive-foreground: oklch(0.985 0 0);
+  --destructive-soft: oklch(0.9546 0.0196 13.63);
+
+  --success: oklch(0.623 0.1397 160.55);
+  --success-foreground: oklch(0.985 0 0);
+  --success-soft: oklch(0.9569 0.0226 168.74);
+
+  --warning: oklch(0.7808 0.1629 77.82);
+  --warning-soft: oklch(0.9744 0.0304 88.37);
+  --warning-foreground: oklch(0.5455 0.1122 74.73);
+
+  --border: oklch(0.9219 0 0);
+  --input: oklch(0.8328 0 0);
+  --ring: oklch(0.495 0.2102 260.71);
+  --overlay: oklch(0 0 0 / 42%);
+
+  --focus-ring: 0 0 0 3px color-mix(in oklch, var(--ring) 32%, transparent);
+
+  --blur-sm: 8px;
+  --blur-md: 14px;
+
+  --topbar-height: 56px;
+  --nav-clearance: 6.25rem;
+
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-form: 760px;
+  --container-content: 840px;
+  --container-panel: 780px;
+
+  --space-0: 0;
+  --space-px: 1px;
+  --space-0-5: 0.125rem;
+  --space-1: 0.25rem;
+  --space-1-5: 0.375rem;
+  --space-2: 0.5rem;
+  --space-2-5: 0.625rem;
+  --space-3: 0.75rem;
+  --space-3-5: 0.875rem;
+  --space-4: 1rem;
+  --space-4-5: 1.125rem;
+  --space-5: 1.25rem;
+  --space-5-5: 1.375rem;
+  --space-6: 1.5rem;
+  --space-6-5: 1.625rem;
+  --space-7: 1.75rem;
+  --space-8: 2rem;
+  --space-9: 2.25rem;
+  --space-10: 2.5rem;
+  --space-11: 2.75rem;
+  --space-12: 3rem;
+  --space-14: 3.5rem;
+  --space-16: 4rem;
+
+  --size-2: 0.5rem;
+  --size-3: 0.75rem;
+  --size-4: 1rem;
+  --size-5: 1.25rem;
+  --size-6: 1.5rem;
+  --size-7: 1.75rem;
+  --size-8: 2rem;
+  --size-9: 2.25rem;
+  --size-10: 2.5rem;
+  --size-11: 2.75rem;
+  --size-12: 3rem;
+  --size-14: 3.5rem;
+  --size-24: 6rem;
+
+  --control-sm: 2rem;
+  --control-md: 2.25rem;
+  --control-lg: 2.5rem;
+  --control-xl: 3.125rem;
+  --tap-target: 2.75rem;
+
+  --text-2xs: 0.625rem;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.75rem;
+  --text-4xl: 1.875rem;
+
+  --leading-tight: 1.25;
+  --leading-snug: 1.35;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.6;
+
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extrabold: 800;
+
+  --tracking-tighter: -0.02em;
+  --tracking-tight: -0.01em;
+  --tracking-wide: 0.04em;
+
+  --border-width: 1px;
+  --border-width-strong: 2px;
+  --border-width-accent: 3px;
+
+  --shadow-sm: 0 1px 2px oklch(0 0 0 / 6%);
+  --shadow-md: 0 4px 12px oklch(0 0 0 / 8%);
+  --shadow-lg: 0 10px 30px oklch(0 0 0 / 10%);
+
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 220ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --transition-fast: var(--duration-fast) var(--ease-standard);
+  --transition-base: var(--duration-base) var(--ease-standard);
+
+  --z-base: 0;
+  --z-topbar: 50;
+  --z-bottom-nav: 60;
+  --z-overlay: 80;
+
+  --bp-sm: 640px;
+  --bp-md: 720px;
+  --bp-lg: 900px;
+  --bp-xl: 1024px;
+
+  --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
+}

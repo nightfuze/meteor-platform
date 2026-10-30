@@ -1,0 +1,35 @@
+---
+interface Props {
+  title: string;
+  href?: string;
+}
+
+const { title, href } = Astro.props;
+---
+
+<div class="head">
+  <h2 class="head__title">
+    {href ? <a href={href} class="head__link">{title}</a> : title}
+  </h2>
+  <slot />
+</div>
+
+<style>
+  .head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+  }
+
+  .head__title {
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+  }
+
+  .head__link {
+    font-size: var(--text-xl);
+    font-weight: var(--weight-semibold);
+    color: var(--foreground);
+  }
+</style>

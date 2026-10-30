@@ -1,7 +1,7 @@
 {
   "name": "@meteor/platform",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "node": ">=22.12.0"
   },
@@ -9,14 +9,21 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "check": "astro check",
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/node": "^11.1.6",
+    "@astrojs/node": "^11.1.8",
+    "@lucide/astro": "^1.58.0",
     "@meteor/types": "workspace:*",
-    "astro": "^7.3.5"
+    "astro": "^7.4.0",
+    "zod": "^4.6.7"
   },
   "allowScripts": {
     "esbuild": true
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "7.0.2"
   }
 }

@@ -1,0 +1,77 @@
+---
+import Alert from '@/components/ui/Alert.astro';
+import AlertDescription from '@/components/ui/AlertDescription.astro';
+import AlertTitle from '@/components/ui/AlertTitle.astro';
+import Badge from '@/components/ui/Badge.astro';
+
+interface Props {
+  status: number;
+  title: string;
+  message: string;
+}
+
+const { status, title, message } = Astro.props;
+---
+
+<section class="status">
+  <Alert variant="info" class="status__alert">
+    <Fragment slot="icon"><slot name="icon" /></Fragment>
+    <div class="status__body">
+      <div class="status__badge">
+        <Badge variant="warning">HTTP {status}</Badge>
+      </div>
+      <AlertTitle class="status__title">{title}</AlertTitle>
+      <AlertDescription class="status__description">{message}</AlertDescription>
+    </div>
+  </Alert>
+
+  <div class="status__actions">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .status {
+    --status-max: 31.25rem;
+    max-width: var(--status-max);
+    margin: 0 auto;
+    min-height: calc(100vh - var(--topbar-height) - var(--nav-clearance));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    text-align: center;
+  }
+
+  .status__alert {
+    align-items: flex-start;
+  }
+
+  .status__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1-5);
+  }
+
+  .status__badge {
+    margin-bottom: var(--space-0-5);
+  }
+
+  .status__title {
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+  }
+
+  .status__description {
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+  }
+
+  .status__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2-5);
+  }
+</style>

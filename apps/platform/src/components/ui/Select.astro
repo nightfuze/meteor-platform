@@ -1,0 +1,38 @@
+---
+import ChevronDown from '@lucide/astro/icons/chevron-down';
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<span class="select">
+  <select class:list={['select__control', className]} {...rest}><slot /></select>
+  <ChevronDown class="select__icon" size={16} stroke-width={2.5} />
+</span>
+
+<style>
+  .select { position: relative; display: flex; align-items: center; }
+
+  .select__control {
+    width: 100%;
+    min-height: var(--control-lg);
+    padding: var(--space-2) var(--space-9) var(--space-2) var(--space-3);
+    font: inherit;
+    font-size: var(--text-sm);
+    color: var(--foreground);
+    background: var(--background);
+    border: var(--border-width) solid var(--input);
+    border-radius: var(--radius-sm);
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .select__control:focus { border-color: var(--ring); box-shadow: var(--focus-ring); outline: none; }
+  .select__control[aria-invalid='true'] { border-color: var(--destructive); background: var(--destructive-soft); }
+
+  .select__icon {
+    position: absolute;
+    right: var(--space-3);
+    color: var(--muted-foreground);
+    pointer-events: none;
+  }
+</style>
