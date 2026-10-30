@@ -1,7 +1,7 @@
 {
   "name": "@meteor/platform",
   "type": "module",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "engines": {
     "node": ">=22.12.0"
   },
@@ -15,6 +15,7 @@
   "dependencies": {
     "@astrojs/node": "^11.1.8",
     "@lucide/astro": "^1.58.0",
+    "@meteor/db": "workspace:*",
     "@meteor/types": "workspace:*",
     "astro": "^7.4.0",
     "zod": "^4.6.7"

@@ -4,13 +4,11 @@ import GameCard from '@/components/GameCard.astro';
 import GameSection from '@/components/GameSection.astro';
 import { games } from '@/api/games';
 
-const byPlaying = games.getCatalog({ sort: 'playing' });
-const byVisits = games.getCatalog({ sort: 'visits' });
-const byNewest = games.getCatalog({ sort: 'newest' });
-
-const recommended = byPlaying.slice(0, 8);
-const continueRow = byVisits.slice(0, 8);
-const rising = byNewest.slice(0, 8);
+const [recommended, continueRow, rising] = await Promise.all([
+  games.getCatalog({ sort: 'playing', limit: 10 }),
+  games.getCatalog({ sort: 'visits', limit: 10 }),
+  games.getCatalog({ sort: 'newest', limit: 10 }),
+]);
 ---
 
 <BaseLayout

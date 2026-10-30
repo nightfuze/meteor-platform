@@ -1,10 +1,35 @@
 # Платформа для многопользовательских браузерных игр
 
-Лабораторная работа №2 по дисциплине «Методы и средства проектирования информационных систем и технологий».  
+Лабораторная работа №3 по дисциплине «Методы и средства проектирования информационных систем и технологий».  
 Студент: Васильев Д.С., группа ИСТбд-41.
 
-## Запуск контейнера
-
+## Инструкция
+### Скачать репозиторий
 ```bash
-docker pull nightfuze/mispisit-lab1:0.0.2
-docker run --rm --name meteor -p 8000:8000 nightfuze/mispisit-lab1:0.0.2
+git clone https://github.com/nightfuze/meteor-platform
+```
+### Сменить ветку 
+```bash
+git switch lab3
+```
+
+### Установить .env
+```bash
+cp .env.example .env
+```
+
+### Запуск
+```bash
+docker compose up -d
+```
+
+### Заполнение данных бд
+```bash
+bun db:seed
+```
+
+### Запуск в dev-режиме
+```bash
+docker compose -f compose.dev.yml up -d
+bun dev:platoform
+```

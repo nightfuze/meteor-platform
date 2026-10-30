@@ -4,6 +4,7 @@ WORKDIR /app
 COPY package.json bun.lock* ./
 COPY apps/platform/package.json ./apps/platform/
 COPY packages/types/package.json ./packages/types/
+COPY packages/db/package.json ./packages/db/
 
 RUN bun install
 

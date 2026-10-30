@@ -12,12 +12,15 @@ import { games } from '@/api/games';
 const search = Astro.url.searchParams.get('search')?.trim() ?? '';
 const genre = Astro.url.searchParams.get('genre')?.trim() ?? 'all';
 
-const genres = games.getGenres();
+const genres = await games.getGenres();
 
 const genreFilter = genre === 'all' ? '' : genre;
-const trending = games.getCatalog({ search, genre: genreFilter, sort: 'playing' });
-const upAndComing = games.getCatalog({ search, genre: genreFilter, sort: 'newest' });
-const topPlaying = games.getCatalog({ search, genre: genreFilter, sort: 'visits' });
+
+const [trending, upAndComing, topPlaying] = await Promise.all([
+  games.getCatalog({ search, genre: genreFilter, sort: 'playing' }),
+  games.getCatalog({ search, genre: genreFilter, sort: 'newest' }),
+  games.getCatalog({ search, genre: genreFilter, sort: 'visits' }),
+]);
 ---
 
 <BaseLayout

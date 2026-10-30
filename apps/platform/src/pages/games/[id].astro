@@ -15,37 +15,38 @@ import GameHero from '@/components/GameHero.astro';
 import GameTabs from '@/components/GameTabs.astro';
 import GameAboutTab from '@/components/GameAboutTab.astro';
 
+import { isObjectId } from "@meteor/db"
+import type { Game } from '@meteor/types';
+
 interface PageError {
   status: 400 | 404;
   title: string;
   message: string;
 }
 
-const rawId = Astro.params.universeId ?? '';
-const universeId = Number(rawId);
-const isValidId = Number.isInteger(universeId) && universeId > 0;
+const id = Astro.params.id ?? '';
+const isValidId = isObjectId(id);
 
 let error: PageError | null = null;
+let game: Game | null = null;
 
 if (!isValidId) {
   Astro.response.status = 400;
   error = {
     status: 400,
     title: 'Некорректный идентификатор',
-    message: `Параметр ${rawId} не является положительным целым числом. Запрос отклонен до обращения к каталогу.`,
+    message: `Параметр "${id}" не является корректным 24-значным идентификатором ObjectId. Запрос отклонен до обращения к базе данных.`,
   };
-}
-
-const details = !error ? games.getDetails(universeId) : undefined;
-const catalogItem = !error ? games.getCatalogItem(universeId) : undefined;
-
-if (!error && (!details || !catalogItem)) {
-  Astro.response.status = 404;
-  error = {
-    status: 404,
-    title: 'Запись не найдена',
-    message: `Игра с идентификатором ${universeId} отсутствует в каталоге платформы.`,
-  };
+} else {
+  game = await games.getDetails(id);
+  if (!game) {
+    Astro.response.status = 404;
+    error = {
+      status: 404,
+      title: 'Запись не найдена',
+      message: `Игра с идентификатором ${id} отсутствует в каталоге платформы.`,
+    };
+  }
 }
 
 const TABS = ['about', 'store', 'servers'] as const;
@@ -55,8 +56,8 @@ const tab: Tab = (TABS as readonly string[]).includes(rawTab) ? (rawTab as Tab) 
 ---
 
 <BaseLayout
-  title={catalogItem?.name ?? 'Игра'}
-  description={`Карточка игры ${catalogItem?.name} в каталоге платформы Meteor.`}
+  title={game?.name ?? 'Игра'}
+  description={`Карточка игры ${game?.name} в каталоге платформы Meteor.`}
 >
   {
     error ? (
@@ -65,14 +66,14 @@ const tab: Tab = (TABS as readonly string[]).includes(rawTab) ? (rawTab as Tab) 
         <Button href="/games">Вернуться в каталог</Button>
       </StatusPage>
     ) : (
-      details && catalogItem && (
+      game && (
         <article class="game-page">
-          <GameHero details={details} catalogItem={catalogItem} />
+          <GameHero game={game} />
 
-          <GameTabs universeId={details.universeId} tab={tab} />
+          <GameTabs gameId={game.id} tab={tab} />
 
           <div class="game-body">
-            {tab === 'about' && <GameAboutTab details={details} />}
+            {tab === 'about' && <GameAboutTab game={game} />}
 
             {tab === 'store' && (
               <Card class="game-panel-card">
@@ -83,7 +84,7 @@ const tab: Tab = (TABS as readonly string[]).includes(rawTab) ? (rawTab as Tab) 
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button variant="outline" href={`/games/${details.universeId}?tab=about`}>
+                  <Button variant="outline" href={`/games/${game.id}?tab=about`}>
                     Вернуться к описанию
                   </Button>
                 </CardContent>
@@ -95,11 +96,11 @@ const tab: Tab = (TABS as readonly string[]).includes(rawTab) ? (rawTab as Tab) 
                 <CardHeader>
                   <CardTitle>Серверы</CardTitle>
                   <CardDescription>
-                    Лимит игроков в текущей сессии - {details.maxPlayers}.
+                    Лимит игроков в текущей сессии - {game.maxPlayers}.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button variant="outline" href={`/games/${details.universeId}?tab=about`}>
+                  <Button variant="outline" href={`/games/${game.id}?tab=about`}>
                     Вернуться к описанию
                   </Button>
                 </CardContent>
@@ -110,11 +111,11 @@ const tab: Tab = (TABS as readonly string[]).includes(rawTab) ? (rawTab as Tab) 
           <footer class="game-foot">
             <span class="game-foot__item">
               <Users size={16} stroke-width={2} />
-              {formatNumber(catalogItem.playing)} играют прямо сейчас
+              {formatNumber(game.metrics.playing)} играют прямо сейчас
             </span>
             <span class="game-foot__item">
               <Share2 size={16} stroke-width={2} />
-              <a class="game-foot__link" href={`/games/${details.universeId}?tab=about`}>
+              <a class="game-foot__link" href={`/games/${game.id}?tab=about`}>
                 Поделиться
               </a>
             </span>

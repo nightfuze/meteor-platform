@@ -10,10 +10,10 @@ interface Props {
 
 const { game, withPlayers = true } = Astro.props;
 
-const rating = getRating(game.universeId);
+const rating = getRating(game.id);
 ---
 
-<a href={`/games/${game.universeId}`} class="tile">
+<a href={`/games/${game.id}`} class="tile">
   <span class="media">
     <img src={asset(game.images.icon)} alt={game.name} loading="lazy" decoding="async" />
   </span>
@@ -26,7 +26,7 @@ const rating = getRating(game.universeId);
     {withPlayers && (
       <span class="meta__item">
         <Users size={13} stroke-width={2} />
-        {formatNumber(game.playing)}
+        {formatNumber(game.metrics.playing)}
       </span>
     )}
   </span>
