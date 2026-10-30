@@ -7,13 +7,13 @@ import CardTitle from '@/components/ui/CardTitle.astro';
 import Badge from '@/components/ui/Badge.astro';
 import Button from '@/components/ui/Button.astro';
 import { asset } from '@/api/games';
-import type { GameEntry } from '@/api/games';
+import type { Game } from '@meteor/types';
 
 interface Props {
-  details: GameEntry;
+  game: Game;
 }
 
-const { details } = Astro.props;
+const { game } = Astro.props;
 ---
 
 <div class="game-panel">
@@ -23,8 +23,8 @@ const { details } = Astro.props;
       <div class="game-event__media">
         <img
           class="game-event__img"
-          src={asset(details.images.banner)}
-          alt={`Событие в ${details.name}`}
+          src={asset(game.images.banner)}
+          alt={`Событие в ${game.name}`}
           loading="lazy"
           decoding="async"
         />
@@ -32,7 +32,7 @@ const { details } = Astro.props;
       </div>
       <div class="game-event__info">
         <CardHeader class="game-event__header">
-          <CardTitle class="game-event__title">Сезон {details.genre}</CardTitle>
+          <CardTitle class="game-event__title">Сезон {game.genre}</CardTitle>
           <CardDescription class="game-event__desc">
             Обновление открывает новый режим и временные награды. Пройдите испытания,
             чтобы получить эксклюзивные предметы.
@@ -47,19 +47,19 @@ const { details } = Astro.props;
 
   <section class="game-section">
     <h2 class="game-section__title">Описание</h2>
-    <p class="game-section__text">{details.description}</p>
+    <p class="game-section__text">{game.description}</p>
   </section>
 
-  {details.images.carousel.length > 0 && (
+  {game.images.carousel.length > 0 && (
     <section class="game-section">
       <h2 class="game-section__title">Скриншоты</h2>
       <div class="game-gallery">
-        {details.images.carousel.slice(0, 6).map((slide, idx) => (
+        {game.images.carousel.slice(0, 6).map((slide, idx) => (
           <div class="game-gallery__item">
             <img
               class="game-gallery__img"
               src={asset(slide)}
-              alt={`Скриншот ${idx + 1} игры ${details.name}`}
+              alt={`Скриншот ${idx + 1} игры ${game.name}`}
               loading="lazy"
               decoding="async"
             />

@@ -11,28 +11,37 @@ import ThumbsUp from '@lucide/astro/icons/thumbs-up';
 import ThumbsDown from '@lucide/astro/icons/thumbs-down';
 import BadgeCheck from '@lucide/astro/icons/badge-check';
 import { asset, formatNumber, getRating } from '@/api/games';
-import type { CatalogEntry, GameEntry } from '@/api/games';
+import { getCurrentUserId } from '@/api/auth';
+import { favoriteRepository } from '@meteor/db';
 import Badge from '@/components/ui/Badge.astro';
 import Button from '@/components/ui/Button.astro';
 import GameStats from '@/components/GameStats.astro';
+import type { Game } from '@meteor/types';
 
 interface Props {
-  details: GameEntry;
-  catalogItem: CatalogEntry;
+  game: Game;
 }
 
-const { details, catalogItem } = Astro.props;
+const { game } = Astro.props;
 
-const slides = details.images.carousel.length > 0 ? details.images.carousel : [details.images.banner];
-const rating = getRating(details.universeId);
-const likes = Math.round((details.favoritedCount * rating) / 100);
+const slides = game.images.carousel.length > 0 ? game.images.carousel : [game.images.banner];
+const rating = getRating(game.id);
+const likes = Math.round((game.metrics.favoritedCount * rating) / 100);
 const dislikes = likes ? Math.round(likes / 8) : 0;
+
+let isFav = false;
+try {
+  const userId = await getCurrentUserId();
+  isFav = await favoriteRepository.isFavorite(userId, game.id);
+} catch {
+  isFav = false;
+}
 ---
 
 <nav class="game-crumbs" aria-label="Навигация">
   <a class="game-crumbs__link" href="/games">Каталог</a>
   <span class="game-crumbs__separator" aria-hidden="true">/</span>
-  <span class="game-crumbs__current">{catalogItem.name}</span>
+  <span class="game-crumbs__current">{game.name}</span>
 </nav>
 
 <header class="game-hero">
@@ -44,7 +53,7 @@ const dislikes = likes ? Math.round(likes / 8) : 0;
             <img
               class="game-hero__carousel-img"
               src={asset(slide)}
-              alt={`Слайд ${index + 1} игры ${details.name}`}
+              alt={`Слайд ${index + 1} игры ${game.name}`}
               loading={index === 0 ? 'eager' : 'lazy'}
               decoding="async"
             />
@@ -61,18 +70,18 @@ const dislikes = likes ? Math.round(likes / 8) : 0;
   </div>
 
   <div class="game-hero__info">
-    <h1 class="game-hero__title">{details.name}</h1>
+    <h1 class="game-hero__title">{game.name}</h1>
 
     <div class="game-hero__author">
-      <span class="game-hero__author-name">От {catalogItem.creator.name}</span>
-      {catalogItem.creator.type === 'Group' && (
+      <span class="game-hero__author-name">От {game.creator.name}</span>
+      {game.creator.type === 'Group' && (
         <BadgeCheck class="game-hero__verified" size={16} stroke-width={2.4} />
       )}
     </div>
 
     <div class="game-hero__badges">
       <Badge variant="success">Рейтинг {rating}%</Badge>
-      <Badge variant="secondary">{details.genre}</Badge>
+      <Badge variant="secondary">{game.genre}</Badge>
     </div>
 
     <div class="game-hero__actions">
@@ -82,9 +91,17 @@ const dislikes = likes ? Math.round(likes / 8) : 0;
       </Button>
 
       <div class="game-hero__reactions">
-        <button type="button" class="game-reaction favorite-button" data-favorite-button data-game-id={details.universeId} aria-pressed="false">
+        <button
+          type="button"
+          class:list={['game-reaction', 'favorite-button', isFav && 'favorite-button--active']}
+          data-favorite-button
+          data-game-id={game.id}
+          aria-pressed={isFav ? 'true' : 'false'}
+        >
           <Heart size={18} stroke-width={2} />
-          <span class="game-reaction__label" data-favorite-label>В избранное</span>
+          <span class="game-reaction__label" data-favorite-label>
+            {isFav ? 'В избранном' : 'В избранное'}
+          </span>
         </button>
         <button type="button" class="game-reaction">
           <Bell size={18} stroke-width={2} />
@@ -101,9 +118,52 @@ const dislikes = likes ? Math.round(likes / 8) : 0;
       </div>
     </div>
 
-    <GameStats details={details} catalogItem={catalogItem} />
+    <GameStats game={game} />
   </div>
 </header>
+
+<script>
+  import { actions } from 'astro:actions';
+
+  function setupFavorite() {
+    const btn = document.querySelector<HTMLButtonElement>('[data-favorite-button]');
+    if (!btn || btn.dataset.bound === 'true') return;
+    btn.dataset.bound = 'true';
+
+    btn.addEventListener('click', async () => {
+      const gameId = btn.dataset.gameId;
+      if (!gameId) return;
+
+      btn.disabled = true;
+
+      try {
+        const { data, error } = await actions.toggleFavorite({ gameId });
+
+        if (error) {
+          console.error('Ошибка при обновлении избранного:', error);
+          return;
+        }
+
+        if (data?.success) {
+          const isFavorite = data.isFavorite;
+          btn.setAttribute('aria-pressed', String(isFavorite));
+          btn.classList.toggle('favorite-button--active', isFavorite);
+          const label = btn.querySelector('[data-favorite-label]');
+          if (label) {
+            label.textContent = isFavorite ? 'В избранном' : 'В избранное';
+          }
+        }
+      } catch (err) {
+        console.error('Ошибка запроса:', err);
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  }
+
+  setupFavorite();
+  document.addEventListener('astro:page-load', setupFavorite);
+</script>
 
 <style>
   .game-crumbs {
@@ -249,7 +309,7 @@ const dislikes = likes ? Math.round(likes / 8) : 0;
     font: inherit;
     font-size: var(--text-xs);
     cursor: pointer;
-    transition: background var(--transition-fast);
+    transition: background var(--transition-fast), color var(--transition-fast);
   }
 
   .game-reaction:hover {
@@ -258,6 +318,10 @@ const dislikes = likes ? Math.round(likes / 8) : 0;
 
   .favorite-button--active {
     color: var(--destructive);
+  }
+
+  .favorite-button--active :global(svg) {
+    fill: currentColor;
   }
 
   .game-reaction--stat {

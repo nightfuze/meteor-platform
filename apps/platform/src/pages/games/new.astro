@@ -10,36 +10,47 @@ import Textarea from '@/components/ui/Textarea.astro';
 import FormMessage from '@/components/ui/FormMessage.astro';
 import Notice from '@/components/Notice.astro';
 import { actions, isInputError } from 'astro:actions';
-import { games, GENRES, EMPTY_PAYLOAD, FIELD_KEYS, FIELD_LABELS, readForm } from '@/api/games';
-import type { GameFormInput } from '@/api/games';
+import { games, GENRES, EMPTY_PAYLOAD, FIELD_KEYS, FIELD_LABELS, readForm, type GameFormInput } from '@/api/games';
+import { isObjectId } from '@meteor/db';
 import type { CreateGameErrors } from '@meteor/types';
 
 let payload: GameFormInput = { ...EMPTY_PAYLOAD };
 let errors: CreateGameErrors = {};
-let created: { universeId: number; name: string } | null = null;
+let created: { id: string; name: string } | null = null;
 
 const result = Astro.getActionResult(actions.createGame);
 
-if (result?.error && isInputError(result.error)) {
-  for (const [field, messages] of Object.entries(result.error.fields)) {
-    const first = messages?.[0];
-    if (first && (FIELD_KEYS as readonly string[]).includes(field)) {
-      errors[field as keyof CreateGameErrors] = first;
+if (result?.error) {
+  if (isInputError(result.error)) {
+    for (const [field, messages] of Object.entries(result.error.fields)) {
+      const first = messages?.[0];
+      if (first && (FIELD_KEYS as readonly string[]).includes(field)) {
+        errors[field as keyof CreateGameErrors] = first;
+      }
     }
+  } else if (result.error.code === 'CONFLICT' || result.error.message?.includes('уже существует')) {
+    errors.name = result.error.message;
+  } else {
+    errors.form = result.error.message || 'Произошла непредвиденная ошибка при публикации игры.';
   }
-  Astro.response.status = 422;
-  payload = readForm(await Astro.request.formData());
+
+  Astro.response.status = result.error.code === 'CONFLICT' ? 409 : 422;
+  try {
+    payload = readForm(await Astro.request.formData());
+  } catch {
+    // игнорируем ошибку чтения formData в непредвиденных случаях
+  }
 }
 
-if (result?.data?.success && result.data.universeId) {
-  return Astro.redirect(`/games/new?created=${result.data.universeId}`, 303);
+if (result?.data?.success && result.data.gameId) {
+  return Astro.redirect(`/games/new?created=${result.data.gameId}`, 303);
 }
 
-const createdId = Number(Astro.url.searchParams.get('created'));
-if (Number.isInteger(createdId) && createdId > 0) {
-  const game = games.getCatalogItem(createdId);
+const createdId = Astro.url.searchParams.get('created') ?? '';
+if (isObjectId(createdId)) {
+  const game = await games.getDetails(createdId);
   if (game) {
-    created = { universeId: game.universeId, name: game.name };
+    created = { id: game.id, name: game.name };
   }
 }
 
@@ -64,7 +75,7 @@ const hasErrors = Object.keys(errors).length > 0;
           {created.name} добавлена в каталог
         </Notice>
         <div class="result__actions">
-          <Button href={`/games/${created.universeId}`}>Открыть карточку игры</Button>
+          <Button href={`/games/${created.id}`}>Открыть карточку игры</Button>
           <Button variant="ghost" href="/games">Посмотреть каталог</Button>
         </div>
       </div>
@@ -74,6 +85,7 @@ const hasErrors = Object.keys(errors).length > 0;
   <div class="result" data-error-summary hidden={!hasErrors} aria-live="polite">
     <Notice tone="error" title="Проверьте поля формы">
       <ul class="summary" data-error-list>
+        {errors.form && <li>{errors.form}</li>}
         {FIELD_KEYS.filter((key) => errors[key]).map((key) => (
           <li data-summary-for={key}>
             <a href={`#${key}`}>{FIELD_LABELS[key]}: {errors[key]}</a>
@@ -269,10 +281,17 @@ const hasErrors = Object.keys(errors).length > 0;
           const first = applyInputError(error);
           first?.focus();
           first?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else if (error.code === 'CONFLICT' || error.message?.includes('уже существует')) {
+          const nameInput = form.querySelector<HTMLInputElement>('#name');
+          if (nameInput) {
+            setError(nameInput, error.message);
+            nameInput.focus();
+            nameInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
         } else if (list && summary) {
           list.replaceChildren();
           const item = document.createElement('li');
-          item.textContent = 'Не удалось отправить форму. Попробуйте ещё раз.';
+          item.textContent = error.message || 'Не удалось отправить форму. Попробуйте ещё раз.';
           list.append(item);
           summary.hidden = false;
         }
@@ -281,8 +300,8 @@ const hasErrors = Object.keys(errors).length > 0;
         return;
       }
 
-      if (data?.success && data.universeId) {
-        window.location.assign(`/games/new?created=${data.universeId}`);
+      if (data?.success && data.gameId) {
+        window.location.assign(`/games/new?created=${data.gameId}`);
       }
     });
 

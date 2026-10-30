@@ -1,20 +1,21 @@
 ---
 import ThumbsUp from '@lucide/astro/icons/thumbs-up';
 import Users from '@lucide/astro/icons/users';
-import { asset, formatNumber, getRating, type CatalogEntry } from '@/api/games';
+import { asset, formatNumber, getRating } from '@/api/games';
+import type { Game } from '@meteor/types';
 
 interface Props {
-  game: CatalogEntry;
+  game: Game;
   withPlayers?: boolean;
 }
 
 const { game, withPlayers = false } = Astro.props;
 
-const rating = getRating(game.universeId);
+const rating = getRating(game.id);
 ---
 
-<article class="game-card" data-game-card data-game-id={game.universeId} draggable="false">
-  <a href={`/games/${game.universeId}`} class="game-card__link" draggable="false">
+<article class="game-card" data-game-card data-game-id={game.id} draggable="false">
+  <a href={`/games/${game.id}`} class="game-card__link" draggable="false">
     <span class="game-card__media">
       <img src={asset(game.images.banner)} alt={game.name} loading="lazy" decoding="async" draggable="false" />
     </span>
@@ -27,7 +28,7 @@ const rating = getRating(game.universeId);
       {withPlayers && (
         <span class="game-card__meta-item">
           <Users size={13} stroke-width={2} />
-          {formatNumber(game.playing)}
+          {formatNumber(game.metrics.playing)}
         </span>
       )}
     </span>

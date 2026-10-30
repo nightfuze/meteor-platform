@@ -1,45 +1,44 @@
 ---
 import { formatDate, formatNumber } from '@/api/games';
-import type { CatalogEntry, GameEntry } from '@/api/games';
+import type { Game } from '@meteor/types';
 
 interface Props {
-  details: GameEntry;
-  catalogItem: CatalogEntry;
+  game: Game
 }
 
-const { details, catalogItem } = Astro.props;
+const { game } = Astro.props;
 ---
 
 <dl class="game-stats">
   <div class="game-stats__item">
     <dt class="game-stats__term">Активных игроков</dt>
-    <dd class="game-stats__desc">{formatNumber(catalogItem.playing)}</dd>
+    <dd class="game-stats__desc">{formatNumber(game.metrics.playing)}</dd>
   </div>
   <div class="game-stats__item">
     <dt class="game-stats__term">Посещаемость</dt>
-    <dd class="game-stats__desc">{formatNumber(catalogItem.visits)}</dd>
+    <dd class="game-stats__desc">{formatNumber(game.metrics.visits)}</dd>
   </div>
   <div class="game-stats__item">
     <dt class="game-stats__term">В избранном</dt>
-    <dd class="game-stats__desc">{formatNumber(details.favoritedCount)}</dd>
+    <dd class="game-stats__desc">{formatNumber(game.metrics.favoritedCount)}</dd>
   </div>
   <div class="game-stats__item">
     <dt class="game-stats__term">Лимит игроков</dt>
-    <dd class="game-stats__desc">{details.maxPlayers}</dd>
+    <dd class="game-stats__desc">{game.maxPlayers}</dd>
   </div>
   <div class="game-stats__item">
     <dt class="game-stats__term">Цена</dt>
     <dd class="game-stats__desc">
-      {details.price === null ? 'Бесплатно' : `${details.price} ₽`}
+      {game.price === null ? 'Бесплатно' : `${game.price}`}
     </dd>
   </div>
   <div class="game-stats__item">
     <dt class="game-stats__term">Опубликована</dt>
-    <dd class="game-stats__desc">{formatDate(details.created)}</dd>
+    <dd class="game-stats__desc">{formatDate(game.createdAt)}</dd>
   </div>
   <div class="game-stats__item">
     <dt class="game-stats__term">Обновлена</dt>
-    <dd class="game-stats__desc">{formatDate(details.updated)}</dd>
+    <dd class="game-stats__desc">{formatDate(game.updatedAt)}</dd>
   </div>
 </dl>
 
