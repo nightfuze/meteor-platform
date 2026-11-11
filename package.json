@@ -12,6 +12,8 @@
     "dev:platform": "bun --filter @meteor/platform dev",
     "build:platform": "bun --filter @meteor/platform build",
     "preview:platform": "bun --filter @meteor/platform preview",
+    "dev:storybook": "bun --filter @meteor/storybook dev",
+    "build:storybook": "bun --filter @meteor/storybook build",
     "db:seed": "bun --filter @meteor/db db:seed"
   },
   "devDependencies": {
