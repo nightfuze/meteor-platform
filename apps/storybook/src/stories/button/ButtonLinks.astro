@@ -1,0 +1,13 @@
+---
+import { Button, Container, Inline, Stack } from "@meteor/ui";
+---
+
+<Container class="py-8">
+  <Stack as="section" gap={4}>
+    <h1 class="text-2xl font-bold tracking-tight">Ссылки Button</h1>
+    <Inline gap={4} class="rounded-lg border p-5">
+      <Button as="a" href="/" variant="primary">Открыть страницу</Button>
+      <Button as="a" href="/" variant="outline" disabled>Отключённая ссылка</Button>
+    </Inline>
+  </Stack>
+</Container>

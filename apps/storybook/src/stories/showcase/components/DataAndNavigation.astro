@@ -1,0 +1,160 @@
+---
+import {
+  Button,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  Image,
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  ScrollArea,
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  Toaster,
+  Video,
+} from "@meteor/ui";
+import { Container, Stack, Inline } from "@meteor/ui";
+import gameIcon from "../../../../../platform/public/images/383310974/icon.png";
+---
+
+<Container class="py-8">
+  <Stack gap={8}>
+    <header class="max-w-2xl">
+      <p class="text-sm font-medium text-muted-foreground">Meteor UI · Навигация и данные</p>
+      <h1 class="mt-2 text-3xl font-bold tracking-tight">Навигация, медиа и списки</h1>
+      <p class="mt-3 text-muted-foreground">Примеры компоновки каталога, страниц игр и панели управления.</p>
+    </header>
+
+    <section class="rounded-xl border bg-card p-5">
+      <h2 class="mb-4 text-lg font-semibold">NavigationMenu</h2>
+      <NavigationMenu>
+        <NavigationMenuList>
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>Игры</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <div class="grid gap-2 p-4 md:w-[28rem] md:grid-cols-2">
+                <NavigationMenuLink href="/games">Каталог игр</NavigationMenuLink>
+                <NavigationMenuLink href="/favorites">Избранное</NavigationMenuLink>
+                <NavigationMenuLink href="/games/new">Опубликовать игру</NavigationMenuLink>
+                <NavigationMenuLink href="/">Рекомендации</NavigationMenuLink>
+              </div>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+          <NavigationMenuItem><NavigationMenuLink href="/games">Каталог</NavigationMenuLink></NavigationMenuItem>
+          <NavigationMenuItem><NavigationMenuLink href="/favorites">Избранное</NavigationMenuLink></NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
+    </section>
+
+    <div class="grid gap-6 lg:grid-cols-2">
+      <section class="rounded-xl border bg-card p-5">
+        <h2 class="mb-4 text-lg font-semibold">Sidebar</h2>
+        <SidebarProvider defaultOpen={true} persistOpen={false}>
+          <div class="flex min-h-72 w-full overflow-hidden rounded-lg border">
+            <Sidebar collapsible="none" class="w-60 border-r">
+              <SidebarContent>
+                <SidebarGroup>
+                  <SidebarGroupLabel>Моя библиотека</SidebarGroupLabel>
+                  <SidebarMenu>
+                    <SidebarMenuItem><SidebarMenuButton href="/games" isActive>Каталог</SidebarMenuButton></SidebarMenuItem>
+                    <SidebarMenuItem><SidebarMenuButton href="/favorites">Избранное</SidebarMenuButton></SidebarMenuItem>
+                    <SidebarMenuItem><SidebarMenuButton href="/games/new">Мои игры</SidebarMenuButton></SidebarMenuItem>
+                  </SidebarMenu>
+                </SidebarGroup>
+              </SidebarContent>
+            </Sidebar>
+            <div class="min-w-0 flex-1 p-5">
+              <Inline align="center" justify="between">
+                <div><h3 class="font-semibold">Игровая библиотека</h3><p class="text-sm text-muted-foreground">Управление разделами</p></div>
+                <SidebarTrigger aria-label="Свернуть меню" />
+              </Inline>
+            </div>
+          </div>
+        </SidebarProvider>
+      </section>
+
+      <section class="rounded-xl border bg-card p-5">
+        <h2 class="mb-4 text-lg font-semibold">Table</h2>
+        <Table>
+          <TableCaption>Последние опубликованные игры</TableCaption>
+          <TableHeader>
+            <TableRow><TableHead>Игра</TableHead><TableHead>Жанр</TableHead><TableHead class="text-right">Онлайн</TableHead></TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow><TableCell class="font-medium">Nebula Run</TableCell><TableCell>Приключения</TableCell><TableCell class="text-right">1 240</TableCell></TableRow>
+            <TableRow><TableCell class="font-medium">Starlight Arena</TableCell><TableCell>Экшен</TableCell><TableCell class="text-right">836</TableCell></TableRow>
+            <TableRow><TableCell class="font-medium">Wilds of Orion</TableCell><TableCell>RPG</TableCell><TableCell class="text-right">412</TableCell></TableRow>
+          </TableBody>
+        </Table>
+      </section>
+    </div>
+
+    <section class="rounded-xl border bg-card p-5">
+      <h2 class="mb-4 text-lg font-semibold">Carousel</h2>
+      <Carousel opts={{ align: "start", loop: true }} class="mx-auto max-w-4xl">
+        <CarouselContent>
+          {["Nebula Run", "Starlight Arena", "Wilds of Orion", "Лунная база «Ноль»"].map((title, index) => (
+            <CarouselItem class="basis-full sm:basis-1/2 lg:basis-1/3">
+              <article class="overflow-hidden rounded-lg border bg-background">
+                <Image src={gameIcon} alt="Обложка игры" class="aspect-video w-full object-cover" />
+                <div class="p-4"><h3 class="font-semibold">{title}</h3><p class="text-sm text-muted-foreground">Популярная игра Meteor</p></div>
+              </article>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <Inline justify="end" gap={2} class="mt-4"><CarouselPrevious /><CarouselNext /></Inline>
+      </Carousel>
+    </section>
+
+    <div class="grid gap-6 lg:grid-cols-2">
+      <section class="rounded-xl border bg-card p-5">
+        <h2 class="mb-4 text-lg font-semibold">ScrollArea</h2>
+        <ScrollArea class="h-48 rounded-md border p-4">
+          <Stack gap={3}>
+            {Array.from({ length: 12 }, (_, index) => <p class="border-b pb-2 text-sm">Игровое событие #{index + 1} · Команда вошла в лобби</p>)}
+          </Stack>
+        </ScrollArea>
+      </section>
+
+      <section class="rounded-xl border bg-card p-5">
+        <h2 class="mb-4 text-lg font-semibold">Video</h2>
+        <Video src="" title="Превью игры" poster="/favicon.svg" class="aspect-video w-full rounded-lg bg-muted" />
+        <p class="mt-2 text-sm text-muted-foreground">Нативный видеоплеер с постером и элементами управления.</p>
+      </section>
+    </div>
+
+    <div class="flex justify-end"><Button data-toast-demo>Показать уведомление</Button></div>
+    <Toaster />
+  </Stack>
+</Container>
+
+<script>
+  import { toast } from "@meteor/ui";
+
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+    if (target instanceof Element && target.closest("[data-toast-demo]")) {
+      toast.success("Игра добавлена в избранное", { description: "Она появится в вашей библиотеке." });
+    }
+  });
+</script>

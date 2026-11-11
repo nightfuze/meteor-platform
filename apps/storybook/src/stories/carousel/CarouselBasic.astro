@@ -1,0 +1,32 @@
+---
+import { Container, Stack } from "@meteor/ui";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@meteor/ui";
+---
+
+<Container class="py-8">
+  <Stack gap={4}>
+    <header>
+      <p class="text-sm font-medium text-muted-foreground">Meteor UI · Carousel</p>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight">Carousel</h1>
+      <p class="mt-2 max-w-2xl text-sm text-muted-foreground">Основной пример компонента и его составных частей.</p>
+    </header>
+
+    <section class="rounded-lg border bg-card p-5">
+      <Carousel opts={{ align: "start", loop: true }} class="max-w-2xl">
+        <CarouselContent>
+          {["Nebula Run", "Starlight Arena", "Wilds of Orion"].map((name) => (
+            <CarouselItem class="basis-1/2">
+              <div class="rounded-lg border bg-background p-8 text-center font-semibold">{name}</div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <div class="mt-4 flex justify-end gap-2"><CarouselPrevious /><CarouselNext /></div>
+      </Carousel>
+    </section>
+
+    <details class="rounded-lg border p-4">
+      <summary class="cursor-pointer text-sm font-semibold">Компоненты семейства</summary>
+      <p class="mt-3 text-sm text-muted-foreground">Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious</p>
+    </details>
+  </Stack>
+</Container>

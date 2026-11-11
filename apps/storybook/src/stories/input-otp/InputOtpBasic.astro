@@ -1,0 +1,27 @@
+---
+import { Container, Stack } from "@meteor/ui";
+import { InputOtp, InputOtpGroup, InputOtpSlot } from "@meteor/ui";
+---
+
+<Container class="py-8">
+  <Stack gap={4}>
+    <header>
+      <p class="text-sm font-medium text-muted-foreground">Meteor UI · InputOtp</p>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight">InputOtp</h1>
+      <p class="mt-2 max-w-2xl text-sm text-muted-foreground">Основной пример компонента и его составных частей.</p>
+    </header>
+
+    <section class="rounded-lg border bg-card p-5">
+      <InputOtp id="invite-code" defaultValue="42" maxLength={6} aria-label="Код приглашения в лобби">
+        <InputOtpGroup>
+          {Array.from({ length: 6 }, (_, index) => <InputOtpSlot index={index} />)}
+        </InputOtpGroup>
+      </InputOtp>
+    </section>
+
+    <details class="rounded-lg border p-4">
+      <summary class="cursor-pointer text-sm font-semibold">Компоненты семейства</summary>
+      <p class="mt-3 text-sm text-muted-foreground">InputOtp, InputOtpGroup, InputOtpSeparator, InputOtpSlot</p>
+    </details>
+  </Stack>
+</Container>

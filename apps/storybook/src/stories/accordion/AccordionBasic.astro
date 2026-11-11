@@ -1,0 +1,32 @@
+---
+import { Container, Stack } from "@meteor/ui";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@meteor/ui";
+---
+
+<Container class="py-8">
+  <Stack gap={4}>
+    <header>
+      <p class="text-sm font-medium text-muted-foreground">Meteor UI · Accordion</p>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight">Accordion</h1>
+      <p class="mt-2 max-w-2xl text-sm text-muted-foreground">Основной пример компонента и его составных частей.</p>
+    </header>
+
+    <section class="rounded-lg border bg-card p-5">
+      <Accordion type="single" collapsible class="max-w-xl">
+        <AccordionItem value="invite">
+          <AccordionTrigger>Как пригласить друзей?</AccordionTrigger>
+          <AccordionContent>Откройте игровое лобби и отправьте друзьям ссылку-приглашение.</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="privacy">
+          <AccordionTrigger>Можно ли сделать лобби закрытым?</AccordionTrigger>
+          <AccordionContent>Да. Измените видимость лобби в настройках игры.</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </section>
+
+    <details class="rounded-lg border p-4">
+      <summary class="cursor-pointer text-sm font-semibold">Компоненты семейства</summary>
+      <p class="mt-3 text-sm text-muted-foreground">Accordion, AccordionContent, AccordionItem, AccordionTrigger</p>
+    </details>
+  </Stack>
+</Container>

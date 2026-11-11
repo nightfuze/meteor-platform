@@ -1,0 +1,30 @@
+---
+import { Container, Stack } from "@meteor/ui";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@meteor/ui";
+---
+
+<Container class="py-8">
+  <Stack gap={4}>
+    <header>
+      <p class="text-sm font-medium text-muted-foreground">Meteor UI · Tabs</p>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight">Tabs</h1>
+      <p class="mt-2 max-w-2xl text-sm text-muted-foreground">Основной пример компонента и его составных частей.</p>
+    </header>
+
+    <section class="rounded-lg border bg-card p-5">
+      <Tabs defaultValue="about" class="max-w-lg">
+        <TabsList>
+          <TabsTrigger value="about">Об игре</TabsTrigger>
+          <TabsTrigger value="servers">Серверы</TabsTrigger>
+        </TabsList>
+        <TabsContent value="about">Исследуйте орбитальные станции вместе с друзьями.</TabsContent>
+        <TabsContent value="servers">Доступно 3 региона · 18 активных серверов</TabsContent>
+      </Tabs>
+    </section>
+
+    <details class="rounded-lg border p-4">
+      <summary class="cursor-pointer text-sm font-semibold">Компоненты семейства</summary>
+      <p class="mt-3 text-sm text-muted-foreground">Tabs, TabsContent, TabsList, TabsTrigger</p>
+    </details>
+  </Stack>
+</Container>

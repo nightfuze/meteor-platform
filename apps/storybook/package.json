@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "storybook dev",
-    "build": "storybook build"
+    "build": "storybook build --output-dir dist"
   },
   "dependencies": {
     "@meteor/ui": "workspace:*",

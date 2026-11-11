@@ -1,0 +1,87 @@
+---
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  AspectRatio,
+  Avatar,
+  AvatarFallback,
+  Badge,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Container,
+  Item,
+  ItemContent,
+  ItemDescription,
+  ItemTitle,
+  Kbd,
+  Progress,
+  Prose,
+  Separator,
+  Skeleton,
+  Spinner,
+  Stack,
+} from "@meteor/ui";
+---
+
+<Container class="py-8">
+  <Stack gap={8}>
+    <h1 class="text-3xl font-bold tracking-tight">Отображение и обратная связь</h1>
+
+    <Stack as="section" gap={4}>
+      <h2 class="text-xl font-semibold">Уведомления и бейджи</h2>
+      <Stack gap={3}>
+        <Alert variant="info">
+          <AlertTitle>Лобби готово</AlertTitle>
+          <AlertDescription>Игровая комната открыта для игроков.</AlertDescription>
+        </Alert>
+        <Stack direction="row" align="center" gap={3}>
+          <Badge>Обычный</Badge>
+          <Badge variant="secondary">Вторичный</Badge>
+          <Badge variant="outline">Контурный</Badge>
+        </Stack>
+      </Stack>
+    </Stack>
+
+    <Stack as="section" gap={4}>
+      <h2 class="text-xl font-semibold">Карточка и элемент</h2>
+      <Card class="max-w-md">
+        <CardHeader>
+          <CardTitle>Игровой сервер</CardTitle>
+          <CardDescription>Загрузка игровых ресурсов</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Progress value={68} aria-label="Загрузка игровых ресурсов" />
+        </CardContent>
+      </Card>
+      <Item class="max-w-md rounded-lg border p-4">
+        <ItemContent>
+          <ItemTitle>Приглашение игрока</ItemTitle>
+          <ItemDescription>NovaFox приглашает вас в лобби.</ItemDescription>
+        </ItemContent>
+      </Item>
+    </Stack>
+
+    <Stack as="section" gap={4}>
+      <h2 class="text-xl font-semibold">Состояния и загрузка</h2>
+      <Stack direction="row" align="center" gap={4}>
+        <Avatar><AvatarFallback>NF</AvatarFallback></Avatar>
+        <Spinner aria-label="Загрузка" />
+        <Kbd>Tab</Kbd>
+      </Stack>
+      <Skeleton class="h-4 w-48" />
+      <Separator />
+    </Stack>
+
+    <Stack as="section" gap={4}>
+      <h2 class="text-xl font-semibold">Соотношение сторон и текст</h2>
+      <AspectRatio ratio={16 / 9} class="max-w-lg rounded-lg bg-muted">
+        <div class="flex h-full items-center justify-center text-sm text-muted-foreground">Превью 16:9</div>
+      </AspectRatio>
+      <Prose><p>Войдите в лобби, чтобы объединиться с друзьями, выбрать режим игры и начать матч.</p></Prose>
+    </Stack>
+  </Stack>
+</Container>

@@ -1,0 +1,146 @@
+---
+import {
+  Button,
+  ButtonGroup,
+  ButtonGroupSeparator,
+  ButtonGroupText,
+  Checkbox,
+  CheckboxGroup,
+  ColorPicker,
+  Combobox,
+  ComboboxContent,
+  ComboboxInput,
+  ComboboxItem,
+  Dropzone,
+  Field,
+  Form,
+  FormErrorSummary,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupText,
+  InputOtp,
+  InputOtpGroup,
+  InputOtpSlot,
+  Label,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  ThemeToggle,
+  Toggle,
+  ToggleGroup,
+  ToggleGroupItem,
+} from "@meteor/ui";
+import { Container, Stack, Inline } from "@meteor/ui";
+---
+
+<Container class="py-8">
+  <Stack gap={8}>
+    <header class="max-w-2xl">
+      <p class="text-sm font-medium text-muted-foreground">Meteor UI · Интерактивные компоненты</p>
+      <h1 class="mt-2 text-3xl font-bold tracking-tight">Дополнительные элементы управления</h1>
+      <p class="mt-3 text-muted-foreground">Составные поля, выбор значений, проверка данных и состояния ввода.</p>
+    </header>
+
+    <div class="grid gap-6 lg:grid-cols-2">
+      <section class="rounded-xl border bg-card p-5">
+        <h2 class="mb-4 text-lg font-semibold">Combobox и Select</h2>
+        <Stack gap={4}>
+          <Field>
+            <Label for="game-search">Игра</Label>
+            <Combobox defaultValue="nebula">
+              <ComboboxInput id="game-search" name="game" placeholder="Выберите игру" />
+              <ComboboxContent>
+                <ComboboxItem value="nebula">Nebula Run</ComboboxItem>
+                <ComboboxItem value="starlight">Starlight Arena</ComboboxItem>
+                <ComboboxItem value="wilds">Wilds of Orion</ComboboxItem>
+              </ComboboxContent>
+            </Combobox>
+          </Field>
+          <Field>
+            <Label>Регион сервера</Label>
+            <Select defaultValue="eu">
+              <SelectTrigger placeholder="Выберите регион" />
+              <SelectContent>
+                <SelectItem value="eu">Европа</SelectItem>
+                <SelectItem value="na">Северная Америка</SelectItem>
+                <SelectItem value="asia">Азия</SelectItem>
+              </SelectContent>
+            </Select>
+          </Field>
+        </Stack>
+      </section>
+
+      <section class="rounded-xl border bg-card p-5">
+        <h2 class="mb-4 text-lg font-semibold">Form и состояния ввода</h2>
+        <Form class="space-y-4">
+          <FormErrorSummary>
+            <p>Не удалось сохранить настройки лобби. Проверьте обязательные поля.</p>
+          </FormErrorSummary>
+          <Field>
+            <Label for="lobby-code">Код лобби</Label>
+            <InputOtp id="lobby-code" name="lobby-code" defaultValue="42" maxLength={6}>
+              <InputOtpGroup>
+                {Array.from({ length: 6 }, (_, index) => <InputOtpSlot index={index} />)}
+              </InputOtpGroup>
+            </InputOtp>
+          </Field>
+          <Field>
+            <Label for="invite-code">Пригласительная ссылка</Label>
+            <InputGroup>
+              <InputGroupAddon><InputGroupText>meteor.gg/</InputGroupText></InputGroupAddon>
+              <InputGroupInput id="invite-code" value="nebula-42" readonly />
+              <InputGroupAddon align="inline-end"><Button size="sm" variant="outline">Копировать</Button></InputGroupAddon>
+            </InputGroup>
+          </Field>
+        </Form>
+      </section>
+
+      <section class="rounded-xl border bg-card p-5">
+        <h2 class="mb-4 text-lg font-semibold">Checkbox Group</h2>
+        <CheckboxGroup defaultValue={["voice"]} class="space-y-3">
+          <Checkbox id="setting-voice" name="settings" value="voice" label="Голосовой чат" />
+          <Checkbox id="setting-spectators" name="settings" value="spectators" label="Разрешить зрителей" />
+          <Checkbox id="setting-private" name="settings" value="private" label="Закрытое лобби" />
+        </CheckboxGroup>
+      </section>
+
+      <section class="rounded-xl border bg-card p-5">
+        <h2 class="mb-4 text-lg font-semibold">Toggle и ColorPicker</h2>
+        <Stack gap={4}>
+          <Inline align="center" gap={3}>
+            <Toggle aria-label="Закрепить игру" defaultPressed>Закрепить</Toggle>
+            <ToggleGroup defaultValue={["list"]} aria-label="Вид каталога">
+              <ToggleGroupItem value="grid">Сетка</ToggleGroupItem>
+              <ToggleGroupItem value="list">Список</ToggleGroupItem>
+            </ToggleGroup>
+            <ThemeToggle ariaLabel="Переключить тему" />
+          </Inline>
+          <ColorPicker label="Цвет команды" defaultValue="#7C5CFC" alpha={false} />
+        </Stack>
+      </section>
+
+      <section class="rounded-xl border bg-card p-5">
+        <h2 class="mb-4 text-lg font-semibold">ButtonGroup</h2>
+        <ButtonGroup aria-label="Каталог игр">
+          <ButtonGroupText>Вид</ButtonGroupText>
+          <Button variant="outline">Сетка</Button>
+          <ButtonGroupSeparator />
+          <Button variant="outline">Список</Button>
+        </ButtonGroup>
+      </section>
+
+      <section class="rounded-xl border bg-card p-5 lg:col-span-2">
+        <h2 class="mb-4 text-lg font-semibold">Dropzone</h2>
+        <Dropzone name="game-art" accept="image/*" aria-label="Загрузить изображение игры">
+          <div class="space-y-2 text-center">
+            <p class="font-medium">Перетащите обложку игры сюда</p>
+            <p class="text-sm text-muted-foreground">PNG или JPG, до 10 МБ</p>
+            <Button type="button" variant="outline" size="sm">Выбрать файл</Button>
+          </div>
+        </Dropzone>
+      </section>
+    </div>
+  </Stack>
+</Container>

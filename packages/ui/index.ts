@@ -1,7 +1,65 @@
 import { ThemeInitScript } from "@starwind-ui/astro";
 
-export { ThemeInitScript }
-export { default as Button } from '@/components/ui/button/Button.astro';
+export { ThemeInitScript };
+
+// Layout primitives and patterns
 export * from "./src/components/layout";
 
-export * from "./src/components/layout";
+// UI components
+export * from "./src/components/ui/accordion";
+export * from "./src/components/ui/alert";
+export * from "./src/components/ui/alert-dialog";
+export * from "./src/components/ui/aspect-ratio";
+export { AspectRatio } from "./src/components/ui/aspect-ratio";
+export * from "./src/components/ui/avatar";
+export * from "./src/components/ui/badge";
+export * from "./src/components/ui/breadcrumb";
+export * from "./src/components/ui/button";
+export * from "./src/components/ui/button-group";
+export * from "./src/components/ui/card";
+export * from "./src/components/ui/carousel";
+export * from "./src/components/ui/checkbox";
+export * from "./src/components/ui/checkbox-group";
+export * from "./src/components/ui/collapsible";
+export * from "./src/components/ui/color-picker";
+export * from "./src/components/ui/combobox";
+export * from "./src/components/ui/context-menu";
+export * from "./src/components/ui/dialog";
+export * from "./src/components/ui/dropdown";
+export * from "./src/components/ui/dropzone";
+export * from "./src/components/ui/field";
+export * from "./src/components/ui/form";
+export * from "./src/components/ui/hover-card";
+export * from "./src/components/ui/image";
+export * from "./src/components/ui/input";
+export * from "./src/components/ui/input-group";
+export * from "./src/components/ui/input-otp";
+export * from "./src/components/ui/item";
+export * from "./src/components/ui/kbd";
+export * from "./src/components/ui/label";
+export * from "./src/components/ui/native-select";
+export * from "./src/components/ui/navigation-menu";
+export * from "./src/components/ui/pagination";
+export * from "./src/components/ui/popover";
+export * from "./src/components/ui/progress";
+export * from "./src/components/ui/prose";
+export * from "./src/components/ui/radio-group";
+export * from "./src/components/ui/scroll-area";
+export { ScrollArea } from "./src/components/ui/scroll-area";
+export * from "./src/components/ui/select";
+export * from "./src/components/ui/separator";
+export * from "./src/components/ui/sheet";
+export * from "./src/components/ui/sidebar";
+export * from "./src/components/ui/skeleton";
+export * from "./src/components/ui/slider";
+export * from "./src/components/ui/spinner";
+export * from "./src/components/ui/switch";
+export * from "./src/components/ui/table";
+export * from "./src/components/ui/tabs";
+export * from "./src/components/ui/textarea";
+export * from "./src/components/ui/theme-toggle";
+export * from "./src/components/ui/toast";
+export * from "./src/components/ui/toggle";
+export * from "./src/components/ui/toggle-group";
+export * from "./src/components/ui/tooltip";
+export * from "./src/components/ui/video";

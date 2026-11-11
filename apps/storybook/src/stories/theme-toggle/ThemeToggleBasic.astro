@@ -1,0 +1,23 @@
+---
+import { Container, Stack } from "@meteor/ui";
+import ThemeToggle from "@meteor/ui/components/ui/theme-toggle/ThemeToggle.astro";
+---
+
+<Container class="py-8">
+  <Stack gap={4}>
+    <header>
+      <p class="text-sm font-medium text-muted-foreground">Meteor UI · ThemeToggle</p>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight">ThemeToggle</h1>
+      <p class="mt-2 max-w-2xl text-sm text-muted-foreground">Основной пример компонента и его составных частей.</p>
+    </header>
+
+    <section class="rounded-lg border bg-card p-5">
+      <ThemeToggle ariaLabel="Toggle color theme" />
+    </section>
+
+    <details class="rounded-lg border p-4">
+      <summary class="cursor-pointer text-sm font-semibold">Компоненты семейства</summary>
+      <p class="mt-3 text-sm text-muted-foreground">ThemeToggle</p>
+    </details>
+  </Stack>
+</Container>

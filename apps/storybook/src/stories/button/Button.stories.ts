@@ -1,16 +1,16 @@
-import ButtonBasic from './ButtonBasic.astro';
+import ButtonBasic from "./ButtonBasic.astro";
 
 export default {
-  title: 'Components/Button',
+  title: "Components/Button/Variants",
   component: ButtonBasic,
   parameters: {
-    layout: 'padded',
+    layout: "fullscreen",
     docs: {
       description: {
-        component: 'Базовая кнопка дизайн-системы Meteor.',
+        component: "Варианты, размеры и состояния компонента Button.",
       },
     },
   },
 };
 
-export const Basic = {};
+export const Overview = {};

@@ -1,0 +1,23 @@
+---
+import { Container, Stack } from "@meteor/ui";
+import ColorPicker from "@meteor/ui/components/ui/color-picker/ColorPicker.astro";
+---
+
+<Container class="py-8">
+  <Stack gap={4}>
+    <header>
+      <p class="text-sm font-medium text-muted-foreground">Meteor UI · ColorPicker</p>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight">ColorPicker</h1>
+      <p class="mt-2 max-w-2xl text-sm text-muted-foreground">Основной пример компонента и его составных частей.</p>
+    </header>
+
+    <section class="rounded-lg border bg-card p-5">
+      <ColorPicker label="Цвет команды" defaultValue="#7C5CFC" alpha={false} clearable swatches={["#7C5CFC", "#28A879", "#E58B2A"]} />
+    </section>
+
+    <details class="rounded-lg border p-4">
+      <summary class="cursor-pointer text-sm font-semibold">Компоненты семейства</summary>
+      <p class="mt-3 text-sm text-muted-foreground">ColorPicker, ColorPickerArea, ColorPickerChannelInput, ColorPickerChannelSlider, ColorPickerClear, ColorPickerContent, ColorPickerDefaultEditor, ColorPickerEyeDropper, ColorPickerInput, ColorPickerSwatch, ColorPickerSwatchGroup, ColorPickerTrigger, ColorPickerValueSwatch</p>
+    </details>
+  </Stack>
+</Container>

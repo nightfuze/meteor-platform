@@ -1,0 +1,14 @@
+---
+import { Button, Container, Inline, Stack } from "@meteor/ui";
+---
+
+<Container class="py-8">
+  <Stack as="section" gap={4}>
+    <h1 class="text-2xl font-bold tracking-tight">Состояния Button</h1>
+    <Inline gap={4} class="rounded-lg border p-5">
+      <Button variant="primary" type="button">Включён</Button>
+      <Button variant="primary" disabled type="button">Отключён</Button>
+      <Button variant="primary" disabled focusableWhenОтключён type="button">Отключённая, но доступная с клавиатуры</Button>
+    </Inline>
+  </Stack>
+</Container>

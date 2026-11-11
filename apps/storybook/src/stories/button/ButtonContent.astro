@@ -1,0 +1,14 @@
+---
+import { Button, Container, Stack } from "@meteor/ui";
+---
+
+<Container class="py-8">
+  <Stack as="section" gap={4}>
+    <h1 class="text-2xl font-bold tracking-tight">Содержимое Button</h1>
+    <Stack gap={4} class="rounded-lg border p-5">
+      <Button variant="primary" type="button">Сохранить</Button>
+      <Button variant="secondary" type="button">Более длинная подпись кнопки</Button>
+      <Button variant="outline" class="w-full" type="button">На всю ширину</Button>
+    </Stack>
+  </Stack>
+</Container>

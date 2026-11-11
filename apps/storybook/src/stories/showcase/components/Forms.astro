@@ -1,0 +1,80 @@
+---
+import {
+  Checkbox,
+  Container,
+  Input,
+  Label,
+  NativeSelect,
+  NativeSelectOption,
+  RadioGroup,
+  RadioGroupItem,
+  Slider,
+  Stack,
+  Switch,
+  Textarea,
+} from "@meteor/ui";
+---
+
+<Container class="py-8">
+  <Stack gap={8}>
+    <h1 class="text-3xl font-bold tracking-tight">Элементы формы</h1>
+
+    <Stack as="section" gap={4}>
+      <h2 class="text-xl font-semibold">Текстовые поля</h2>
+      <Stack gap={4} class="max-w-md rounded-lg border p-5">
+        <Stack gap={2}>
+          <Label for="demo-input">Имя игрока</Label>
+          <Input id="demo-input" placeholder="PixelRanger" />
+        </Stack>
+        <Stack gap={2}>
+          <Label for="demo-textarea">Сообщение лобби</Label>
+          <Textarea id="demo-textarea" placeholder="Расскажите игрокам, чего ожидать..." />
+        </Stack>
+      </Stack>
+    </Stack>
+
+    <Stack as="section" gap={4}>
+      <h2 class="text-xl font-semibold">Selection</h2>
+      <Stack gap={4} class="max-w-md rounded-lg border p-5">
+        <Stack gap={2}>
+          <Label for="demo-native-select">Режим игры</Label>
+          <NativeSelect id="demo-native-select" name="game-mode">
+            <NativeSelectOption value="team-deathmatch">Командный бой</NativeSelectOption>
+            <NativeSelectOption value="capture-the-flag">Захват флага</NativeSelectOption>
+          </NativeSelect>
+        </Stack>
+        <Stack gap={3}>
+          <Label>Настройки лобби</Label>
+          <Stack direction="row" align="center" gap={2}>
+            <Checkbox id="demo-checkbox" checked />
+            <Label for="demo-checkbox">Разрешить зрителей</Label>
+          </Stack>
+          <Stack direction="row" align="center" gap={2}>
+            <Switch id="demo-switch" checked />
+            <Label for="demo-switch">Включить голосовой чат</Label>
+          </Stack>
+        </Stack>
+        <Stack gap={2}>
+          <Label>Team</Label>
+          <RadioGroup name="team" defaultValue="blue" class="gap-3">
+            <Stack direction="row" align="center" gap={2}>
+              <RadioGroupItem id="blue-team" value="blue" />
+              <Label for="blue-team">Синяя команда</Label>
+            </Stack>
+            <Stack direction="row" align="center" gap={2}>
+              <RadioGroupItem id="red-team" value="red" />
+              <Label for="red-team">Красная команда</Label>
+            </Stack>
+          </RadioGroup>
+        </Stack>
+      </Stack>
+    </Stack>
+
+    <Stack as="section" gap={4}>
+      <h2 class="text-xl font-semibold">Громкость голосового чата</h2>
+      <div class="max-w-md rounded-lg border p-5">
+        <Slider value={[50]} min={0} max={100} />
+      </div>
+    </Stack>
+  </Stack>
+</Container>
