@@ -1,0 +1,27 @@
+---
+import type { BaseLayoutProps, Breakpoint } from "../types";
+
+interface Props extends BaseLayoutProps {
+  breakpoints?: Partial<Record<Breakpoint, string>>;
+}
+
+const {
+  as = "div",
+  class: className,
+  breakpoints,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "min-w-0",
+    className
+  ]}
+  data-slot="responsive"
+>
+  <slot />
+</Tag>

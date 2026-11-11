@@ -1,0 +1,41 @@
+---
+import type { GridLayoutProps } from "../types";
+import { gridColumnClass, gridRowClass, gapClass, rowGapClass, columnGapClass, alignClasses, justifyClasses, pickClass } from "../types";
+
+interface Props extends GridLayoutProps {
+}
+
+const {
+  as = "div",
+  class: className,
+  columns = 2,
+  rows,
+  gap = 4,
+  rowGap,
+  columnGap,
+  align,
+  justify,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "grid",
+    "min-w-0",
+    pickClass(gridColumnClass, columns),
+    pickClass(gridRowClass, rows),
+    pickClass(gapClass, gap),
+    pickClass(rowGapClass, rowGap),
+    pickClass(columnGapClass, columnGap),
+    pickClass(alignClasses, align),
+    pickClass(justifyClasses, justify),
+    className
+  ]}
+  data-slot="grid"
+>
+  <slot />
+</Tag>

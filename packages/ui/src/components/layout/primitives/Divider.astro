@@ -1,0 +1,35 @@
+---
+import type { BaseLayoutProps, Spacing } from "../types";
+import { dividerSpacingClass, pickClass } from "../types";
+
+interface Props extends BaseLayoutProps {
+  orientation?: "horizontal" | "vertical";
+  variant?: "solid" | "dashed";
+  spacing?: Spacing;
+}
+
+const {
+  as = "div",
+  class: className,
+  orientation = "horizontal",
+  variant = "solid",
+  spacing,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "shrink-0",
+    "border-border",
+    { "w-full border-t": orientation === "horizontal", "h-full border-l": orientation === "vertical", "border-dashed": variant === "dashed", "border-solid": variant === "solid" },
+    pickClass(dividerSpacingClass, spacing),
+    className
+  ]}
+  data-slot="divider"
+>
+  <slot />
+</Tag>

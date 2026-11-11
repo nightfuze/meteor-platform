@@ -1,0 +1,36 @@
+---
+import type { BaseLayoutProps, ContainerSize } from "../types";
+import { containerSizeClass, pickClass } from "../types";
+
+interface Props extends BaseLayoutProps {
+  maxWidth?: ContainerSize;
+  minHeight?: boolean;
+}
+
+const {
+  as = "div",
+  class: className,
+  maxWidth = "lg",
+  minHeight = true,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "mx-auto",
+    "flex",
+    "w-full",
+    "flex-col",
+    "items-center",
+    pickClass(containerSizeClass, maxWidth),
+    { "min-h-screen justify-center": minHeight },
+    className
+  ]}
+  data-slot="centered-layout"
+>
+  <slot />
+</Tag>

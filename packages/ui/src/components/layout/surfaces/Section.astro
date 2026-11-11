@@ -1,0 +1,34 @@
+---
+import type { BaseLayoutProps, Spacing, ContainerSize } from "../types";
+import { gapClass, containerSizeClass, pickClass } from "../types";
+
+interface Props extends BaseLayoutProps {
+  spacing?: Spacing;
+  width?: ContainerSize;
+}
+
+const {
+  as = "div",
+  class: className,
+  spacing = 6,
+  width,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "flex",
+    "min-w-0",
+    "flex-col",
+    pickClass(gapClass, spacing),
+    pickClass(containerSizeClass, width),
+    className
+  ]}
+  data-slot="section"
+>
+  <slot />
+</Tag>

@@ -1,0 +1,36 @@
+---
+import type { BaseLayoutProps, Spacing, ContainerSize } from "../types";
+import { paddingClass, containerSizeClass, pickClass } from "../types";
+
+interface Props extends BaseLayoutProps {
+  padding?: Spacing;
+  scrollable?: boolean;
+  maxWidth?: ContainerSize;
+}
+
+const {
+  as = "div",
+  class: className,
+  padding = 6,
+  scrollable = false,
+  maxWidth,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "min-h-0",
+    "min-w-0",
+    pickClass(paddingClass, padding),
+    pickClass(containerSizeClass, maxWidth),
+    { "overflow-auto": scrollable },
+    className
+  ]}
+  data-slot="app-content"
+>
+  <slot />
+</Tag>

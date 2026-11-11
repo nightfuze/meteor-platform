@@ -1,0 +1,37 @@
+---
+import type { BaseLayoutProps, SidebarWidth, Spacing } from "../types";
+import { sidebarWidthClass, gapClass, pickClass } from "../types";
+
+interface Props extends BaseLayoutProps {
+  sidebarWidth?: SidebarWidth;
+  side?: "left" | "right";
+  gap?: Spacing;
+}
+
+const {
+  as = "div",
+  class: className,
+  sidebarWidth = "md",
+  side = "left",
+  gap = 4,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "grid",
+    "min-w-0",
+    "grid-cols-[auto_minmax(0,1fr)]",
+    pickClass(sidebarWidthClass, sidebarWidth),
+    pickClass(gapClass, gap),
+    { "[&>*:first-child]:order-1": side === "right" },
+    className
+  ]}
+  data-slot="sidebar-layout"
+>
+  <slot />
+</Tag>

@@ -1,0 +1,555 @@
+---
+import { Button } from '@meteor/ui';
+
+const variants = [
+  { value: 'default', label: 'Default' },
+  { value: 'primary', label: 'Primary' },
+  { value: 'secondary', label: 'Secondary' },
+  { value: 'outline', label: 'Outline' },
+  { value: 'ghost', label: 'Ghost' },
+  { value: 'info', label: 'Info' },
+  { value: 'success', label: 'Success' },
+  { value: 'warning', label: 'Warning' },
+  { value: 'error', label: 'Error' },
+] as const;
+
+const sizes = [
+  { value: 'sm', label: 'Small' },
+  { value: 'md', label: 'Medium' },
+  { value: 'lg', label: 'Large' },
+] as const;
+
+const iconSizes = [
+  { value: 'icon-sm', label: 'Small icon' },
+  { value: 'icon', label: 'Medium icon' },
+  { value: 'icon-lg', label: 'Large icon' },
+] as const;
+---
+
+<div class="button-docs">
+  <header class="docs-header">
+    <div class="eyebrow">Components / Actions</div>
+    <h1>Button</h1>
+    <p class="description">
+      Кнопка используется для выполнения действий, отправки форм и перехода
+      между страницами. Поддерживает несколько визуальных вариантов,
+      размеров и состояний.
+    </p>
+  </header>
+
+  <section class="docs-section">
+    <div class="section-heading">
+      <div>
+        <h2>Variants</h2>
+        <p>Все доступные визуальные варианты кнопки.</p>
+      </div>
+    </div>
+
+    <div class="state-legend">
+      <span>Default — обычное состояние</span>
+      <span>Hover — наведите курсор</span>
+      <span>Active — зажмите кнопку</span>
+      <span>Disabled — недоступное состояние</span>
+    </div>
+
+    <div class="table-container">
+      <table class="variants-table">
+        <thead>
+          <tr>
+            <th class="variant-column">Variant</th>
+            <th>Default</th>
+            <th>Hover</th>
+            <th>Active</th>
+            <th>Disabled</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {variants.map((variant) => (
+            <tr>
+              <th scope="row">
+                <span class="variant-name">{variant.label}</span>
+                <span class="variant-value">{variant.value}</span>
+              </th>
+
+              <td>
+                <Button variant={variant.value} type="button">
+                  Button
+                </Button>
+              </td>
+
+              <td>
+                <Button variant={variant.value} type="button">
+                  Hover me
+                </Button>
+              </td>
+
+              <td>
+                <Button variant={variant.value} type="button">
+                  Press me
+                </Button>
+              </td>
+
+              <td>
+                <Button variant={variant.value} disabled type="button">
+                  Disabled
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <p class="section-note">
+      Наведи курсор на кнопку в колонке Hover или нажми и удерживай кнопку
+      в колонке Active, чтобы увидеть соответствующее состояние.
+    </p>
+  </section>
+
+  <section class="docs-section">
+    <div class="section-heading">
+      <div>
+        <h2>Sizes</h2>
+        <p>Три стандартных размера кнопки.</p>
+      </div>
+    </div>
+
+    <div class="examples-grid">
+      {sizes.map((size) => (
+        <div class="example-card">
+          <div class="example-card-header">
+            <span class="example-title">{size.label}</span>
+            <code>{size.value}</code>
+          </div>
+
+          <div class="example-preview">
+            <Button size={size.value} variant="primary" type="button">
+              Button
+            </Button>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="docs-section">
+    <div class="section-heading">
+      <div>
+        <h2>Icon buttons</h2>
+        <p>Кнопки для действий, обозначенных иконкой.</p>
+      </div>
+    </div>
+
+    <div class="examples-grid">
+      {iconSizes.map((size) => (
+        <div class="example-card">
+          <div class="example-card-header">
+            <span class="example-title">{size.label}</span>
+            <code>{size.value}</code>
+          </div>
+
+          <div class="example-preview">
+            <Button
+              size={size.value}
+              variant="secondary"
+              type="button"
+              aria-label="Add item"
+            >
+              +
+            </Button>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="docs-section">
+    <div class="section-heading">
+      <div>
+        <h2>States</h2>
+        <p>Дополнительные состояния и поведение кнопки.</p>
+      </div>
+    </div>
+
+    <div class="examples-grid">
+      <div class="example-card">
+        <div class="example-card-header">
+          <span class="example-title">Default</span>
+          <code>disabled=false</code>
+        </div>
+        <div class="example-preview">
+          <Button variant="primary" type="button">Available</Button>
+        </div>
+      </div>
+
+      <div class="example-card">
+        <div class="example-card-header">
+          <span class="example-title">Disabled</span>
+          <code>disabled=true</code>
+        </div>
+        <div class="example-preview">
+          <Button variant="primary" disabled type="button">
+            Disabled
+          </Button>
+        </div>
+      </div>
+
+      <div class="example-card">
+        <div class="example-card-header">
+          <span class="example-title">Disabled focusable</span>
+          <code>focusableWhenDisabled</code>
+        </div>
+        <div class="example-preview">
+          <Button
+            variant="primary"
+            disabled
+            focusableWhenDisabled
+            type="button"
+          >
+            Focusable
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="docs-section">
+    <div class="section-heading">
+      <div>
+        <h2>As link</h2>
+        <p>Кнопка может отображаться как ссылка.</p>
+      </div>
+    </div>
+
+    <div class="examples-grid">
+      <div class="example-card">
+        <div class="example-card-header">
+          <span class="example-title">Primary link</span>
+          <code>as="a"</code>
+        </div>
+        <div class="example-preview">
+          <Button
+            as="a"
+            href="https://example.com"
+            variant="primary"
+          >
+            Open link
+          </Button>
+        </div>
+      </div>
+
+      <div class="example-card">
+        <div class="example-card-header">
+          <span class="example-title">Disabled link</span>
+          <code>disabled</code>
+        </div>
+        <div class="example-preview">
+          <Button
+            as="a"
+            href="https://example.com"
+            variant="primary"
+            disabled
+          >
+            Disabled link
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="docs-section">
+    <div class="section-heading">
+      <div>
+        <h2>Content</h2>
+        <p>Примеры кнопок с разной длиной текста.</p>
+      </div>
+    </div>
+
+    <div class="examples-grid">
+      <div class="example-card">
+        <div class="example-card-header">
+          <span class="example-title">Short label</span>
+        </div>
+        <div class="example-preview">
+          <Button variant="primary">Save</Button>
+        </div>
+      </div>
+
+      <div class="example-card">
+        <div class="example-card-header">
+          <span class="example-title">Long label</span>
+        </div>
+        <div class="example-preview">
+          <Button variant="primary">
+            A button with a longer label
+          </Button>
+        </div>
+      </div>
+
+      <div class="example-card">
+        <div class="example-card-header">
+          <span class="example-title">Full width</span>
+        </div>
+        <div class="example-preview">
+          <Button variant="primary" class="full-width">
+            Full width button
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="docs-section">
+    <div class="section-heading">
+      <div>
+        <h2>Usage</h2>
+        <p>Примеры использования компонента.</p>
+      </div>
+    </div>
+
+    <div class="code-example">
+      <div class="code-example-header">Astro</div>
+      <pre><code>{`import { Button } from '@meteor/ui';
+
+<Button variant="primary">
+  Save changes
+</Button>
+
+<Button variant="secondary" size="sm">
+  Cancel
+</Button>
+
+<Button variant="outline" disabled>
+  Disabled
+</Button>
+
+<Button as="a" href="/dashboard" variant="primary">
+  Open dashboard
+</Button>`}</code></pre>
+    </div>
+  </section>
+</div>
+
+<style>
+  .button-docs {
+    width: 100%;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding: 8px 0 64px;
+    color: var(--foreground);
+  }
+
+  .docs-header {
+    margin-bottom: 48px;
+  }
+
+  .eyebrow {
+    margin-bottom: 12px;
+    color: var(--muted-foreground);
+    font-size: 13px;
+  }
+
+  .docs-header h1 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+  }
+
+  .description {
+    max-width: 680px;
+    margin-top: 12px;
+    color: var(--muted-foreground);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .docs-section {
+    margin-top: 48px;
+  }
+
+  .section-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .section-heading h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+  }
+
+  .section-heading p {
+    margin: 6px 0 0;
+    color: var(--muted-foreground);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .state-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    margin-bottom: 16px;
+    color: var(--muted-foreground);
+    font-size: 12px;
+  }
+
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+
+  .variants-table {
+    width: 100%;
+    min-width: 760px;
+    border-collapse: collapse;
+    text-align: left;
+  }
+
+  .variants-table th,
+  .variants-table td {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+
+  .variants-table thead th {
+    background: color-mix(in srgb, currentColor 3%, transparent);
+    color: var(--muted-foreground);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .variants-table tbody tr:last-child th,
+  .variants-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .variants-table tbody tr:hover {
+    background: color-mix(in srgb, currentColor 2%, transparent);
+  }
+
+  .variants-table .variant-column {
+    width: 170px;
+  }
+
+  .variant-name {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .variant-value {
+    display: block;
+    margin-top: 4px;
+    color: var(--muted-foreground);
+    font-family: monospace;
+    font-size: 11px;
+    font-weight: 400;
+  }
+
+  .section-note {
+    margin-top: 12px;
+    color: var(--muted-foreground);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .examples-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .example-card {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+
+  .example-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .example-title {
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .example-card-header code {
+    color: var(--muted-foreground);
+    font-size: 10px;
+  }
+
+  .example-preview {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100px;
+    padding: 20px;
+  }
+
+  .full-width {
+    width: 100%;
+  }
+
+  .code-example {
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+
+  .code-example-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted-foreground);
+    font-size: 12px;
+  }
+
+  .code-example pre {
+    overflow-x: auto;
+    margin: 0;
+    padding: 20px;
+    background: color-mix(in srgb, currentColor 3%, transparent);
+    font-size: 12px;
+    line-height: 1.7;
+  }
+
+  .code-example code {
+    font-family: monospace;
+  }
+
+  @media (max-width: 850px) {
+    .examples-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .docs-header h1 {
+      font-size: 26px;
+    }
+
+    .examples-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .docs-section {
+      margin-top: 36px;
+    }
+  }
+</style>

@@ -1,0 +1,34 @@
+---
+import type { BaseLayoutProps, GridSpan } from "../types";
+import { columnSpanClass, rowSpanClass, pickClass } from "../types";
+
+interface Props extends BaseLayoutProps {
+  columnSpan?: GridSpan;
+  rowSpan?: GridSpan;
+  area?: string;
+}
+
+const {
+  as = "div",
+  class: className,
+  columnSpan,
+  rowSpan,
+  area,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "min-w-0",
+    pickClass(columnSpanClass, columnSpan),
+    pickClass(rowSpanClass, rowSpan),
+    className
+  ]}
+  data-slot="grid-item"
+>
+  <slot />
+</Tag>

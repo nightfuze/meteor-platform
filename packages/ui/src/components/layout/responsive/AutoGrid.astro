@@ -1,0 +1,36 @@
+---
+import type { BaseLayoutProps, AutoGridWidth, GridColumnCount, Spacing } from "../types";
+import { gapClass, autoGridWidthClass, pickClass } from "../types";
+
+interface Props extends BaseLayoutProps {
+  minItemWidth?: AutoGridWidth;
+  maxColumns?: GridColumnCount;
+  gap?: Spacing;
+}
+
+const {
+  as = "div",
+  class: className,
+  minItemWidth = "md",
+  maxColumns,
+  gap = 4,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "grid",
+    "min-w-0",
+    "grid-cols-[repeat(auto-fit,minmax(min(100%,var(--auto-grid-min)),1fr))]",
+    pickClass(gapClass, gap),
+    pickClass(autoGridWidthClass, minItemWidth),
+    className
+  ]}
+  data-slot="auto-grid"
+>
+  <slot />
+</Tag>

@@ -1,0 +1,37 @@
+---
+import type { BaseLayoutProps, Spacing } from "../types";
+import { widthClass, heightClass, paddingClass, pickClass } from "../types";
+
+interface Props extends BaseLayoutProps {
+  display?: "block" | "inline-block" | "flex" | "inline-flex" | "grid" | "hidden";
+  width?: "full" | "screen" | "auto" | "fit";
+  height?: "full" | "screen" | "auto" | "fit";
+  padding?: Spacing;
+}
+
+const {
+  as = "div",
+  class: className,
+  display = "block",
+  width,
+  height,
+  padding,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    { "block": display === "block", "inline-block": display === "inline-block", "flex": display === "flex", "inline-flex": display === "inline-flex", "grid": display === "grid", "hidden": display === "hidden" },
+    pickClass(widthClass, width),
+    pickClass(heightClass, height),
+    pickClass(paddingClass, padding),
+    className
+  ]}
+  data-slot="box"
+>
+  <slot />
+</Tag>

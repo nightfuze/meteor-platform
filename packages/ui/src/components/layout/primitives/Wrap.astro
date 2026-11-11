@@ -1,0 +1,34 @@
+---
+import type { FlexLayoutProps } from "../types";
+import { gapClass, pickClass } from "../types";
+
+interface Props extends FlexLayoutProps {
+}
+
+const {
+  as = "div",
+  class: className,
+  direction = "row",
+  gap = 4,
+  align,
+  justify,
+  wrap = true,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "flex",
+    "min-w-0",
+    { "flex-row": direction === "row", "flex-col": direction === "column", "flex-wrap": wrap },
+    pickClass(gapClass, gap),
+    className
+  ]}
+  data-slot="wrap"
+>
+  <slot />
+</Tag>

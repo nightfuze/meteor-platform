@@ -1,0 +1,32 @@
+---
+import type { BaseLayoutProps, Breakpoint, GridColumnCount, Spacing } from "../types";
+import { gapClass, pickClass } from "../types";
+
+interface Props extends BaseLayoutProps {
+  columns?: Partial<Record<Breakpoint, GridColumnCount>>;
+  gap?: Spacing;
+}
+
+const {
+  as = "div",
+  class: className,
+  columns,
+  gap = 4,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "grid",
+    "min-w-0",
+    pickClass(gapClass, gap),
+    className
+  ]}
+  data-slot="responsive-grid"
+>
+  <slot />
+</Tag>

@@ -1,0 +1,30 @@
+---
+import type { BaseLayoutProps, Breakpoint } from "../types";
+
+interface Props extends BaseLayoutProps {
+  above?: Breakpoint;
+  below?: Breakpoint;
+}
+
+const {
+  as = "div",
+  class: className,
+  above,
+  below,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    { "hidden": above !== undefined, "sm:block": above === "sm", "md:block": above === "md", "lg:block": above === "lg", "xl:block": above === "xl", "2xl:block": above === "2xl" },
+    { "sm:hidden": below === "sm", "md:hidden": below === "md", "lg:hidden": below === "lg", "xl:hidden": below === "xl", "2xl:hidden": below === "2xl" },
+    className
+  ]}
+  data-slot="show"
+>
+  <slot />
+</Tag>

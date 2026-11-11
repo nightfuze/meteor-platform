@@ -1,0 +1,36 @@
+---
+import type { BaseLayoutProps, SidebarWidth } from "../types";
+import { sidebarWidthClass, pickClass } from "../types";
+
+interface Props extends BaseLayoutProps {
+  sidebarWidth?: SidebarWidth;
+  hasHeader?: boolean;
+  hasSidebar?: boolean;
+}
+
+const {
+  as = "div",
+  class: className,
+  sidebarWidth = "md",
+  hasHeader = true,
+  hasSidebar = true,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "grid",
+    "min-h-screen",
+    "min-w-0",
+    { "grid-cols-[auto_minmax(0,1fr)]": hasSidebar, "grid-cols-1": !hasSidebar, "grid-rows-[auto_minmax(0,1fr)]": hasHeader },
+    pickClass(sidebarWidthClass, sidebarWidth),
+    className
+  ]}
+  data-slot="app-shell"
+>
+  <slot />
+</Tag>

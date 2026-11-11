@@ -1,0 +1,30 @@
+---
+import type { BaseLayoutProps, Spacing } from "../types";
+import { paddingClass, pickClass } from "../types";
+
+interface Props extends BaseLayoutProps {
+  padding?: Spacing;
+}
+
+const {
+  as = "div",
+  class: className,
+  padding = 4,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "min-w-0",
+    "flex-1",
+    pickClass(paddingClass, padding),
+    className
+  ]}
+  data-slot="panel-body"
+>
+  <slot />
+</Tag>

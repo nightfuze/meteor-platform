@@ -1,0 +1,30 @@
+---
+import type { BaseLayoutProps } from "../types";
+
+interface Props extends BaseLayoutProps {
+  ratio?: "square" | "video" | "wide" | "portrait";
+}
+
+const {
+  as = "div",
+  class: className,
+  ratio = "video",
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "relative",
+    "w-full",
+    "overflow-hidden",
+    { "aspect-square": ratio === "square", "aspect-video": ratio === "video", "aspect-2/1": ratio === "wide", "aspect-3/4": ratio === "portrait" },
+    className
+  ]}
+  data-slot="aspect-ratio"
+>
+  <slot />
+</Tag>
