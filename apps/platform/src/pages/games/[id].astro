@@ -4,12 +4,7 @@ import ShieldAlert from '@lucide/astro/icons/shield-alert';
 import Users from '@lucide/astro/icons/users';
 import Share2 from '@lucide/astro/icons/share-2';
 import { games, formatNumber } from '@/api/games';
-import Button from '@/components/ui/Button.astro';
-import Card from '@/components/ui/Card.astro';
-import CardContent from '@/components/ui/CardContent.astro';
-import CardDescription from '@/components/ui/CardDescription.astro';
-import CardHeader from '@/components/ui/CardHeader.astro';
-import CardTitle from '@/components/ui/CardTitle.astro';
+import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@meteor/ui';
 import StatusPage from '@/components/StatusPage.astro';
 import GameHero from '@/components/GameHero.astro';
 import GameTabs from '@/components/GameTabs.astro';
@@ -63,7 +58,7 @@ const tab: Tab = (TABS as readonly string[]).includes(rawTab) ? (rawTab as Tab) 
     error ? (
       <StatusPage status={error.status} title={error.title} message={error.message}>
         <ShieldAlert slot="icon" size={24} stroke-width={2} />
-        <Button href="/games">Вернуться в каталог</Button>
+        <Button variant="primary" href="/games">Вернуться в каталог</Button>
       </StatusPage>
     ) : (
       game && (
@@ -128,27 +123,26 @@ const tab: Tab = (TABS as readonly string[]).includes(rawTab) ? (rawTab as Tab) 
 
 <style>
   .game-page {
-    max-width: var(--container-xl);
+    max-width: 80rem;
     margin-inline: auto;
   }
 
   .game-panel-card {
-    --panel-card-max: 37.5rem;
     max-width: var(--panel-card-max);
-    margin-top: var(--space-6);
+    margin-top: calc(var(--spacing) * 6);
   }
 
   .game-body {
-    max-width: var(--container-content);
+    max-width: 52.5rem;
   }
 
   .game-foot {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-4);
-    margin-top: var(--space-9);
-    padding-top: var(--space-4-5);
-    border-top: var(--border-width) solid var(--border);
+    gap: calc(var(--spacing) * 4);
+    margin-top: calc(var(--spacing) * 9);
+    padding-top: calc(var(--spacing) * 4.5);
+    border-top: 1px solid var(--border);
     font-size: var(--text-xs);
     color: var(--muted-foreground);
   }
@@ -156,7 +150,7 @@ const tab: Tab = (TABS as readonly string[]).includes(rawTab) ? (rawTab as Tab) 
   .game-foot__item {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-1-5);
+    gap: calc(var(--spacing) * 1.5);
   }
 
   .game-foot__link {
@@ -165,7 +159,7 @@ const tab: Tab = (TABS as readonly string[]).includes(rawTab) ? (rawTab as Tab) 
   }
 
   .game-foot__code {
-    padding: var(--space-0-5) var(--space-1-5);
+    padding: calc(var(--spacing) * 0.5) calc(var(--spacing) * 1.5);
     border-radius: var(--radius-sm);
     background: var(--muted);
   }

@@ -7,6 +7,7 @@ import LayoutGrid from '@lucide/astro/icons/layout-grid';
 import Bell from '@lucide/astro/icons/bell';
 import Heart from '@lucide/astro/icons/heart';
 import MenuIcon from '@lucide/astro/icons/menu';
+import { Button, Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@meteor/ui';
 
 const path = Astro.url.pathname;
 const active = (matches: string | string[]) => {
@@ -19,6 +20,7 @@ const active = (matches: string | string[]) => {
 const menuOpenOn = ['/games/new', '/account', '/settings'];
 ---
 
+<Sheet class="mobile-menu-sheet">
 <nav class="bottom-nav" aria-label="Мобильная навигация">
   <a href="/games" class:list={['bottom-nav__item', { 'is-active': active('/games') && !active('/games/new') }]}>
     <LayoutGrid size={21} stroke-width={2} />
@@ -42,53 +44,54 @@ const menuOpenOn = ['/games/new', '/account', '/settings'];
     <span>Уведомления</span>
   </a>
 
-  <button
-    type="button"
-    class="bottom-nav__item"
-    aria-expanded="false"
-    aria-controls="mobile-menu-sheet"
-    class:list={{ 'is-active': active(menuOpenOn) }}
-  >
-    <MenuIcon size={21} stroke-width={2} />
-    <span>Меню</span>
-  </button>
+  <SheetTrigger asChild>
+    <Button
+      variant="ghost"
+      type="button"
+      class:list={['bottom-nav__item', { 'is-active': active(menuOpenOn) }]}
+    >
+      <MenuIcon size={21} stroke-width={2} />
+      <span>Меню</span>
+    </Button>
+  </SheetTrigger>
 </nav>
 
-<div
-  class="bottom-sheet"
-  id="mobile-menu-sheet"
-  role="dialog"
-  aria-modal="true"
-  aria-label="Мобильное меню"
-  hidden
->
-  <button type="button" class="bottom-sheet__backdrop" aria-label="Закрыть меню"></button>
-  <div class="bottom-sheet__panel">
+  <SheetContent side="bottom" class="bottom-sheet__panel" aria-label="Мобильное меню">
     <div class="bottom-sheet__handle" aria-hidden="true"></div>
-    <div class="bottom-sheet__header">
-      <strong>Меню</strong>
-      <button type="button" class="bottom-sheet__close" aria-label="Закрыть меню">×</button>
-    </div>
+    <SheetHeader class="bottom-sheet__header">
+      <SheetTitle>Меню</SheetTitle>
+      <SheetClose asChild>
+        <Button variant="ghost" type="button" class="bottom-sheet__close" aria-label="Закрыть меню">×</Button>
+      </SheetClose>
+    </SheetHeader>
     <div class="bottom-sheet__list">
-      <a href="/games/new" class="bottom-sheet__item">
-        <Plus size={18} stroke-width={2} />
-        <span>Опубликовать игру</span>
-      </a>
-      <a href="/games?search=" class="bottom-sheet__item">
-        <Search size={18} stroke-width={2} />
-        <span>Поиск игр</span>
-      </a>
-      <a href="/settings" class="bottom-sheet__item">
-        <Settings size={18} stroke-width={2} />
-        <span>Настройки</span>
-      </a>
-      <a href="/account" class="bottom-sheet__item">
-        <User size={18} stroke-width={2} />
-        <span>Профиль</span>
-      </a>
+      <SheetClose asChild>
+        <a href="/games/new" class="bottom-sheet__item">
+          <Plus size={18} stroke-width={2} />
+          <span>Опубликовать игру</span>
+        </a>
+      </SheetClose>
+      <SheetClose asChild>
+        <a href="/games?search=" class="bottom-sheet__item">
+          <Search size={18} stroke-width={2} />
+          <span>Поиск игр</span>
+        </a>
+      </SheetClose>
+      <SheetClose asChild>
+        <a href="/settings" class="bottom-sheet__item">
+          <Settings size={18} stroke-width={2} />
+          <span>Настройки</span>
+        </a>
+      </SheetClose>
+      <SheetClose asChild>
+        <a href="/account" class="bottom-sheet__item">
+          <User size={18} stroke-width={2} />
+          <span>Профиль</span>
+        </a>
+      </SheetClose>
     </div>
-  </div>
-</div>
+  </SheetContent>
+</Sheet>
 
 <style>
   .bottom-nav {
@@ -186,38 +189,20 @@ const menuOpenOn = ['/games/new', '/account', '/settings'];
     }
   }
 
-  .bottom-sheet {
-    position: fixed;
-    inset: 0;
-    z-index: var(--z-overlay);
-  }
-
-  .bottom-sheet[hidden] {
-    display: none;
-  }
-
-  .bottom-sheet__backdrop {
-    position: absolute;
-    inset: 0;
-    background: var(--overlay);
-    border: none;
-  }
-
   .bottom-sheet__panel {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    gap: 0;
     background: var(--background);
     border-top: var(--border-width) solid var(--border);
     border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
     padding: var(--space-2-5) var(--space-3-5) calc(var(--space-3-5) + env(safe-area-inset-bottom));
-    transform: translateY(100%);
-    transition: transform var(--duration-slow) var(--ease-standard);
   }
 
-  .bottom-sheet.is-open .bottom-sheet__panel {
-    transform: translateY(0);
+  :global([data-slot='sheet-backdrop']) {
+    background: var(--overlay);
+  }
+
+  :global(.bottom-sheet__panel > [data-sw-drawer-close]) {
+    display: none;
   }
 
   .bottom-sheet__handle {
@@ -230,8 +215,11 @@ const menuOpenOn = ['/games/new', '/account', '/settings'];
 
   .bottom-sheet__header {
     display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    gap: 0;
+    padding: 0;
     margin-bottom: var(--space-2);
   }
 
@@ -264,52 +252,4 @@ const menuOpenOn = ['/games/new', '/account', '/settings'];
     text-decoration: none;
   }
 
-  @media (max-width: --bp-lg) {
-    .bottom-sheet {
-      pointer-events: none;
-    }
-
-    .bottom-sheet.is-open {
-      pointer-events: auto;
-    }
-  }
-
-  :global(body.bottom-sheet-open) {
-    overflow: hidden;
-  }
 </style>
-
-<script>
-  const setupBottomSheet = () => {
-    let button = document.querySelector('[aria-controls="mobile-menu-sheet"]');
-    let sheet = document.getElementById('mobile-menu-sheet');
-    if (!(button instanceof HTMLButtonElement) || !sheet) return;
-
-    const setOpen = (open: boolean) => {
-      button.setAttribute('aria-expanded', String(open));
-      sheet.hidden = !open;
-      sheet.classList.toggle('is-open', open);
-      document.body.classList.toggle('bottom-sheet-open', open);
-    };
-
-    const toggle = () => setOpen(button.getAttribute('aria-expanded') !== 'true');
-
-    button.addEventListener('click', toggle, { once: false });
-    sheet.querySelector('.bottom-sheet__backdrop')?.addEventListener('click', () => setOpen(false));
-    sheet.querySelector('.bottom-sheet__close')?.addEventListener('click', () => setOpen(false));
-
-    sheet.querySelectorAll('a').forEach((link) => {
-      link.addEventListener('click', () => setOpen(false));
-    });
-
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') setOpen(false);
-    });
-  };
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setupBottomSheet);
-  } else {
-    setupBottomSheet();
-  }
-</script>

@@ -2,7 +2,7 @@
 import TopBar from '@/components/TopBar.astro';
 import Footer from '@/components/Footer.astro';
 import BottomNav from '@/components/BottomNav.astro';
-import '@/styles/reset.css';
+import '@meteor/ui/styles.css';
 import '@/styles/tokens.css';
 
 interface Props {
@@ -33,10 +33,10 @@ const ogImage = new URL('/logo.svg', Astro.url).href;
     <title>{title} - Meteor</title>
   </head>
   <body>
-    <div class="shell">
+    <div class="flex min-h-screen flex-col">
       <TopBar />
-      <div class="content">
-        <main class="main">
+      <div class="flex-1">
+        <main class="min-w-0 px-3.5 py-4 pb-24 lg:px-6.5 lg:py-5.5 lg:pb-14">
           <slot />
         </main>
       </div>
@@ -45,32 +45,3 @@ const ogImage = new URL('/logo.svg', Astro.url).href;
     <BottomNav />
   </body>
 </html>
-
-<style>
-  .shell {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-
-  .content {
-    flex: 1;
-  }
-
-  .main {
-    min-width: 0;
-    padding: var(--space-5-5) var(--space-6-5) var(--space-14);
-  }
-
-  @media (max-width: --bp-lg) {
-    .main {
-      padding-bottom: var(--nav-clearance);
-    }
-  }
-
-  @media (max-width: var(--bp-md)) {
-    .main {
-      padding: var(--space-4) var(--space-3-5) var(--nav-clearance);
-    }
-  }
-</style>

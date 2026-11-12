@@ -1,0 +1,109 @@
+:root {
+  /* Semantic tokens */
+  --primary-hover: color-mix(in oklch, var(--primary), var(--foreground) 10%);
+  --primary-soft: color-mix(in oklch, var(--primary) 8%, var(--background));
+  --neutral: var(--color-neutral-700);
+  --neutral-foreground: var(--color-neutral-50);
+  --neutral-hover: var(--color-neutral-800);
+  --destructive: var(--error);
+  --destructive-foreground: var(--error-foreground);
+  --destructive-soft: color-mix(in oklch, var(--error) 8%, var(--background));
+  --success-soft: color-mix(in oklch, var(--success) 8%, var(--background));
+  --warning-soft: color-mix(in oklch, var(--warning) 12%, var(--background));
+  --ring: var(--outline);
+  --focus-ring: 0 0 0 3px color-mix(in oklch, var(--outline) 32%, transparent);
+  --overlay: color-mix(in oklch, var(--color-black) 42%, transparent);
+  --blur-sm: 8px;
+  --blur-md: 14px;
+  --font: var(--font-sans);
+
+  /* Spacing and sizing scale */
+  --space-0: 0;
+  --space-px: 1px;
+  --space-0-5: calc(var(--spacing) * 0.5);
+  --space-1: calc(var(--spacing) * 1);
+  --space-1-5: calc(var(--spacing) * 1.5);
+  --space-2: calc(var(--spacing) * 2);
+  --space-2-5: calc(var(--spacing) * 2.5);
+  --space-3: calc(var(--spacing) * 3);
+  --space-3-5: calc(var(--spacing) * 3.5);
+  --space-4: calc(var(--spacing) * 4);
+  --space-4-5: calc(var(--spacing) * 4.5);
+  --space-5: calc(var(--spacing) * 5);
+  --space-5-5: calc(var(--spacing) * 5.5);
+  --space-6: calc(var(--spacing) * 6);
+  --space-6-5: calc(var(--spacing) * 6.5);
+  --space-7: calc(var(--spacing) * 7);
+  --space-8: calc(var(--spacing) * 8);
+  --space-9: calc(var(--spacing) * 9);
+  --space-10: calc(var(--spacing) * 10);
+  --space-11: calc(var(--spacing) * 11);
+  --space-12: calc(var(--spacing) * 12);
+  --space-14: calc(var(--spacing) * 14);
+  --space-16: calc(var(--spacing) * 16);
+
+  --size-2: calc(var(--spacing) * 2);
+  --size-3: calc(var(--spacing) * 3);
+  --size-4: calc(var(--spacing) * 4);
+  --size-5: calc(var(--spacing) * 5);
+  --size-6: calc(var(--spacing) * 6);
+  --size-7: calc(var(--spacing) * 7);
+  --size-8: calc(var(--spacing) * 8);
+  --size-9: calc(var(--spacing) * 9);
+  --size-10: calc(var(--spacing) * 10);
+  --size-11: calc(var(--spacing) * 11);
+  --size-12: calc(var(--spacing) * 12);
+  --size-14: calc(var(--spacing) * 14);
+  --size-24: calc(var(--spacing) * 24);
+
+  --control-sm: calc(var(--spacing) * 8);
+  --control-md: calc(var(--spacing) * 9);
+  --control-lg: calc(var(--spacing) * 10);
+  --control-xl: calc(var(--spacing) * 12.5);
+  --tap-target: calc(var(--spacing) * 11);
+  --radius-pill: 9999px;
+  --radius-circle: 50%;
+
+  /* Layout tokens */
+  --container-sm: 40rem;
+  --container-md: 48rem;
+  --container-lg: 64rem;
+  --container-xl: 80rem;
+
+  --text-2xs: 0.625rem;
+  --weight-medium: var(--font-weight-medium);
+  --weight-semibold: var(--font-weight-semibold);
+  --weight-bold: var(--font-weight-bold);
+  --weight-extrabold: var(--font-weight-extrabold);
+  --leading-tight: 1.25;
+  --leading-snug: 1.35;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.6;
+  --tracking-tighter: -0.02em;
+  --tracking-tight: -0.01em;
+  --tracking-wide: 0.04em;
+
+  --border-width: 1px;
+  --border-width-strong: 2px;
+  --border-width-accent: 3px;
+  --shadow-sm: 0 1px 2px oklch(0 0 0 / 6%);
+  --shadow-md: 0 4px 12px oklch(0 0 0 / 8%);
+  --shadow-lg: 0 10px 30px oklch(0 0 0 / 10%);
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 220ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --transition-fast: var(--duration-fast) var(--ease-standard);
+  --transition-base: var(--duration-base) var(--ease-standard);
+  --z-base: 0;
+  --z-topbar: 50;
+  --z-bottom-nav: 60;
+  --z-overlay: 80;
+}
+
+.dark {
+  --neutral: var(--color-neutral-200);
+  --neutral-foreground: var(--color-neutral-950);
+  --neutral-hover: var(--color-neutral-100);
+}

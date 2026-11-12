@@ -1,8 +1,5 @@
 ---
-import Alert from '@/components/ui/Alert.astro';
-import AlertDescription from '@/components/ui/AlertDescription.astro';
-import AlertTitle from '@/components/ui/AlertTitle.astro';
-import Badge from '@/components/ui/Badge.astro';
+import { Alert, AlertDescription, AlertTitle, Badge } from '@meteor/ui';
 
 interface Props {
   status: number;
@@ -32,15 +29,14 @@ const { status, title, message } = Astro.props;
 
 <style>
   .status {
-    --status-max: 31.25rem;
     max-width: var(--status-max);
     margin: 0 auto;
-    min-height: calc(100vh - var(--topbar-height) - var(--nav-clearance));
+    min-height: calc(100vh - 3.5rem - 6.25rem);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--space-4);
+    gap: calc(var(--spacing) * 4);
     text-align: center;
   }
 
@@ -51,16 +47,16 @@ const { status, title, message } = Astro.props;
   .status__body {
     display: flex;
     flex-direction: column;
-    gap: var(--space-1-5);
+    gap: calc(var(--spacing) * 1.5);
   }
 
   .status__badge {
-    margin-bottom: var(--space-0-5);
+    margin-bottom: calc(var(--spacing) * 0.5);
   }
 
   .status__title {
     font-size: var(--text-lg);
-    font-weight: var(--weight-bold);
+    font-weight: var(--font-weight-bold);
   }
 
   .status__description {
@@ -72,6 +68,6 @@ const { status, title, message } = Astro.props;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: var(--space-2-5);
+    gap: calc(var(--spacing) * 2.5);
   }
 </style>

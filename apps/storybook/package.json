@@ -7,7 +7,8 @@
   },
   "scripts": {
     "dev": "storybook dev",
-    "build": "storybook build --output-dir dist"
+    "build": "storybook build --output-dir dist",
+    "preview": "astro preview"
   },
   "dependencies": {
     "@meteor/ui": "workspace:*",

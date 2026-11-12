@@ -1,9 +1,5 @@
 ---
-import Carousel from '@/components/ui/carousel/Carousel.astro';
-import CarouselContent from '@/components/ui/carousel/CarouselContent.astro';
-import CarouselItem from '@/components/ui/carousel/CarouselItem.astro';
-import CarouselPrevious from '@/components/ui/carousel/CarouselPrevious.astro';
-import CarouselNext from '@/components/ui/carousel/CarouselNext.astro';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@meteor/ui';
 import Play from '@lucide/astro/icons/play';
 import Heart from '@lucide/astro/icons/heart';
 import Bell from '@lucide/astro/icons/bell';
@@ -13,8 +9,7 @@ import BadgeCheck from '@lucide/astro/icons/badge-check';
 import { asset, formatNumber, getRating } from '@/api/games';
 import { getCurrentUserId } from '@/api/auth';
 import { favoriteRepository } from '@meteor/db';
-import Badge from '@/components/ui/Badge.astro';
-import Button from '@/components/ui/Button.astro';
+import { Badge, Button } from '@meteor/ui';
 import GameStats from '@/components/GameStats.astro';
 import type { Game } from '@meteor/types';
 
@@ -62,8 +57,8 @@ try {
       </CarouselContent>
       {slides.length > 1 && (
         <div class="game-hero__carousel-nav">
-          <CarouselPrevious class="game-hero__carousel-btn game-hero__carousel-btn--prev" />
-          <CarouselNext class="game-hero__carousel-btn game-hero__carousel-btn--next" />
+          <CarouselPrevious aria-label="Предыдущий скриншот" class="game-hero__carousel-btn game-hero__carousel-btn--prev !left-2" />
+          <CarouselNext aria-label="Следующий скриншот" class="game-hero__carousel-btn game-hero__carousel-btn--next !right-2" />
         </div>
       )}
     </Carousel>
@@ -85,13 +80,14 @@ try {
     </div>
 
     <div class="game-hero__actions">
-      <Button size="lg" block>
+      <Button variant="primary" size="lg" class="w-full">
         <Play size={22} stroke-width={2.6} />
         Играть
       </Button>
 
       <div class="game-hero__reactions">
-        <button
+        <Button
+          variant="ghost"
           type="button"
           class:list={['game-reaction', 'favorite-button', isFav && 'favorite-button--active']}
           data-favorite-button
@@ -102,19 +98,19 @@ try {
           <span class="game-reaction__label" data-favorite-label>
             {isFav ? 'В избранном' : 'В избранное'}
           </span>
-        </button>
-        <button type="button" class="game-reaction">
+        </Button>
+        <Button variant="ghost" type="button" class="game-reaction">
           <Bell size={18} stroke-width={2} />
           <span class="game-reaction__label">Уведомить</span>
-        </button>
-        <button type="button" class="game-reaction game-reaction--stat">
+        </Button>
+        <Button variant="ghost" type="button" class="game-reaction game-reaction--stat">
           <ThumbsUp size={18} stroke-width={2} />
           <span class="game-reaction__label">{formatNumber(likes)}+</span>
-        </button>
-        <button type="button" class="game-reaction game-reaction--stat">
+        </Button>
+        <Button variant="ghost" type="button" class="game-reaction game-reaction--stat">
           <ThumbsDown size={18} stroke-width={2} />
           <span class="game-reaction__label">{formatNumber(dislikes)}+</span>
-        </button>
+        </Button>
       </div>
     </div>
 
@@ -202,7 +198,7 @@ try {
 
   @media (min-width: --bp-lg) {
     .game-hero {
-      grid-template-columns: minmax(0, var(--container-content)) minmax(0, 27.5rem);
+      grid-template-columns: minmax(0, 1fr) minmax(0, 27.5rem);
     }
   }
 
@@ -224,10 +220,12 @@ try {
   .game-hero__carousel-content {
     gap: 0;
     height: 100%;
+    margin-left: 0;
   }
 
   .game-hero__carousel-item {
     height: 100%;
+    padding-left: 0;
   }
 
   .game-hero__carousel-img {
@@ -295,7 +293,6 @@ try {
   }
 
   .game-reaction {
-    --reaction-min: 3.75rem;
     display: inline-flex;
     flex-direction: column;
     align-items: center;

@@ -56,7 +56,7 @@ const rating = getRating(game.id);
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform var(--transition-base);
+    transition: transform 200ms cubic-bezier(0.2, 0, 0, 1);
   }
 
   .tile:hover .media img {
@@ -65,9 +65,9 @@ const rating = getRating(game.id);
 
   .title {
     display: -webkit-box;
-    margin-top: var(--space-1-5);
+    margin-top: calc(var(--spacing) * 1.5);
     font-size: var(--text-xs);
-    font-weight: var(--weight-bold);
+    font-weight: var(--font-weight-bold);
     line-height: var(--leading-snug);
     overflow: hidden;
     -webkit-line-clamp: 2;
@@ -77,8 +77,8 @@ const rating = getRating(game.id);
   .meta {
     display: flex;
     align-items: center;
-    gap: var(--space-2-5);
-    margin-top: var(--space-1);
+    gap: calc(var(--spacing) * 2.5);
+    margin-top: var(--spacing);
     font-size: var(--text-xs);
     color: var(--muted-foreground);
   }
@@ -86,6 +86,6 @@ const rating = getRating(game.id);
   .meta__item {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-1);
+    gap: var(--spacing);
   }
 </style>

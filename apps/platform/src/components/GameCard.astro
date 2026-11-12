@@ -37,7 +37,6 @@ const rating = getRating(game.id);
 
 <style>
   .game-card {
-    --game-card-width: 13.125rem;
     position: relative;
     display: block;
     flex: 0 0 auto;
@@ -71,7 +70,7 @@ const rating = getRating(game.id);
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform var(--transition-base);
+    transition: transform 200ms cubic-bezier(0.2, 0, 0, 1);
   }
 
   .game-card:hover .game-card__media img {
@@ -80,9 +79,9 @@ const rating = getRating(game.id);
 
   .game-card__title {
     display: -webkit-box;
-    margin-top: var(--space-2);
+    margin-top: calc(var(--spacing) * 2);
     font-size: var(--text-sm);
-    font-weight: var(--weight-bold);
+    font-weight: var(--font-weight-bold);
     line-height: var(--leading-snug);
     overflow: hidden;
     -webkit-line-clamp: 2;
@@ -92,8 +91,8 @@ const rating = getRating(game.id);
   .game-card__meta {
     display: flex;
     align-items: center;
-    gap: var(--space-2-5);
-    margin-top: var(--space-1);
+    gap: calc(var(--spacing) * 2.5);
+    margin-top: var(--spacing);
     font-size: var(--text-xs);
     color: var(--muted-foreground);
   }
@@ -101,6 +100,6 @@ const rating = getRating(game.id);
   .game-card__meta-item {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-1);
+    gap: var(--spacing);
   }
 </style>

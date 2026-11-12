@@ -1,38 +1,55 @@
-# Meteor UI Storybook
+# Storybook Meteor UI
 
-Storybook is the visual reference for `@meteor/ui`. The component stories use game-platform examples, while component and API names stay aligned with the English exports in the package.
+Storybook — визуальная документация и песочница компонентов библиотеки `@meteor/ui`. Истории показывают компоненты в примерах; названия компонентов и API соответствуют экспортам пакета.
 
-## Run Storybook
+## Запуск
 
-From the repository root:
+Из корня репозитория:
 
 ```sh
 bun dev:storybook
 ```
 
-## Story map
+Либо из `apps/storybook`:
 
-| Storybook section | Coverage |
+```sh
+bun run dev
+```
+
+## Сборка и просмотр
+
+Из корня репозитория:
+
+```sh
+bun build:storybook
+bun preview:storybook
+```
+
+Сборка создаётся в `apps/storybook/dist`. Команда предварительного просмотра запускает Astro preview.
+
+## Содержание историй
+
+| Раздел Storybook | Что входит |
 | --- | --- |
-| `
-/Design Tokens` | Semantic theme colors, typography, spacing, radii, action hierarchy, light/dark theme toggle |
-| `Components/Button` | Button variants, sizes, content, links, and states |
-| `Components/Display & Feedback` | Alert, AspectRatio, Avatar, Badge, Card, Item, Kbd, Progress, Prose, Separator, Skeleton, Spinner |
-| `Components/Forms` | Checkbox, Input, Label, NativeSelect, RadioGroup, Slider, Switch, Textarea |
-| `Components/Navigation` | Accordion, Breadcrumb, Collapsible, Pagination, Tabs |
-| `Components/Overlays` | AlertDialog, ContextMenu, Dialog, Dropdown, HoverCard, Popover, Sheet, Tooltip |
-| `Components/Controls & Forms/Advanced` | ButtonGroup, CheckboxGroup, ColorPicker, Combobox, Dropzone, Field, Form, InputGroup, InputOtp, Select, ThemeToggle, Toggle, ToggleGroup |
-| `Components/Navigation & Data/Patterns` | Carousel, Image, NavigationMenu, ScrollArea, Sidebar, Table, Toaster, Video |
-| `Layout/Patterns` | AutoGrid, CenteredLayout, Container, Grid, Inline, MasterDetailLayout, Panel, ResponsiveGrid, Section, Split, Stack, Surface, ThreeColumnLayout, Wrap |
+| `Showcase/Foundations/Design Tokens` | Обзор дизайн-токенов |
+| `Showcase/Components/Display & Feedback` | Alert, AspectRatio, Avatar, Badge, Card, Item, Kbd, Progress, Prose, Separator, Skeleton и Spinner |
+| `Showcase/Components/Forms` | Checkbox, Input, Label, NativeSelect, RadioGroup, Slider, Switch и Textarea |
+| `Showcase/Components/Navigation` | Accordion, Breadcrumb, Collapsible, Pagination и Tabs |
+| `Showcase/Components/Overlays` | AlertDialog, ContextMenu, Dialog, Dropdown, HoverCard, Popover, Sheet и Tooltip |
+| `Showcase/Components/Controls & Forms/Advanced` | ButtonGroup, CheckboxGroup, ColorPicker, Combobox, Dropzone, Field, Form, InputGroup, InputOtp, Select, ThemeToggle, Toggle и ToggleGroup |
+| `Showcase/Components/Navigation & Data/Patterns` | Carousel, Image, NavigationMenu, ScrollArea, Sidebar, Table, Toast и Video |
+| `Showcase/Layout/Patterns` | Обзор layout-паттернов |
+| `Components/<Component>/Basic` | Отдельные истории для Accordion, Alert, AlertDialog, AspectRatio, Avatar, Badge, Breadcrumb, ButtonGroup, Card, Carousel, Checkbox, CheckboxGroup, Collapsible, ColorPicker, Combobox, ContextMenu, Dialog, Dropdown, Dropzone, Field, Form, HoverCard, Image, Input, InputGroup, InputOtp, Item, Kbd, Label, NativeSelect, NavigationMenu, Pagination, Popover, Progress, Prose, RadioGroup, ScrollArea, Select, Separator, Sheet, Sidebar, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, ThemeToggle, Toast, Toggle, ToggleGroup, Tooltip и Video |
+| `Components/Button/*` | Button: варианты, размеры, содержимое, ссылки и состояния |
 
-Stories are currently organized around component families and common product patterns. Some compound families still need individual stories for every exported part and state; use the package barrel and family `index.ts` files as the source of truth when extending coverage.
+Указаны фактические заголовки и состав историй в `src/stories` на момент обновления. Каталог `Showcase` объединяет несколько компонентов в обзорные примеры; истории `Components/<Component>` показывают отдельные компоненты. `Showcase/Layout/Patterns` — обзор, поэтому перечень его паттернов смотрите в самой истории.
 
-## Adding a story
+## Добавление истории
 
-1. Import the exported component from `@meteor/ui` where possible.
-2. Use the component's English API name in Storybook titles and section headings.
-3. Include the default appearance plus relevant disabled, selected, invalid, loading, or empty states.
-4. Use a Meteor product example and provide visible labels for interactive controls.
-5. Add the story under the matching `Components`, `Foundations`, or `Layout` section.
+1. По возможности импортируйте компонент из `@meteor/ui`.
+2. Используйте английское API-имя компонента в заголовке Storybook и названиях разделов.
+3. Покажите базовый вид и актуальные состояния: например, disabled, selected, invalid, loading или empty.
+4. Используйте пример из продукта Meteor и добавляйте видимые подписи к интерактивным элементам.
+5. Размещайте историю в подходящем разделе `Components`, `Foundations` или `Layout`.
 
-The preview loads both `@meteor/ui/styles.css` and the platform theme tokens from `apps/platform/src/styles/tokens.css`.
+Истории находятся в `src/stories`; конфигурация Storybook — в `.storybook`. Preview подключает стили `@meteor/ui/styles.css` и токены темы платформы из `apps/platform/src/styles/tokens.css`.

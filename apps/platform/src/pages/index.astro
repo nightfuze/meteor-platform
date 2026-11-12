@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import GameCard from '@/components/GameCard.astro';
 import GameSection from '@/components/GameSection.astro';
+import { CarouselItem } from '@meteor/ui';
 import { games } from '@/api/games';
 
 const [recommended, continueRow, rising] = await Promise.all([
@@ -18,14 +19,14 @@ const [recommended, continueRow, rising] = await Promise.all([
   <h1>Главная</h1>
 
   <GameSection title="Рекомендуем вам" href="/games" layout="rail">
-    {recommended.map((game) => <GameCard game={game} />)}
+    {recommended.map((game) => <CarouselItem class="basis-[13.125rem]"><GameCard game={game} /></CarouselItem>)}
   </GameSection>
 
   <GameSection title="Продолжить" href="/games" layout="rail">
-    {continueRow.map((game) => <GameCard game={game} withPlayers />)}
+    {continueRow.map((game) => <CarouselItem class="basis-[13.125rem]"><GameCard game={game} withPlayers /></CarouselItem>)}
   </GameSection>
 
   <GameSection title="Набирают популярность" href="/games" layout="rail">
-    {rising.map((game) => <GameCard game={game} withPlayers />)}
+    {rising.map((game) => <CarouselItem class="basis-[13.125rem]"><GameCard game={game} withPlayers /></CarouselItem>)}
   </GameSection>
 </BaseLayout>

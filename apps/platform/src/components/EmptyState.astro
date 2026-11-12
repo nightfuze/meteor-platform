@@ -1,4 +1,6 @@
 ---
+import { Card } from '@meteor/ui';
+
 interface Props {
   title: string;
   text?: string;
@@ -7,38 +9,10 @@ interface Props {
 const { title, text } = Astro.props;
 ---
 
-<section class="empty">
-  <h2 class="empty__title">{title}</h2>
-  {text && <p class="empty__text">{text}</p>}
-  <div class="empty__actions">
+<Card class="mt-6 border-dashed px-6 py-12 text-center">
+  <h2 class="text-xl">{title}</h2>
+  {text && <p class="mt-1.5 text-muted-foreground">{text}</p>}
+  <div class="mt-4.5 flex flex-wrap justify-center gap-2.5">
     <slot />
   </div>
-</section>
-
-<style>
-  .empty {
-    margin-top: var(--space-6);
-    padding: var(--space-12) var(--space-6);
-    border: var(--border-width) dashed var(--input);
-    border-radius: var(--radius-lg);
-    background: var(--card);
-    text-align: center;
-  }
-
-  .empty__title {
-    font-size: var(--text-xl);
-  }
-
-  .empty__text {
-    margin-top: var(--space-1-5);
-    color: var(--muted-foreground);
-  }
-
-  .empty__actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--space-2-5);
-    margin-top: var(--space-4-5);
-  }
-</style>
+</Card>
