@@ -5,32 +5,42 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: nightfuze/mispisit-lab1:0.0.3
+    image: nightfuze/mispisit-lab1:0.0.4
     restart: unless-stopped
     ports:
-      - "${PORT}:8000"
+      - "${PORT:-8000}:8000"
     environment:
       NODE_ENV: production
-      HOST: ${HOST}
-      PORT: ${PORT}
+      HOST: ${HOST:-0.0.0.0}
+      PORT: ${PORT:-8000}
       MONGO_HOST: mongo
-      MONGO_PORT: ${MONGO_PORT}
-      MONGO_ROOT_USER: ${MONGO_ROOT_USER}
-      MONGO_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
-      DATABASE_NAME: ${DATABASE_NAME}
+      MONGO_PORT: ${MONGO_PORT:-27017}
+      MONGO_ROOT_USER: ${MONGO_ROOT_USER:-root}
+      MONGO_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:-example}
+      DATABASE_NAME: ${DATABASE_NAME:-meteor-platform}
     depends_on:
       mongo:
         condition: service_healthy
+
+  storybook:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: storybook
+    image: nightfuze/mispisit-storybook:0.0.4
+    restart: unless-stopped
+    ports:
+      - "${STORYBOOK_PORT:-4321}:4321"
 
   mongo:
     image: mongo:9.0.4
     restart: unless-stopped
     ports:
-      - "${MONGO_PORT}:27017"
+      - "${MONGO_PORT:-27017}:27017"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
-      MONGO_INITDB_DATABASE: ${DATABASE_NAME}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:-example}
+      MONGO_INITDB_DATABASE: ${DATABASE_NAME:-meteor-platform}
     volumes:
       - mongo_prod_data:/data/db
     healthcheck:
