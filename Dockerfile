@@ -23,7 +23,7 @@ ENV PORT=4321
 EXPOSE 4321/tcp
 CMD ["bun", "run", "preview", "--", "--host", "0.0.0.0"]
 
-FROM node:26.10.0-alpine AS runner
+FROM oven/bun:1.4.4-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
@@ -33,7 +33,7 @@ ENV PORT=8000
 COPY --from=builder /app/apps/platform/dist ./dist
 COPY --from=builder /app/apps/platform/package.json ./package.json
 
-USER node
+USER bun
 EXPOSE 8000/tcp
 
-CMD ["node", "./dist/server/entry.mjs"]
+CMD ["bun", "./dist/server/entry.mjs"]
