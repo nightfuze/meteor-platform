@@ -1,0 +1,94 @@
+---
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+  Container,
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+  Stack,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@meteor/ui";
+---
+
+<Container class="py-8">
+  <Stack gap={8}>
+    <h1 class="text-3xl font-bold tracking-tight">Navigation</h1>
+
+    <Stack as="section" gap={4}>
+      <h2 class="text-xl font-semibold">Breadcrumb</h2>
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem><BreadcrumbLink href="/">Игры</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem><BreadcrumbLink href="/lobbies">Lobbies</BreadcrumbLink></BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem><BreadcrumbPage>Space Arena</BreadcrumbPage></BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+    </Stack>
+
+    <Stack as="section" gap={4}>
+      <h2 class="text-xl font-semibold">Tabs</h2>
+      <Tabs defaultValue="account" class="max-w-lg">
+        <TabsList>
+          <TabsTrigger value="account">Account</TabsTrigger>
+          <TabsTrigger value="security">Security</TabsTrigger>
+        </TabsList>
+        <TabsContent value="account">Управляйте профилем игрока и настройками игры.</TabsContent>
+        <TabsContent value="security">Настраивайте защиту игрового профиля.</TabsContent>
+      </Tabs>
+    </Stack>
+
+    <Stack as="section" gap={4}>
+      <h2 class="text-xl font-semibold">Accordion</h2>
+      <Accordion type="single" collapsible class="max-w-lg">
+        <AccordionItem value="item-1">
+          <AccordionTrigger>Как присоединиться к матчу?</AccordionTrigger>
+          <AccordionContent>Откройте лобби и нажмите «Присоединиться», чтобы войти в игру.</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-2">
+          <AccordionTrigger>Как пригласить друзей?</AccordionTrigger>
+          <AccordionContent>Поделитесь ссылкой-приглашением в лобби с командой.</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </Stack>
+
+    <Stack as="section" gap={4}>
+      <h2 class="text-xl font-semibold">Collapsible</h2>
+      <Collapsible class="max-w-lg">
+        <CollapsibleTrigger>Показать сведения о лобби</CollapsibleTrigger>
+        <CollapsibleContent class="pt-2">Карта: Орбитальная станция · Режим: командный бой · Игроки: 4/8</CollapsibleContent>
+      </Collapsible>
+    </Stack>
+
+    <Stack as="section" gap={4}>
+      <h2 class="text-xl font-semibold">Pagination</h2>
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem><PaginationPrevious href="#" /></PaginationItem>
+          <PaginationItem><PaginationLink href="#" isActive>1</PaginationLink></PaginationItem>
+          <PaginationItem><PaginationLink href="#">2</PaginationLink></PaginationItem>
+          <PaginationItem><PaginationNext href="#" /></PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    </Stack>
+  </Stack>
+</Container>

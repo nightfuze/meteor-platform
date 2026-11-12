@@ -1,0 +1,29 @@
+---
+import { Container, Stack } from "@meteor/ui";
+import { Avatar, AvatarFallback, AvatarGroup, AvatarGroupCount } from "@meteor/ui";
+---
+
+<Container class="py-8">
+  <Stack gap={4}>
+    <header>
+      <p class="text-sm font-medium text-muted-foreground">Meteor UI · Avatar</p>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight">Avatar</h1>
+      <p class="mt-2 max-w-2xl text-sm text-muted-foreground">Основной пример компонента и его составных частей.</p>
+    </header>
+
+    <section class="rounded-lg border bg-card p-5">
+      <Avatar><AvatarFallback>NF</AvatarFallback></Avatar>
+      <AvatarGroup class="mt-4">
+        <Avatar><AvatarFallback>NF</AvatarFallback></Avatar>
+        <Avatar><AvatarFallback>AR</AvatarFallback></Avatar>
+        <Avatar><AvatarFallback>MK</AvatarFallback></Avatar>
+        <AvatarGroupCount>+4</AvatarGroupCount>
+      </AvatarGroup>
+    </section>
+
+    <details class="rounded-lg border p-4">
+      <summary class="cursor-pointer text-sm font-semibold">Компоненты семейства</summary>
+      <p class="mt-3 text-sm text-muted-foreground">Avatar, AvatarFallback, AvatarGroup, AvatarGroupCount, AvatarImage</p>
+    </details>
+  </Stack>
+</Container>

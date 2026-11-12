@@ -1,0 +1,34 @@
+---
+import { Button, Container, Inline, Stack } from "@meteor/ui";
+
+const sizes = ["sm", "md", "lg"] as const;
+const iconSizes = ["icon-sm", "icon", "icon-lg"] as const;
+---
+
+<Container class="py-8">
+  <Stack gap={6}>
+    <Stack as="section" gap={4}>
+      <h1 class="text-2xl font-bold tracking-tight">Размеры Button</h1>
+      <Inline gap={4} class="rounded-lg border p-5">
+        {sizes.map((size) => (
+          <Stack align="center" gap={2}>
+            <Button size={size} variant="primary" type="button">Кнопка</Button>
+            <span class="text-xs text-muted-foreground">{size}</span>
+          </Stack>
+        ))}
+      </Inline>
+    </Stack>
+
+    <Stack as="section" gap={4}>
+      <h2 class="text-xl font-semibold">Кнопки с иконками</h2>
+      <Inline gap={4} class="rounded-lg border p-5">
+        {iconSizes.map((size) => (
+          <Stack align="center" gap={2}>
+            <Button size={size} variant="secondary" type="button" aria-label="Добавить элемент">+</Button>
+            <span class="text-xs text-muted-foreground">{size}</span>
+          </Stack>
+        ))}
+      </Inline>
+    </Stack>
+  </Stack>
+</Container>

@@ -1,0 +1,41 @@
+---
+import type { GridLayoutProps, SidebarWidth, HeaderHeight } from "../types";
+import { sidebarWidthClass, headerHeightClass, pickClass } from "../types";
+
+interface Props extends GridLayoutProps {
+  sidebarWidth?: SidebarWidth;
+  headerHeight?: HeaderHeight;
+}
+
+const {
+  as = "div",
+  class: className,
+  columns = 1,
+  rows,
+  gap = 4,
+  rowGap,
+  columnGap,
+  align,
+  justify,
+  sidebarWidth = "md",
+  headerHeight = "md",
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "grid",
+    "min-h-screen",
+    "min-w-0",
+    pickClass(sidebarWidthClass, sidebarWidth),
+    pickClass(headerHeightClass, headerHeight),
+    className
+  ]}
+  data-slot="dashboard-layout"
+>
+  <slot />
+</Tag>

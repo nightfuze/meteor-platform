@@ -1,0 +1,124 @@
+---
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+  Button,
+  Container,
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  Dropdown,
+  DropdownContent,
+  DropdownItem,
+  DropdownTrigger,
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+  Inline,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  Stack,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@meteor/ui";
+---
+
+<Container class="py-8">
+  <Stack gap={8}>
+    <h1 class="text-3xl font-bold tracking-tight">Всплывающие окна</h1>
+    <Inline gap={4} wrap>
+      <Dialog>
+        <DialogTrigger asChild><Button variant="outline">Сведения о матче</Button></DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Orbital Station</DialogTitle>
+            <DialogDescription>Командный бой · 4 из 8 игроков</DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+
+      <AlertDialog>
+        <AlertDialogTrigger asChild><Button variant="error">Покинуть матч</Button></AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Покинуть этот матч?</AlertDialogTitle>
+            <AlertDialogDescription>Участники группы получат уведомление.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Остаться</AlertDialogCancel>
+            <AlertDialogAction>Покинуть матч</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <Dropdown>
+        <DropdownTrigger asChild><Button variant="outline">Меню игрока</Button></DropdownTrigger>
+        <DropdownContent>
+          <DropdownItem>Профиль игрока</DropdownItem>
+          <DropdownItem>Пригласить в группу</DropdownItem>
+          <DropdownItem>Пожаловаться на игрока</DropdownItem>
+        </DropdownContent>
+      </Dropdown>
+
+      <Popover>
+        <PopoverTrigger asChild><Button variant="outline">Настройки группы</Button></PopoverTrigger>
+        <PopoverContent>
+          <Stack gap={2}>
+            <strong>Приватность группы</strong>
+            <span class="text-sm text-muted-foreground">Друзья могут присоединиться к вашему лобби.</span>
+          </Stack>
+        </PopoverContent>
+      </Popover>
+
+      <Tooltip>
+        <TooltipTrigger asChild><Button variant="secondary">Пинг</Button></TooltipTrigger>
+        <TooltipContent>Задержка сети: 32 мс</TooltipContent>
+      </Tooltip>
+
+      <HoverCard>
+        <HoverCardTrigger asChild><Button variant="ghost">NovaFox</Button></HoverCardTrigger>
+        <HoverCardContent><p>Уровень 24 · В сети · 128 матчей</p></HoverCardContent>
+      </HoverCard>
+
+      <Sheet>
+        <SheetTrigger asChild><Button variant="outline">Открыть группу</Button></SheetTrigger>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>Ваша группа</SheetTitle>
+            <SheetDescription>Пригласите друзей перед началом матча.</SheetDescription>
+          </SheetHeader>
+        </SheetContent>
+      </Sheet>
+
+      <ContextMenu>
+        <ContextMenuTrigger class="rounded-md border px-4 py-2 text-sm">Нажмите правой кнопкой мыши на игрока</ContextMenuTrigger>
+        <ContextMenuContent>
+          <ContextMenuItem>Пригласить в группу</ContextMenuItem>
+          <ContextMenuItem>Профиль игрока</ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
+    </Inline>
+  </Stack>
+</Container>

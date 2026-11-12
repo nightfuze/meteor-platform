@@ -1,0 +1,32 @@
+---
+import type { BaseLayoutProps, Spacing } from "../types";
+import { gapClass, pickClass } from "../types";
+
+interface Props extends BaseLayoutProps {
+  gap?: Spacing;
+}
+
+const {
+  as = "div",
+  class: className,
+  gap = 4,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "grid",
+    "min-w-0",
+    "grid-cols-1",
+    "md:grid-cols-2",
+    pickClass(gapClass, gap),
+    className
+  ]}
+  data-slot="split-layout"
+>
+  <slot />
+</Tag>

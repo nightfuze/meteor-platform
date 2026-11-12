@@ -44,21 +44,20 @@ const { game } = Astro.props;
 
 <style>
   .game-stats {
-    --stat-min: 11.25rem;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(var(--stat-min), 1fr));
-    gap: 0 var(--space-5);
-    margin: var(--space-5) 0 0;
-    padding-top: var(--space-4);
-    border-top: var(--border-width) solid var(--border);
+    gap: 0 calc(var(--spacing) * 5);
+    margin: calc(var(--spacing) * 5) 0 0;
+    padding-top: calc(var(--spacing) * 4);
+    border-top: 1px solid var(--border);
   }
 
   .game-stats__item {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    gap: var(--space-3);
-    padding: var(--space-1-5) 0;
+    gap: calc(var(--spacing) * 3);
+    padding: calc(var(--spacing) * 1.5) 0;
   }
 
   .game-stats__term {
@@ -69,6 +68,6 @@ const { game } = Astro.props;
   .game-stats__desc {
     margin: 0;
     font-size: var(--text-xs);
-    font-weight: var(--weight-bold);
+    font-weight: var(--font-weight-bold);
   }
 </style>

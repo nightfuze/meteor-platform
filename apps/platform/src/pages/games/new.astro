@@ -1,13 +1,23 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PageHeader from '@/components/PageHeader.astro';
-import Button from '@/components/ui/Button.astro';
-import Field from '@/components/ui/Field.astro';
-import Input from '@/components/ui/Input.astro';
-import Label from '@/components/ui/Label.astro';
-import Select from '@/components/ui/Select.astro';
-import Textarea from '@/components/ui/Textarea.astro';
-import FormMessage from '@/components/ui/FormMessage.astro';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  Field,
+  FieldDescription,
+  FieldError,
+  Form,
+  FormErrorSummary,
+  Input,
+  Label,
+  NativeSelect,
+  NativeSelectOption,
+  Textarea,
+} from '@meteor/ui';
 import Notice from '@/components/Notice.astro';
 import { actions, isInputError } from 'astro:actions';
 import { games, GENRES, EMPTY_PAYLOAD, FIELD_KEYS, FIELD_LABELS, readForm, type GameFormInput } from '@/api/games';
@@ -75,33 +85,33 @@ const hasErrors = Object.keys(errors).length > 0;
           {created.name} добавлена в каталог
         </Notice>
         <div class="result__actions">
-          <Button href={`/games/${created.id}`}>Открыть карточку игры</Button>
+          <Button variant="primary" href={`/games/${created.id}`}>Открыть карточку игры</Button>
           <Button variant="ghost" href="/games">Посмотреть каталог</Button>
         </div>
       </div>
     )
   }
 
-  <div class="result" data-error-summary hidden={!hasErrors} aria-live="polite">
-    <Notice tone="error" title="Проверьте поля формы">
-      <ul class="summary" data-error-list>
-        {errors.form && <li>{errors.form}</li>}
-        {FIELD_KEYS.filter((key) => errors[key]).map((key) => (
-          <li data-summary-for={key}>
-            <a href={`#${key}`}>{FIELD_LABELS[key]}: {errors[key]}</a>
-          </li>
-        ))}
-      </ul>
-    </Notice>
-  </div>
+  <FormErrorSummary class="result summary" data-error-summary hidden={!hasErrors} aria-live="polite">
+    <h2>Проверьте поля формы</h2>
+    <ul data-error-list data-sw-form-error-summary-list>
+      {errors.form && <li data-sw-form-error-summary-item>{errors.form}</li>}
+      {FIELD_KEYS.filter((key) => errors[key]).map((key) => (
+        <li data-summary-for={key} data-sw-form-error-summary-item>
+          <a href={`#${key}`}>{FIELD_LABELS[key]}: {errors[key]}</a>
+        </li>
+      ))}
+    </ul>
+  </FormErrorSummary>
 
-  <form class="form card" method="POST" action={actions.createGame} data-game-form novalidate>
-    <div class="card__head">
-      <h2 class="card__title">Данные игры</h2>
-      <p class="card__sub">Все поля обязательны</p>
-    </div>
+  <Card class="form-card gap-0">
+    <Form class="form" method="POST" action={actions.createGame} data-game-form novalidate>
+      <CardHeader>
+        <h2 class="text-base font-medium">Данные игры</h2>
+        <CardDescription>Все поля обязательны</CardDescription>
+      </CardHeader>
 
-    <div class="card__body form">
+      <CardContent class="form__body">
       <Field data-field="name">
         <Label for="name">Название игры <span class="req">*</span></Label>
         <Input
@@ -113,10 +123,10 @@ const hasErrors = Object.keys(errors).length > 0;
           aria-invalid={Boolean(errors.name)}
           aria-describedby="name-hint name-error"
         />
-        <FormMessage tone="hint" id="name-hint">
+        <FieldDescription class="form-message--hint" id="name-hint">
           От 3 до 50 символов. Название должно быть уникальным.
-        </FormMessage>
-        <FormMessage tone="error" id="name-error">{errors.name ?? ''}</FormMessage>
+        </FieldDescription>
+        <FieldError class="form-message--error" id="name-error" messageSource="children">{errors.name ?? ''}</FieldError>
       </Field>
 
       <Field data-field="description">
@@ -129,22 +139,22 @@ const hasErrors = Object.keys(errors).length > 0;
           aria-invalid={Boolean(errors.description)}
           aria-describedby="description-hint description-error"
         >{payload.description}</Textarea>
-        <FormMessage tone="hint" id="description-hint">
+        <FieldDescription class="form-message--hint" id="description-hint">
           От 30 до 1200 символов. Введено: <span data-counter="description">{descriptionLength}</span>.
-        </FormMessage>
-        <FormMessage tone="error" id="description-error">{errors.description ?? ''}</FormMessage>
+        </FieldDescription>
+        <FieldError class="form-message--error" id="description-error" messageSource="children">{errors.description ?? ''}</FieldError>
       </Field>
 
       <div class="form-row">
         <Field data-field="genre">
           <Label for="genre">Жанр <span class="req">*</span></Label>
-          <Select id="genre" name="genre" aria-invalid={Boolean(errors.genre)} aria-describedby="genre-error">
-            <option value="" selected={!payload.genre}>- выберите жанр -</option>
+          <NativeSelect id="genre" name="genre" aria-invalid={Boolean(errors.genre)} aria-describedby="genre-error">
+            <NativeSelectOption value="" selected={!payload.genre}>- выберите жанр -</NativeSelectOption>
             {GENRES.map((genre) => (
-              <option value={genre} selected={payload.genre === genre}>{genre}</option>
+              <NativeSelectOption value={genre} selected={payload.genre === genre}>{genre}</NativeSelectOption>
             ))}
-          </Select>
-          <FormMessage tone="error" id="genre-error">{errors.genre ?? ''}</FormMessage>
+          </NativeSelect>
+          <FieldError class="form-message--error" id="genre-error" messageSource="children">{errors.genre ?? ''}</FieldError>
         </Field>
 
         <Field data-field="maxPlayers">
@@ -160,8 +170,8 @@ const hasErrors = Object.keys(errors).length > 0;
             aria-invalid={Boolean(errors.maxPlayers)}
             aria-describedby="maxPlayers-hint maxPlayers-error"
           />
-          <FormMessage tone="hint" id="maxPlayers-hint">От 2 до 50 игроков.</FormMessage>
-          <FormMessage tone="error" id="maxPlayers-error">{errors.maxPlayers ?? ''}</FormMessage>
+          <FieldDescription class="form-message--hint" id="maxPlayers-hint">От 2 до 50 игроков.</FieldDescription>
+          <FieldError class="form-message--error" id="maxPlayers-error" messageSource="children">{errors.maxPlayers ?? ''}</FieldError>
         </Field>
       </div>
 
@@ -176,16 +186,17 @@ const hasErrors = Object.keys(errors).length > 0;
           aria-invalid={Boolean(errors.creatorName)}
           aria-describedby="creatorName-hint creatorName-error"
         />
-        <FormMessage tone="hint" id="creatorName-hint">От 2 до 40 символов.</FormMessage>
-        <FormMessage tone="error" id="creatorName-error">{errors.creatorName ?? ''}</FormMessage>
+        <FieldDescription class="form-message--hint" id="creatorName-hint">От 2 до 40 символов.</FieldDescription>
+        <FieldError class="form-message--error" id="creatorName-error" messageSource="children">{errors.creatorName ?? ''}</FieldError>
       </Field>
 
       <div class="form__actions">
-        <Button type="submit" data-submit>Опубликовать игру</Button>
+        <Button variant="primary" type="submit" data-submit>Опубликовать игру</Button>
         <Button variant="ghost" href="/games">Отмена</Button>
       </div>
-    </div>
-  </form>
+      </CardContent>
+    </Form>
+  </Card>
 </BaseLayout>
 
 <script>
@@ -229,6 +240,7 @@ const hasErrors = Object.keys(errors).length > 0;
         if (!item) {
           item = document.createElement('li');
           item.dataset.summaryFor = control.name;
+          item.dataset.swFormErrorSummaryItem = '';
           list.append(item);
         }
         const link = item.querySelector('a') ?? item.appendChild(document.createElement('a'));
@@ -291,6 +303,7 @@ const hasErrors = Object.keys(errors).length > 0;
         } else if (list && summary) {
           list.replaceChildren();
           const item = document.createElement('li');
+          item.dataset.swFormErrorSummaryItem = '';
           item.textContent = error.message || 'Не удалось отправить форму. Попробуйте ещё раз.';
           list.append(item);
           summary.hidden = false;
@@ -318,92 +331,64 @@ const hasErrors = Object.keys(errors).length > 0;
 </script>
 
 <style>
-  :global(.field .form-message--error) {
+  :global([data-slot='field'] .form-message--error) {
     display: none;
   }
 
-  :global(.field:has([aria-invalid='true']) .form-message--error) {
+  :global([data-slot='field']:has([aria-invalid='true']) .form-message--error) {
     display: block;
   }
 
-  :global(.field:has([aria-invalid='true']) .form-message--hint) {
+  :global([data-slot='field']:has([aria-invalid='true']) .form-message--hint) {
     display: none;
   }
 
-  .card {
+  .form-card {
     width: 100%;
-    max-width: var(--container-form);
-    margin: var(--space-5) auto 0;
-    border: var(--border-width) solid var(--border);
-    border-radius: var(--radius-lg);
-    background: var(--card);
-    color: var(--card-foreground);
-  }
-
-  .card__head {
-    padding: var(--space-3-5) var(--space-5);
-    border-bottom: var(--border-width) solid var(--border);
-  }
-
-  .card__body {
-    padding: var(--space-5);
-  }
-
-  .card__title {
-    font-size: var(--text-base);
-  }
-
-  .card__sub {
-    margin-top: var(--space-0-5);
-    font-size: var(--text-xs);
-    color: var(--muted-foreground);
+    max-width: 47.5rem;
+    margin: calc(var(--spacing) * 5) auto 0;
   }
 
   .result {
-    margin-top: var(--space-5);
+    margin-top: calc(var(--spacing) * 5);
   }
 
   .result__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-2-5);
-    margin-top: var(--space-3);
-  }
-
-  .summary {
-    margin: 0;
-    padding-left: var(--space-4-5);
-    display: grid;
-    gap: var(--space-1);
+    gap: calc(var(--spacing) * 2.5);
+    margin-top: calc(var(--spacing) * 3);
   }
 
   .summary a {
-    font-weight: var(--weight-semibold);
+    font-weight: var(--font-weight-semibold);
   }
 
-  .form {
-    gap: var(--space-4);
+  .form__body {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) * 4);
   }
 
   .form-row {
     display: grid;
-    gap: var(--space-4);
+    gap: calc(var(--spacing) * 4);
     align-items: stretch;
   }
 
-  @media (min-width: --bp-md) {
+  @media (min-width: 48rem) {
     .form-row {
       grid-template-columns: 1fr 1fr;
     }
   }
 
   .req {
-    color: var(--destructive);
+    color: var(--error);
   }
 
   .form__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-2-5);
+    gap: calc(var(--spacing) * 2.5);
   }
 </style>

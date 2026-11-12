@@ -1,0 +1,31 @@
+---
+import type { BaseLayoutProps } from "../types";
+
+interface Props extends BaseLayoutProps {
+  overflowX?: "auto" | "hidden" | "scroll" | "visible";
+  overflowY?: "auto" | "hidden" | "scroll" | "visible";
+}
+
+const {
+  as = "div",
+  class: className,
+  overflowX = "hidden",
+  overflowY = "auto",
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "min-w-0",
+    { "overflow-x-auto": overflowX === "auto", "overflow-x-hidden": overflowX === "hidden", "overflow-x-scroll": overflowX === "scroll", "overflow-x-visible": overflowX === "visible" },
+    { "overflow-y-auto": overflowY === "auto", "overflow-y-hidden": overflowY === "hidden", "overflow-y-scroll": overflowY === "scroll", "overflow-y-visible": overflowY === "visible" },
+    className
+  ]}
+  data-slot="overflow"
+>
+  <slot />
+</Tag>

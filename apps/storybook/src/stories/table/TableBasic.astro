@@ -1,0 +1,30 @@
+---
+import { Container, Stack } from "@meteor/ui";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@meteor/ui";
+---
+
+<Container class="py-8">
+  <Stack gap={4}>
+    <header>
+      <p class="text-sm font-medium text-muted-foreground">Meteor UI · Table</p>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight">Table</h1>
+      <p class="mt-2 max-w-2xl text-sm text-muted-foreground">Основной пример компонента и его составных частей.</p>
+    </header>
+
+    <section class="rounded-lg border bg-card p-5">
+      <Table>
+        <TableCaption>Популярные игры за неделю</TableCaption>
+        <TableHeader><TableRow><TableHead>Игра</TableHead><TableHead>Жанр</TableHead><TableHead class="text-right">В сети</TableHead></TableRow></TableHeader>
+        <TableBody>
+          <TableRow><TableCell class="font-medium">Nebula Run</TableCell><TableCell>Приключение</TableCell><TableCell class="text-right">1,240</TableCell></TableRow>
+          <TableRow><TableCell class="font-medium">Starlight Arena</TableCell><TableCell>Экшен</TableCell><TableCell class="text-right">836</TableCell></TableRow>
+        </TableBody>
+      </Table>
+    </section>
+
+    <details class="rounded-lg border p-4">
+      <summary class="cursor-pointer text-sm font-semibold">Компоненты семейства</summary>
+      <p class="mt-3 text-sm text-muted-foreground">Table, TableBody, TableCaption, TableCell, TableFoot, TableHead, TableHeader, TableRow</p>
+    </details>
+  </Stack>
+</Container>

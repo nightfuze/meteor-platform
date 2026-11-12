@@ -3,7 +3,7 @@ import Search from '@lucide/astro/icons/search';
 import Bell from '@lucide/astro/icons/bell';
 import Settings from '@lucide/astro/icons/settings';
 import Coins from '@lucide/astro/icons/coins';
-import TopBarLink from './TopBarLink.astro';
+import { Button, Input } from '@meteor/ui';
 
 const path = Astro.url.pathname;
 const nav = [
@@ -26,12 +26,23 @@ const activeHref = nav
   </a>
 
   <nav class="nav">
-    {nav.map((item) => <TopBarLink href={item.href} label={item.label} active={item.href === activeHref} />)}
+    {nav.map((item) => (
+      <Button
+        as="a"
+        href={item.href}
+        variant="ghost"
+        size="sm"
+        class="topbar-nav-link"
+        aria-current={item.href === activeHref ? 'page' : undefined}
+      >
+        {item.label}
+      </Button>
+    ))}
   </nav>
 
   <form class="search" method="get" action="/games">
     <Search class="search__icon" size={17} stroke-width={2} />
-    <input
+    <Input
       type="search"
       name="search"
       value={Astro.url.searchParams.get('search') ?? ''}
@@ -104,8 +115,27 @@ const activeHref = nav
     flex-shrink: 0;
   }
 
+  .topbar-nav-link {
+    height: var(--control-md);
+    padding: 0 var(--space-3);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+    color: var(--foreground);
+    white-space: nowrap;
+  }
+
+  .topbar-nav-link:hover {
+    background: var(--accent);
+    text-decoration: none;
+  }
+
+  .topbar-nav-link[aria-current='page'] {
+    background: var(--muted);
+    font-weight: var(--weight-bold);
+  }
+
   .search {
-    --search-max: 27.5rem;
     position: relative;
     flex: 1;
     max-width: var(--search-max);
@@ -230,6 +260,10 @@ const activeHref = nav
   }
 
   @media (max-width: --bp-md) {
+    .search {
+      display: none;
+    }
+
     .user__name,
     .balance {
       display: none;

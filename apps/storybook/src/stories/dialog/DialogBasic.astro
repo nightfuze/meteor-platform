@@ -1,0 +1,31 @@
+---
+import { Container, Stack } from "@meteor/ui";
+import { Button, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@meteor/ui";
+---
+
+<Container class="py-8">
+  <Stack gap={4}>
+    <header>
+      <p class="text-sm font-medium text-muted-foreground">Meteor UI · Dialog</p>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight">Dialog</h1>
+      <p class="mt-2 max-w-2xl text-sm text-muted-foreground">Основной пример компонента и его составных частей.</p>
+    </header>
+
+    <section class="rounded-lg border bg-card p-5">
+      <Dialog>
+        <DialogTrigger asChild><Button variant="outline">Сведения об игре</Button></DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Nebula Run</DialogTitle>
+            <DialogDescription>Приключение · 1,240 игроков в сети · До 12 игроков</DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+    </section>
+
+    <details class="rounded-lg border p-4">
+      <summary class="cursor-pointer text-sm font-semibold">Компоненты семейства</summary>
+      <p class="mt-3 text-sm text-muted-foreground">Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger</p>
+    </details>
+  </Stack>
+</Container>

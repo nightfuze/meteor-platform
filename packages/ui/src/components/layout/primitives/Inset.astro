@@ -1,0 +1,28 @@
+---
+import type { BaseLayoutProps, Spacing } from "../types";
+import { insetPaddingClass, pickClass } from "../types";
+
+interface Props extends BaseLayoutProps {
+  space?: Spacing;
+}
+
+const {
+  as = "div",
+  class: className,
+  space = 4,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    pickClass(insetPaddingClass, space),
+    className
+  ]}
+  data-slot="inset"
+>
+  <slot />
+</Tag>

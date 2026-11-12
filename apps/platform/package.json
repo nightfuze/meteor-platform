@@ -1,7 +1,7 @@
 {
   "name": "@meteor/platform",
   "type": "module",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "engines": {
     "node": ">=22.12.0"
   },
@@ -15,6 +15,7 @@
   "dependencies": {
     "@astrojs/node": "^11.1.8",
     "@lucide/astro": "^1.58.0",
+    "@meteor/ui": "workspace:*",
     "@meteor/db": "workspace:*",
     "@meteor/types": "workspace:*",
     "astro": "^7.4.0",
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@tailwindcss/vite": "^4.3.4",
     "typescript": "7.0.2"
   }
 }

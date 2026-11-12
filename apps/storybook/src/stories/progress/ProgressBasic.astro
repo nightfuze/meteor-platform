@@ -1,0 +1,23 @@
+---
+import { Container, Stack } from "@meteor/ui";
+import Progress from "@meteor/ui/components/ui/progress/Progress.astro";
+---
+
+<Container class="py-8">
+  <Stack gap={4}>
+    <header>
+      <p class="text-sm font-medium text-muted-foreground">Meteor UI · Progress</p>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight">Progress</h1>
+      <p class="mt-2 max-w-2xl text-sm text-muted-foreground">Основной пример компонента и его составных частей.</p>
+    </header>
+
+    <section class="rounded-lg border bg-card p-5">
+      <Progress value={68} label="Игровые ресурсы загружены" class="max-w-md" />
+    </section>
+
+    <details class="rounded-lg border p-4">
+      <summary class="cursor-pointer text-sm font-semibold">Компоненты семейства</summary>
+      <p class="mt-3 text-sm text-muted-foreground">Progress</p>
+    </details>
+  </Stack>
+</Container>

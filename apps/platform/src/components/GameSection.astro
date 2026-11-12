@@ -1,9 +1,6 @@
 ---
 import SectionHead from '@/components/SectionHead.astro';
-import Carousel from '@/components/ui/carousel/Carousel.astro';
-import CarouselContent from '@/components/ui/carousel/CarouselContent.astro';
-import CarouselPrevious from '@/components/ui/carousel/CarouselPrevious.astro';
-import CarouselNext from '@/components/ui/carousel/CarouselNext.astro';
+import { Carousel, CarouselContent, CarouselNext, CarouselPrevious } from '@meteor/ui';
 
 interface Props {
   title: string;
@@ -21,10 +18,8 @@ const { title, href, layout = 'grid' } = Astro.props;
       <CarouselContent class="rail">
         <slot />
       </CarouselContent>
-      <div class="rail-nav">
-        <CarouselPrevious />
-        <CarouselNext />
-      </div>
+      <CarouselPrevious aria-label="Предыдущая игра" class="!left-2 z-10" />
+      <CarouselNext aria-label="Следующая игра" class="!right-2 z-10" />
     </Carousel>
   ) : (
     <div class="grid">
@@ -35,27 +30,21 @@ const { title, href, layout = 'grid' } = Astro.props;
 
 <style>
   .section {
-    margin-top: var(--space-8);
+    margin-top: calc(var(--spacing) * 8);
   }
 
-  .rail-shell {
-    position: relative;
+  :global([data-slot='carousel-container'].rail) {
+    column-gap: var(--space-4);
+    margin-left: 0;
   }
 
-  .rail-nav {
-    pointer-events: none;
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 var(--space-1-5);
+  :global([data-slot='carousel-container'].rail > [data-slot='carousel-item']) {
+    padding-left: 0;
   }
 
   .grid {
-    --grid-tile-min: 9.125rem;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(var(--grid-tile-min), 1fr));
-    gap: var(--space-4-5) var(--space-3);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--grid-tile-min)), 1fr));
+    gap: calc(var(--spacing) * 4.5) calc(var(--spacing) * 3);
   }
 </style>

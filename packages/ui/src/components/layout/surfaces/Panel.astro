@@ -1,0 +1,40 @@
+---
+import type { SurfaceProps } from "../types";
+import { radiusClass, paddingClass, shadowClass, pickClass } from "../types";
+
+interface Props extends SurfaceProps {
+  variant?: "default" | "outlined" | "elevated";
+}
+
+const {
+  as = "div",
+  class: className,
+  padding = 4,
+  radius = "lg",
+  border = true,
+  shadow,
+  variant = "default",
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "flex",
+    "min-w-0",
+    "flex-col",
+    "bg-card",
+    "text-card-foreground",
+    { "border border-border": border || variant === "outlined", "shadow-md": variant === "elevated" },
+    pickClass(radiusClass, radius),
+    pickClass(paddingClass, padding),
+    pickClass(shadowClass, shadow),
+    className
+  ]}
+  data-slot="panel"
+>
+  <slot />
+</Tag>

@@ -1,0 +1,37 @@
+---
+import type { BaseLayoutProps, Spacing } from "../types";
+import { gapClass, pickClass } from "../types";
+
+interface Props extends BaseLayoutProps {
+  direction?: "horizontal" | "vertical";
+  snap?: boolean;
+  gap?: Spacing;
+}
+
+const {
+  as = "div",
+  class: className,
+  direction = "horizontal",
+  snap = false,
+  gap = 4,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "flex",
+    "min-w-0",
+    "overflow-auto",
+    { "flex-row": direction === "horizontal", "flex-col": direction === "vertical" },
+    pickClass(gapClass, gap),
+    { "snap-x snap-mandatory": snap && direction === "horizontal", "snap-y snap-mandatory": snap && direction === "vertical" },
+    className
+  ]}
+  data-slot="scroll-container"
+>
+  <slot />
+</Tag>

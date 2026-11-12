@@ -1,0 +1,38 @@
+---
+import type { FlexLayoutProps } from "../types";
+
+interface Props extends FlexLayoutProps {
+  scrollable?: boolean;
+}
+
+const {
+  as = "div",
+  class: className,
+  direction = "column",
+  gap,
+  align,
+  justify,
+  wrap,
+  scrollable,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "flex",
+    "h-screen",
+    "w-full",
+    "min-w-0",
+    "overflow-hidden",
+    { "flex-row": direction === "row", "flex-col": direction === "column" },
+    { "overflow-auto": scrollable },
+    className
+  ]}
+  data-slot="full-screen-layout"
+>
+  <slot />
+</Tag>

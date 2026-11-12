@@ -1,0 +1,40 @@
+---
+import type { BaseLayoutProps, LayoutAlign, LayoutJustify, Spacing } from "../types";
+import { alignClasses, justifyClasses, paddingClass, pickClass } from "../types";
+
+interface Props extends BaseLayoutProps {
+  align?: LayoutAlign;
+  justify?: LayoutJustify;
+  divider?: boolean;
+  padding?: Spacing;
+}
+
+const {
+  as = "div",
+  class: className,
+  align = "center",
+  justify = "between",
+  divider,
+  padding,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "flex",
+    "min-w-0",
+    "flex-row",
+    pickClass(alignClasses, align),
+    pickClass(justifyClasses, justify),
+    pickClass(paddingClass, padding),
+    { "border-b border-border": divider },
+    className
+  ]}
+  data-slot="panel-header"
+>
+  <slot />
+</Tag>

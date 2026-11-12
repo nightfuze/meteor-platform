@@ -1,0 +1,34 @@
+---
+import type { BaseLayoutProps, HeaderHeight } from "../types";
+import { headerHeightClass, pickClass } from "../types";
+
+interface Props extends BaseLayoutProps {
+  headerHeight?: HeaderHeight;
+  sticky?: boolean;
+}
+
+const {
+  as = "div",
+  class: className,
+  headerHeight = "md",
+  sticky = false,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "grid",
+    "min-h-screen",
+    "grid-rows-[auto_minmax(0,1fr)]",
+    pickClass(headerHeightClass, headerHeight),
+    { "[&>*:first-child]:sticky [&>*:first-child]:top-0": sticky },
+    className
+  ]}
+  data-slot="header-layout"
+>
+  <slot />
+</Tag>

@@ -1,0 +1,92 @@
+---
+import { Badge, Button, ThemeToggle } from "@meteor/ui";
+import { Container, Grid, Inline, Stack } from "@meteor/ui";
+
+const colors = [
+  { token: "background", className: "bg-background", foreground: "text-foreground" },
+  { token: "card", className: "bg-card", foreground: "text-card-foreground" },
+  { token: "primary", className: "bg-primary", foreground: "text-primary-foreground" },
+  { token: "secondary", className: "bg-secondary", foreground: "text-secondary-foreground" },
+  { token: "muted", className: "bg-muted", foreground: "text-muted-foreground" },
+  { token: "accent", className: "bg-accent", foreground: "text-accent-foreground" },
+  { token: "destructive", className: "bg-destructive", foreground: "text-destructive-foreground" },
+];
+
+const radii = ["sm", "md", "lg", "xl", "2xl", "pill"];
+const spaces = ["1", "2", "3", "4", "6", "8"];
+---
+
+<Container class="py-8">
+  <Stack gap={8}>
+    <header class="flex flex-wrap items-start justify-between gap-4">
+      <div class="max-w-2xl">
+        <p class="text-sm font-medium text-muted-foreground">Meteor UI · Foundations</p>
+        <h1 class="mt-2 text-3xl font-bold tracking-tight">Токены дизайн-системы</h1>
+        <p class="mt-3 text-muted-foreground">Семантические цвета, типографика, отступы и скругления платформы.</p>
+      </div>
+      <ThemeToggle ariaLabel="Toggle color theme" />
+    </header>
+
+    <section>
+      <Inline align="center" justify="between" class="mb-4">
+        <h2 class="text-xl font-semibold">Семантические цвета</h2>
+        <Badge variant="outline">Поддерживает темы</Badge>
+      </Inline>
+      <Grid columns={2} gap={3} class="sm:grid-cols-3 lg:grid-cols-4">
+        {colors.map(({ token, className, foreground }) => (
+          <div class={`flex min-h-24 flex-col justify-between rounded-lg border p-3 ${className} ${foreground}`}>
+            <span class="text-sm font-semibold">{token}</span>
+            <code class="text-xs opacity-80">var(--{token})</code>
+          </div>
+        ))}
+      </Grid>
+    </section>
+
+    <section>
+      <h2 class="mb-4 text-xl font-semibold">Шкала типографики</h2>
+      <Stack gap={3} class="rounded-xl border bg-card p-5">
+        <p class="text-3xl font-bold tracking-tight">Заголовок первого уровня <code class="text-xs font-normal text-muted-foreground">text-3xl</code></p>
+        <p class="text-2xl font-semibold">Заголовок страницы <code class="text-xs font-normal text-muted-foreground">text-2xl</code></p>
+        <p class="text-lg font-semibold">Заголовок раздела <code class="text-xs font-normal text-muted-foreground">text-lg</code></p>
+        <p class="text-base">Основной текст описаний и длинных материалов.</p>
+        <p class="text-sm text-muted-foreground">Вторичный текст · метаданные · подсказки</p>
+        <p class="font-mono text-xs text-muted-foreground">Моноширинный · ID лобби · сочетания клавиш</p>
+      </Stack>
+    </section>
+
+    <section>
+      <h2 class="mb-4 text-xl font-semibold">Шкала скруглений</h2>
+      <Grid columns={2} gap={3} class="sm:grid-cols-3 lg:grid-cols-6">
+        {radii.map((radius) => (
+          <div class="space-y-2">
+            <div class="h-16 border-2 border-primary bg-primary-soft" style={`border-radius: var(--radius-${radius})`}></div>
+            <code class="text-xs text-muted-foreground">radius-{radius}</code>
+          </div>
+        ))}
+      </Grid>
+    </section>
+
+    <section>
+      <h2 class="mb-4 text-xl font-semibold">Шкала отступов</h2>
+      <Stack gap={3} class="rounded-xl border bg-card p-5">
+        {spaces.map((space) => (
+          <Inline align="center" gap={3}>
+            <code class="w-12 shrink-0 text-xs text-muted-foreground">space-{space}</code>
+            <div class="h-3 rounded-full bg-primary" style={`width: var(--space-${space})`}></div>
+          </Inline>
+        ))}
+      </Stack>
+    </section>
+
+    <section class="rounded-xl border bg-muted/50 p-5">
+      <h2 class="text-lg font-semibold">Иерархия действий</h2>
+      <p class="mb-4 mt-1 text-sm text-muted-foreground">Используйте одно основное действие и менее заметные дополнительные.</p>
+      <Inline wrap gap={3}>
+        <Button>Опубликовать игру</Button>
+        <Button variant="secondary">Сохранить черновик</Button>
+        <Button variant="outline">Предпросмотр</Button>
+        <Button variant="ghost">Отмена</Button>
+      </Inline>
+    </section>
+  </Stack>
+</Container>

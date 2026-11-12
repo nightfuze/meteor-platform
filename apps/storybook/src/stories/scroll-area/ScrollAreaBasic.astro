@@ -1,0 +1,27 @@
+---
+import { Container, Stack } from "@meteor/ui";
+import { ScrollArea, Stack } from "@meteor/ui";
+---
+
+<Container class="py-8">
+  <Stack gap={4}>
+    <header>
+      <p class="text-sm font-medium text-muted-foreground">Meteor UI · ScrollArea</p>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight">ScrollArea</h1>
+      <p class="mt-2 max-w-2xl text-sm text-muted-foreground">Основной пример компонента и его составных частей.</p>
+    </header>
+
+    <section class="rounded-lg border bg-card p-5">
+      <ScrollArea class="h-48 max-w-md rounded-md border p-4">
+        <Stack gap={3}>
+          {Array.from({ length: 8 }, (_, index) => <p class="border-b pb-2 text-sm">Обновление лобби №{index + 1} · Игрок присоединился к сессии</p>)}
+        </Stack>
+      </ScrollArea>
+    </section>
+
+    <details class="rounded-lg border p-4">
+      <summary class="cursor-pointer text-sm font-semibold">Компоненты семейства</summary>
+      <p class="mt-3 text-sm text-muted-foreground">ScrollArea, ScrollAreaContent, ScrollAreaCorner, ScrollAreaThumb, ScrollAreaViewport, ScrollBar</p>
+    </details>
+  </Stack>
+</Container>

@@ -1,0 +1,91 @@
+---
+import {
+  AutoGrid,
+  CenteredLayout,
+  Container,
+  Grid,
+  Inline,
+  MasterDetailLayout,
+  Panel,
+  PanelBody,
+  PanelFooter,
+  PanelHeader,
+  ResponsiveGrid,
+  Section,
+  Split,
+  Stack,
+  Surface,
+  ThreeColumnLayout,
+  Wrap,
+} from "@meteor/ui";
+---
+
+<Container class="py-8">
+  <Stack gap={8}>
+    <header class="max-w-2xl">
+      <p class="text-sm font-medium text-muted-foreground">Meteor UI · Layouts</p>
+      <h1 class="mt-2 text-3xl font-bold tracking-tight">Паттерны макетов</h1>
+      <p class="mt-3 text-muted-foreground">Переиспользуемые структуры страниц на основе примитивов макета и поверхностей.</p>
+    </header>
+
+    <Section class="space-y-4">
+      <div><h2 class="text-xl font-semibold">AutoGrid</h2><p class="text-sm text-muted-foreground">Карточки подстраиваются под доступную ширину.</p></div>
+      <AutoGrid minItemWidth="sm" gap={4}>
+        {["Nebula Run", "Starlight Arena", "Wilds of Orion", "Лунная база «Ноль»"].map((name, index) => (
+          <Panel variant="outlined" padding={4}>
+            <PanelHeader class="font-semibold">{name}</PanelHeader>
+            <PanelBody class="text-sm text-muted-foreground">{1280 - index * 173} игроков в сети</PanelBody>
+            <PanelFooter class="text-xs text-muted-foreground">Обновлено только что</PanelFooter>
+          </Panel>
+        ))}
+      </AutoGrid>
+    </Section>
+
+    <Section class="space-y-4">
+      <div><h2 class="text-xl font-semibold">MasterDetailLayout</h2><p class="text-sm text-muted-foreground">Список рядом с панелью сведений о выбранном элементе.</p></div>
+      <MasterDetailLayout class="overflow-hidden rounded-xl border bg-card">
+        <Stack gap={1} class="border-b p-3 md:border-b-0 md:border-r">
+          <Surface border radius="md" padding={3} class="bg-primary-soft text-primary">Nebula Run</Surface>
+          <Surface radius="md" padding={3}>Starlight Arena</Surface>
+          <Surface radius="md" padding={3}>Wilds of Orion</Surface>
+        </Stack>
+        <Stack gap={3} class="p-5">
+          <h3 class="text-lg font-semibold">Nebula Run</h3>
+          <p class="text-sm text-muted-foreground">Совместная исследовательская игра на цепочке орбитальных станций.</p>
+          <Inline wrap gap={2}><span class="rounded-full bg-muted px-3 py-1 text-xs">Приключение</span><span class="rounded-full bg-muted px-3 py-1 text-xs">До 12 игроков</span></Inline>
+        </Stack>
+      </MasterDetailLayout>
+    </Section>
+
+    <Section class="space-y-4">
+      <div><h2 class="text-xl font-semibold">ResponsiveGrid</h2><p class="text-sm text-muted-foreground">Число колонок меняется на заданных контрольных точках.</p></div>
+      <ResponsiveGrid columns={{ sm: 2, lg: 3 }} gap={4}>
+        {["Обзор", "Активность", "Игроки"].map((title) => (
+          <Panel variant="elevated"><PanelHeader class="font-semibold">{title}</PanelHeader><PanelBody class="text-sm text-muted-foreground">Адаптивная карточка панели управления</PanelBody></Panel>
+        ))}
+      </ResponsiveGrid>
+    </Section>
+
+    <Section class="space-y-4">
+      <div><h2 class="text-xl font-semibold">Split и Wrap</h2><p class="text-sm text-muted-foreground">Гибкие группы для панелей инструментов и адаптивных действий.</p></div>
+      <Split gap={4} class="items-center rounded-xl border bg-card p-4">
+        <Stack gap={1}><strong>Настройки игры</strong><span class="text-sm text-muted-foreground">Изменения вступят в силу в следующей сессии.</span></Stack>
+        <Wrap gap={2} class="justify-end"><button class="rounded-md border px-3 py-2 text-sm">Сбросить</button><button class="rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground">Сохранить изменения</button></Wrap>
+      </Split>
+    </Section>
+
+    <Section class="space-y-4">
+      <div><h2 class="text-xl font-semibold">CenteredLayout и ThreeColumnLayout</h2><p class="text-sm text-muted-foreground">Типовые макеты страниц для сфокусированных экранов и панелей управления.</p></div>
+      <Grid columns={1} gap={4} class="lg:grid-cols-2">
+        <CenteredLayout minHeight={false} class="min-h-48 rounded-xl border bg-card p-5">
+          <Stack gap={2} class="items-center text-center"><strong>Библиотека пуста</strong><span class="text-sm text-muted-foreground">Здесь появятся сохранённые игры.</span><button class="rounded-md bg-primary px-3 py-2 text-sm text-primary-foreground">Перейти к играм</button></Stack>
+        </CenteredLayout>
+        <ThreeColumnLayout class="min-h-48 rounded-xl border bg-card p-3">
+          <Surface background="muted" radius="md" padding={3}>Фильтры</Surface>
+          <Surface radius="md" padding={3}>Каталог игр</Surface>
+          <Surface background="subtle" radius="md" padding={3}>Сведения</Surface>
+        </ThreeColumnLayout>
+      </Grid>
+    </Section>
+  </Stack>
+</Container>

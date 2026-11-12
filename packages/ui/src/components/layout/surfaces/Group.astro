@@ -1,0 +1,37 @@
+---
+import type { FlexLayoutProps } from "../types";
+import { gapClass, pickClass } from "../types";
+
+interface Props extends FlexLayoutProps {
+  divided?: boolean;
+}
+
+const {
+  as = "div",
+  class: className,
+  direction = "column",
+  gap = 3,
+  align,
+  justify,
+  wrap,
+  divided,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "flex",
+    "min-w-0",
+    { "flex-row": direction === "row", "flex-col": direction === "column" },
+    pickClass(gapClass, gap),
+    { "[&>*+*]:border-t [&>*+*]:border-border": divided && direction === "column", "[&>*+*]:border-l [&>*+*]:border-border": divided && direction === "row" },
+    className
+  ]}
+  data-slot="group"
+>
+  <slot />
+</Tag>

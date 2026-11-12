@@ -1,0 +1,36 @@
+---
+import type { BaseLayoutProps } from "../types";
+
+interface Props extends BaseLayoutProps {
+  orientation?: "vertical" | "horizontal" | "both";
+  scrollbar?: "auto" | "hidden";
+  maxHeight?: string;
+  maxWidth?: string;
+}
+
+const {
+  as = "div",
+  class: className,
+  orientation = "vertical",
+  scrollbar = "auto",
+  maxHeight,
+  maxWidth,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "min-h-0",
+    "min-w-0",
+    { "overflow-y-auto overflow-x-hidden": orientation === "vertical", "overflow-x-auto overflow-y-hidden": orientation === "horizontal", "overflow-auto": orientation === "both" },
+    { "scrollbar-none [&::-webkit-scrollbar]:hidden": scrollbar === "hidden" },
+    className
+  ]}
+  data-slot="scroll-area"
+>
+  <slot />
+</Tag>

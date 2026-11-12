@@ -1,0 +1,33 @@
+---
+import type { BaseLayoutProps, GridColumnCount, Spacing } from "../types";
+import { gapClass, pickClass } from "../types";
+
+interface Props extends BaseLayoutProps {
+  columns?: GridColumnCount;
+  gap?: Spacing;
+}
+
+const {
+  as = "div",
+  class: className,
+  columns = 3,
+  gap = 4,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "columns-1",
+    "md:columns-2",
+    "lg:columns-3",
+    pickClass(gapClass, gap),
+    className
+  ]}
+  data-slot="masonry"
+>
+  <slot />
+</Tag>

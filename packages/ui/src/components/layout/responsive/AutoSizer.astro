@@ -1,0 +1,33 @@
+---
+import type { BaseLayoutProps, Spacing } from "../types";
+import { minHeightClass, minWidthClass, pickClass } from "../types";
+
+interface Props extends BaseLayoutProps {
+  minHeight?: Spacing;
+  minWidth?: Spacing;
+}
+
+const {
+  as = "div",
+  class: className,
+  minHeight,
+  minWidth,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "min-h-0",
+    "min-w-0",
+    pickClass(minHeightClass, minHeight),
+    pickClass(minWidthClass, minWidth),
+    className
+  ]}
+  data-slot="auto-sizer"
+>
+  <slot />
+</Tag>

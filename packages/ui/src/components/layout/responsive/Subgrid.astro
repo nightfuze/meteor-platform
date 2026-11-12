@@ -1,0 +1,29 @@
+---
+import type { BaseLayoutProps } from "../types";
+
+interface Props extends BaseLayoutProps {
+  axis?: "columns" | "rows";
+}
+
+const {
+  as = "div",
+  class: className,
+  axis = "columns",
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "grid",
+    "grid-cols-subgrid",
+    { "grid-rows-subgrid": axis === "rows", "grid-cols-subgrid": axis === "columns" },
+    className
+  ]}
+  data-slot="subgrid"
+>
+  <slot />
+</Tag>

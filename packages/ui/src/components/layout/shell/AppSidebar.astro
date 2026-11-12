@@ -1,0 +1,39 @@
+---
+import type { BaseLayoutProps, SidebarWidth } from "../types";
+import { sidebarWidthClass, pickClass } from "../types";
+
+interface Props extends BaseLayoutProps {
+  width?: SidebarWidth;
+  collapsed?: boolean;
+  sticky?: boolean;
+}
+
+const {
+  as = "div",
+  class: className,
+  width = "md",
+  collapsed = false,
+  sticky = true,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "flex",
+    "min-h-0",
+    "flex-col",
+    "border-r",
+    "border-border",
+    "bg-background",
+    pickClass(sidebarWidthClass, width),
+    { "w-16": collapsed, "sticky top-0 h-screen": sticky },
+    className
+  ]}
+  data-slot="app-sidebar"
+>
+  <slot />
+</Tag>

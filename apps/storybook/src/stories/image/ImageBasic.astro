@@ -1,0 +1,24 @@
+---
+import { Container, Stack } from "@meteor/ui";
+import Image from "@meteor/ui/components/ui/image/Image.astro";
+import gameIcon from "../../../../platform/public/images/383310974/icon.png";
+---
+
+<Container class="py-8">
+  <Stack gap={4}>
+    <header>
+      <p class="text-sm font-medium text-muted-foreground">Meteor UI · Image</p>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight">Image</h1>
+      <p class="mt-2 max-w-2xl text-sm text-muted-foreground">Основной пример компонента и его составных частей.</p>
+    </header>
+
+    <section class="rounded-lg border bg-card p-5">
+      <Image src={gameIcon} alt="Иконка игры Nebula Run" class="max-w-48 rounded-lg" />
+    </section>
+
+    <details class="rounded-lg border p-4">
+      <summary class="cursor-pointer text-sm font-semibold">Компоненты семейства</summary>
+      <p class="mt-3 text-sm text-muted-foreground">Image</p>
+    </details>
+  </Stack>
+</Container>

@@ -1,0 +1,58 @@
+---
+import {
+  Button,
+  Container,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@meteor/ui";
+
+const variants = [
+  "default",
+  "primary",
+  "secondary",
+  "outline",
+  "ghost",
+  "info",
+  "success",
+  "warning",
+  "error",
+] as const;
+---
+
+<Container class="py-8">
+  <Stack gap={4}>
+    <header>
+      <h1 class="text-2xl font-bold tracking-tight">Варианты Button</h1>
+    </header>
+
+    <div class="overflow-hidden rounded-lg border">
+      <Table class="min-w-[680px]">
+        <TableHeader>
+          <TableRow class="bg-muted/40">
+            <TableHead class="px-4 py-3 text-xs">Вариант</TableHead>
+            <TableHead class="px-4 py-3 text-xs">Обычный</TableHead>
+            <TableHead class="px-4 py-3 text-xs">Отключён</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {variants.map((variant) => (
+            <TableRow>
+              <TableHead scope="row" class="px-4 py-3 text-sm text-foreground">{variant}</TableHead>
+              <TableCell class="px-4 py-3">
+                <Button variant={variant} type="button">Кнопка</Button>
+              </TableCell>
+              <TableCell class="px-4 py-3">
+                <Button variant={variant} disabled type="button">Кнопка</Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  </Stack>
+</Container>

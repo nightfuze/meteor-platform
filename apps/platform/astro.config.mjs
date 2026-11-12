@@ -1,10 +1,13 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import tailwindcss from '@tailwindcss/vite';
 import { defineConfig, envField } from 'astro/config';
 import node from '@astrojs/node';
 
-const tokensPath = fileURLToPath(new URL('./src/styles/tokens.css', import.meta.url));
-const tokensCss = readFileSync(tokensPath, 'utf8');
+const tokensCss = readFileSync(
+  fileURLToPath(new URL('./src/styles/tokens.css', import.meta.url)),
+  'utf8',
+);
 const breakpoints = Object.fromEntries(
   [...tokensCss.matchAll(/--bp-([a-z0-9-]+):\s*([^;]+);/g)].map(([, name, value]) => [
     name,
@@ -49,11 +52,12 @@ export default defineConfig({
     },
   },
   vite: {
+    plugins: [tailwindcss()],
     ssr: {
       noExternal:
         process.env.NODE_ENV === 'production'
-          ? ['zod', 'mongodb', '@meteor/db', '@meteor/types']
-          : ['zod', '@meteor/db', '@meteor/types'],
+          ? ['zod', 'mongodb', '@meteor/db', '@meteor/types', '@meteor/ui']
+          : ['zod', '@meteor/db', '@meteor/types', '@meteor/ui'],
       external: process.env.NODE_ENV === 'production' ? [] : ['mongodb'],
     },
     envDir: '../../',

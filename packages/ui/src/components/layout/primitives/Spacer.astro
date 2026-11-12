@@ -1,0 +1,32 @@
+---
+import type { BaseLayoutProps, Spacing } from "../types";
+import { spacerSizeClass, pickClass } from "../types";
+
+interface Props extends BaseLayoutProps {
+  axis?: "horizontal" | "vertical";
+  size?: Spacing;
+}
+
+const {
+  as = "div",
+  class: className,
+  axis = "horizontal",
+  size,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "shrink-0",
+    { "flex-1": size === undefined, "w-full": axis === "horizontal" && size === undefined, "h-full": axis === "vertical" && size === undefined, "h-0": axis === "horizontal" && size !== undefined, "w-0": axis === "vertical" && size !== undefined },
+    pickClass(spacerSizeClass, size),
+    className
+  ]}
+  data-slot="spacer"
+>
+  <slot />
+</Tag>

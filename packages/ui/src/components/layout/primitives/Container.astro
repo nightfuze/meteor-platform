@@ -1,0 +1,32 @@
+---
+import type { ContainerProps } from "../types";
+import { containerSizeClass, paddingClass, pickClass } from "../types";
+
+interface Props extends ContainerProps {
+}
+
+const {
+  as = "div",
+  class: className,
+  size = "lg",
+  centered = true,
+  padding = 4,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    pickClass(containerSizeClass, size),
+    pickClass(paddingClass, padding),
+    { "mx-auto": centered },
+    "w-full",
+    className
+  ]}
+  data-slot="container"
+>
+  <slot />
+</Tag>

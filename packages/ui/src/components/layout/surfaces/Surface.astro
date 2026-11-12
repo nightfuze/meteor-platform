@@ -1,0 +1,38 @@
+---
+import type { SurfaceProps } from "../types";
+import { radiusClass, paddingClass, shadowClass, pickClass } from "../types";
+
+interface Props extends SurfaceProps {
+  background?: "default" | "muted" | "subtle";
+  variant?: "default" | "outline" | "ghost";
+}
+
+const {
+  as = "div",
+  class: className,
+  padding = 4,
+  radius = "md",
+  border,
+  shadow,
+  background = "default",
+  variant = "default",
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    { "bg-background": background === "default", "bg-muted": background === "muted", "bg-muted/50": background === "subtle" },
+    { "border border-border": border || variant === "outline", "bg-transparent": variant === "ghost" },
+    pickClass(radiusClass, radius),
+    pickClass(paddingClass, padding),
+    pickClass(shadowClass, shadow),
+    className
+  ]}
+  data-slot="surface"
+>
+  <slot />
+</Tag>

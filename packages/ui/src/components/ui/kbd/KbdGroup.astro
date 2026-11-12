@@ -1,0 +1,13 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import { kbdGroup } from "./variants";
+
+type Props = HTMLAttributes<"kbd">;
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<kbd {...rest} data-sw-kbd-group class={kbdGroup({ class: className })} data-slot="kbd-group">
+  <slot />
+</kbd>

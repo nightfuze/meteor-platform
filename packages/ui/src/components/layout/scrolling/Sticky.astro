@@ -1,0 +1,35 @@
+---
+import type { BaseLayoutProps, Spacing } from "../types";
+import { stickyTopClass, stickyBottomClass, pickClass } from "../types";
+
+interface Props extends BaseLayoutProps {
+  top?: Spacing;
+  bottom?: Spacing;
+  zIndex?: number;
+}
+
+const {
+  as = "div",
+  class: className,
+  top = 0,
+  bottom,
+  zIndex = 10,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "sticky",
+    pickClass(stickyTopClass, top),
+    pickClass(stickyBottomClass, bottom),
+    { "z-10": zIndex === 10, "z-20": zIndex === 20, "z-30": zIndex === 30, "z-40": zIndex === 40, "z-50": zIndex === 50 },
+    className
+  ]}
+  data-slot="sticky"
+>
+  <slot />
+</Tag>

@@ -1,0 +1,32 @@
+---
+import type { BaseLayoutProps } from "../types";
+
+interface Props extends BaseLayoutProps {
+  items?: unknown[];
+  itemHeight?: number;
+  overscan?: number;
+}
+
+const {
+  as = "div",
+  class: className,
+  items = [],
+  itemHeight = 40,
+  overscan = 5,
+  ...attrs
+} = Astro.props as Props;
+
+const Tag = as;
+---
+
+<Tag
+  {...attrs}
+  class:list={[
+    "min-w-0",
+    "overflow-auto",
+    className
+  ]}
+  data-slot="virtual-list"
+>
+  <slot />
+</Tag>
