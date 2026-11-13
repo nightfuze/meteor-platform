@@ -62,6 +62,41 @@ export interface Favorite {
   createdAt: string;
 }
 
+export type NotificationType =
+  | "game_published"
+  | "game_updated"
+  | "game_deleted"
+  | "game_added_to_favorites"
+  | "user_registered";
+
+export type NotificationStatus = "new" | "read" | "archived";
+
+export interface NotificationEntity {
+  type: "game" | "user";
+  id: string;
+}
+
+export interface NotificationActor {
+  type: "user";
+  id: string | null;
+  name: string;
+}
+
+export interface Notification {
+  id: string;
+  type: NotificationType;
+  title: string;
+  message: string;
+  entity: NotificationEntity;
+  actor: NotificationActor;
+  recipientId: string | null;
+  status: NotificationStatus;
+  createdAt: string;
+  readAt: string | null;
+  metadata: { gameName: string };
+  schemaVersion: 1;
+}
+
 export interface Genre {
   id: string;
   name: string;

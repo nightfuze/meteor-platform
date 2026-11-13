@@ -1,6 +1,7 @@
 import { ObjectId, type Collection, type Filter } from "mongodb";
 import { getDatabase } from "../client.ts";
 import { handleMongoError } from "../errors.ts";
+import { notificationRepository } from "./notification.ts";
 import type { Game, CatalogFilter, CreateGamePayload } from "@meteor/types";
 
 interface GameDoc extends Omit<Game, "id" | "createdAt" | "updatedAt" | "creator"> {
@@ -137,7 +138,9 @@ export class GameRepository {
       };
 
       await col.insertOne(doc);
-      return this.map(doc);
+      const game = this.map(doc);
+      await notificationRepository.createGamePublished(game.id, game.name, game.creator.name);
+      return game;
     } catch (e) {
       handleMongoError(e);
     }

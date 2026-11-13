@@ -1,9 +1,9 @@
 ---
 import Search from '@lucide/astro/icons/search';
-import Bell from '@lucide/astro/icons/bell';
 import Settings from '@lucide/astro/icons/settings';
 import Coins from '@lucide/astro/icons/coins';
 import { Button, Input } from '@meteor/ui';
+import NotificationPopover from '@/components/NotificationPopover.astro';
 
 const path = Astro.url.pathname;
 const nav = [
@@ -56,10 +56,7 @@ const activeHref = nav
       <Coins size={16} stroke-width={2} />
       0
     </span>
-    <span class="icon-btn" title="Уведомления">
-      <Bell size={20} stroke-width={2} />
-      <span class="icon-btn__badge">3</span>
-    </span>
+    <NotificationPopover />
     <span class="icon-btn" title="Настройки">
       <Settings size={20} stroke-width={2} />
     </span>

@@ -1,6 +1,6 @@
 ---
 import type { FlexLayoutProps, Spacing } from "../types";
-import { gapClass, alignClasses, pickClass } from "../types";
+import { gapClass, alignClasses, justifyClasses, pickClass } from "../types";
 
 interface Props extends FlexLayoutProps {
   space?: Spacing;
@@ -29,6 +29,7 @@ const Tag = as;
     { "flex-row": direction === "row", "flex-col": direction === "column" },
     pickClass(gapClass, space),
     pickClass(alignClasses, align),
+    pickClass(justifyClasses, justify),
     { "flex-wrap": wrap },
     className
   ]}

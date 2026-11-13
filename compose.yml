@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: nightfuze/mispisit-lab1:0.0.4
+    image: nightfuze/mispisit-lab1:0.0.5
     restart: unless-stopped
     ports:
       - "${PORT:-8000}:8000"
@@ -21,16 +21,6 @@ services:
     depends_on:
       mongo:
         condition: service_healthy
-
-  storybook:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: storybook
-    image: nightfuze/mispisit-storybook:0.0.4
-    restart: unless-stopped
-    ports:
-      - "${STORYBOOK_PORT:-4321}:4321"
 
   mongo:
     image: mongo:9.0.4

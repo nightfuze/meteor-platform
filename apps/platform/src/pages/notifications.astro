@@ -1,0 +1,418 @@
+---
+import Bell from '@lucide/astro/icons/bell';
+import Check from '@lucide/astro/icons/check';
+import CheckCheck from '@lucide/astro/icons/check-check';
+import Gamepad2 from '@lucide/astro/icons/gamepad-2';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { Badge, Button, Container, Stack, Cluster, Surface } from '@meteor/ui';
+import { notifications, type NotificationFilter, type NotificationSort } from '@/api/notifications';
+import { actions } from 'astro:actions';
+
+const filter: NotificationFilter = Astro.url.searchParams.get('filter') === 'unread' ? 'unread' : 'all';
+const sort: NotificationSort = Astro.url.searchParams.get('sort') === 'oldest' ? 'oldest' : 'newest';
+let notificationList = { notifications: [], unreadCount: 0, totalCount: 0 } as Awaited<ReturnType<typeof notifications.getList>>;
+try {
+  const readResult = Astro.getActionResult(actions.markNotificationRead);
+  const readAllResult = Astro.getActionResult(actions.markAllNotificationsRead);
+  if (readResult?.data?.success || readAllResult?.data?.success) return Astro.redirect('/notifications');
+  notificationList = await notifications.getList(filter, sort);
+} catch (error) {
+  console.error('Не удалось загрузить уведомления:', error);
+}
+const { notifications: visibleNotifications, unreadCount, totalCount } = notificationList;
+const dateFormat = new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+---
+
+<BaseLayout title="Уведомления" description="Последние события и уведомления платформы Meteor">
+  <Container as="main" size="lg" padding={0} class="notification-page">
+    <Cluster as="header" gap={4} justify="between" class="page-heading">
+      <div class="page-heading__icon"><Bell size={22} stroke-width={1.8} /></div>
+      <div class="page-heading__text">
+        <h1>Уведомления</h1>
+        <p class="page-subtitle">Всё важное о новых играх и событиях платформы.</p>
+      </div>
+      <div class="unread-summary" aria-live="polite">
+        <Badge variant="primary" size="md" class="unread-summary__count">{unreadCount}</Badge>
+        <span>{unreadCount === 1 ? 'новое уведомление' : 'новых уведомлений'}</span>
+      </div>
+    </Cluster>
+
+    <Stack as="section" gap={3} class="notification-section" aria-label="Список уведомлений">
+      <Cluster class="list-toolbar" justify="between" gap={4}>
+        <Cluster class="filters" gap={1} aria-label="Фильтр уведомлений">
+          <a href="/notifications" class:list={['filter', { active: filter === 'all' }]} aria-current={filter === 'all' ? 'page' : undefined}>
+            Все <span>{totalCount}</span>
+          </a>
+          <a href="/notifications?filter=unread" class:list={['filter', { active: filter === 'unread' }]} aria-current={filter === 'unread' ? 'page' : undefined}>
+            Непрочитанные <span>{unreadCount}</span>
+          </a>
+        </Cluster>
+        <Cluster class="toolbar-actions" gap={3}>
+          {unreadCount > 0 && <form method="POST" action={actions.markAllNotificationsRead}>
+            <Button type="submit" variant="ghost" size="sm"><CheckCheck size={15} /> Прочитать все</Button>
+          </form>}
+          <form class="sort-form" method="GET" action="/notifications">
+            <input type="hidden" name="filter" value={filter} />
+            <label for="notification-sort">Сортировка</label>
+            <select id="notification-sort" name="sort" value={sort} onchange="this.form.requestSubmit()">
+              <option value="newest" selected={sort === 'newest'}>Сначала новые</option>
+              <option value="oldest" selected={sort === 'oldest'}>Сначала старые</option>
+            </select>
+          </form>
+        </Cluster>
+      </Cluster>
+
+      {visibleNotifications.length === 0 ? (
+        <Surface as="div" padding={12} radius="xl" variant="outline" class="empty-state">
+          <div class="empty-state__icon"><Bell size={24} stroke-width={1.7} /></div>
+          <h2>{filter === 'unread' ? 'Непрочитанных уведомлений нет' : 'Здесь пока тихо'}</h2>
+          <p>{filter === 'unread' ? 'Вы просмотрели все новые события.' : 'Когда появятся новости платформы, они будут собраны здесь.'}</p>
+          {filter === 'unread' && <Button variant="ghost" href="/notifications">Показать все уведомления</Button>}
+        </Surface>
+      ) : (
+        <Surface as="div" padding={0} radius="xl" variant="outline" class="notification-list">
+        <Stack gap={0}>
+          {visibleNotifications.map((notification) => (
+            <Cluster as="article" gap={4} align="start" class:list={['notification-card', 'p-5', { 'notification-card--unread': notification.status === 'new' }]}>
+              <div class="notification-card__marker">
+                {notification.gameCover
+                  ? <img src={notification.gameCover} alt={`Обложка игры ${notification.metadata.gameName}`} loading="lazy" />
+                  : <Gamepad2 size={19} stroke-width={1.8} aria-hidden="true" />}
+              </div>
+              <Stack gap={2} class="notification-card__body">
+                <Cluster class="notification-card__topline" gap={2}>
+                  <h2>{notification.title}</h2>
+                  {notification.status === 'new'
+                    ? <Badge variant="primary" size="sm" class="status status--new"><span></span> Новое</Badge>
+                    : <Badge variant="ghost" size="sm" class="status"><Check size={13} /> Прочитано</Badge>}
+                </Cluster>
+                <p class="notification-card__message">{notification.message}</p>
+                <Cluster class="notification-card__bottom" gap={4}>
+                  <time datetime={notification.createdAt}>{dateFormat.format(new Date(notification.createdAt))}</time>
+                  <a class="game-link" href={`/games/${notification.entity.id}`}>
+                    Игра: {notification.metadata.gameName}<span aria-hidden="true"> →</span>
+                  </a>
+                </Cluster>
+              </Stack>
+              {notification.status === 'new' && (
+                <form class="notification-card__action" method="POST" action={actions.markNotificationRead}>
+                  <input type="hidden" name="notificationId" value={notification.id} />
+                  <Button type="submit" variant="primary" size="sm">
+                    <Check size={15} stroke-width={2} />
+                    Прочитать
+                  </Button>
+                </form>
+              )}
+            </Cluster>
+          ))}
+        </Stack>
+        </Surface>
+      )}
+    </Stack>
+  </Container>
+</BaseLayout>
+
+<style>
+.notification-page {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: clamp(1rem, 3vw, 2.25rem) 0 3rem;
+}
+.page-heading {
+  padding: 0 0 1.75rem;
+  border-bottom: 1px solid var(--border);
+}
+.page-heading__icon,
+.empty-state__icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 3.25rem;
+  height: 3.25rem;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: var(--muted);
+  color: var(--foreground);
+}
+.page-heading__text {
+  flex: 1;
+}
+.notification-page h1 {
+  margin: 0;
+  font-size: clamp(1.65rem, 3vw, 2.1rem);
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+}
+.page-subtitle {
+  margin: 0.45rem 0 0;
+  color: var(--muted-foreground);
+  font-size: 0.925rem;
+}
+.unread-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--muted-foreground);
+  font-size: 0.8rem;
+}
+
+.notification-section {
+  margin-top: 1.5rem;
+}
+.list-toolbar {
+  margin-bottom: 0.25rem;
+}
+.filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 0.6rem;
+  color: var(--muted-foreground);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.filter:hover {
+  background: var(--muted);
+  text-decoration: none;
+}
+.filter.active {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+.filter span {
+  padding: 0.08rem 0.4rem;
+  border-radius: 999px;
+  background: var(--background);
+  font-size: 0.72rem;
+}
+.sort-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.sort-form label {
+  color: var(--muted-foreground);
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+.sort-form select {
+  min-height: 2.25rem;
+  padding: 0 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 0.55rem;
+  background: var(--background);
+  color: var(--foreground);
+  font: inherit;
+  font-size: 0.8rem;
+}
+.notification-list {
+  overflow: hidden;
+}
+.notification-card {
+  position: relative;
+  border-bottom: 1px solid var(--border);
+}
+.notification-card:last-child {
+  border-bottom: 0;
+}
+.notification-card--unread {
+  background: color-mix(in srgb, var(--primary) 4%, var(--card));
+}
+.notification-card__marker {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 2.5rem;
+  height: 2.5rem;
+  overflow: hidden;
+  border-radius: 0.8rem;
+  background: var(--muted);
+  color: var(--muted-foreground);
+}
+.notification-card__marker img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.notification-card--unread .notification-card__marker {
+  background: color-mix(in srgb, var(--primary) 12%, var(--background));
+  color: var(--primary);
+}
+.notification-card__body {
+  min-width: 0;
+  flex: 1;
+}
+.notification-card__topline {
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+.notification-card h2 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 650;
+}
+.status--new {
+  font-weight: 650;
+}
+.status--new span {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+.notification-card__message {
+  margin: 0.45rem 0 0.75rem;
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.notification-card__bottom {
+  flex-wrap: wrap;
+  gap: 0.45rem 1rem;
+}
+.notification-card time {
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+}
+.game-link {
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+.notification-card__action {
+  flex: 0 0 auto;
+}
+.empty-state {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+.empty-state__icon {
+  margin-bottom: 1rem;
+}
+.empty-state h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+.empty-state p {
+  max-width: 26rem;
+  margin: 0.5rem 0 1.25rem;
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 600px) {
+  .notification-page {
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+  }
+  .page-heading {
+    display: grid;
+    grid-template-columns: 2.75rem minmax(0, 1fr);
+    gap: 0.75rem;
+    padding-bottom: 1.25rem;
+  }
+  .page-heading__icon {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.8rem;
+  }
+  .page-heading__text {
+    min-width: 0;
+  }
+  .notification-page h1 {
+    font-size: 1.5rem;
+  }
+  .page-subtitle {
+    margin-top: 0.3rem;
+    font-size: 0.825rem;
+  }
+  .unread-summary {
+    grid-column: 2;
+    margin: 0;
+    font-size: 0.75rem;
+  }
+  .notification-section {
+    margin-top: 1rem;
+  }
+  .list-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .filters {
+    width: 100%;
+  }
+  .filter {
+    flex: 1;
+    justify-content: center;
+    padding: 0.55rem 0.4rem;
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+  .toolbar-actions {
+    width: 100%;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+  .toolbar-actions button {
+    font-size: 0.75rem;
+  }
+  .sort-form {
+    gap: 0.35rem;
+  }
+  .sort-form label {
+    display: none;
+  }
+  .sort-form select {
+    max-width: 10.5rem;
+    min-height: 2.5rem;
+    font-size: 0.78rem;
+  }
+  .notification-card {
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+  .notification-card__marker {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.7rem;
+  }
+  .notification-card__body {
+    flex-basis: calc(100% - 3.25rem);
+  }
+  .notification-card__topline {
+    gap: 0.45rem;
+  }
+  .notification-card h2 {
+    font-size: 0.9rem;
+  }
+  .notification-card__message {
+    font-size: 0.825rem;
+  }
+  .notification-card__bottom {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .notification-card__action {
+    position: static;
+    display: flex;
+    flex: 1 0 100%;
+    justify-content: stretch;
+    margin-top: 0.15rem;
+  }
+  .notification-card__action :global(button) {
+    width: 100%;
+    min-height: 2.75rem;
+    padding-inline: 0.75rem;
+    font-size: 0.85rem;
+  }
+  .empty-state {
+    padding: 2.5rem 1.25rem;
+  }
+}
+</style>
