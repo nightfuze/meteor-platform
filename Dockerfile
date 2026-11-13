@@ -3,7 +3,6 @@ WORKDIR /app
 
 COPY package.json bun.lock* ./
 COPY apps/platform/package.json ./apps/platform/
-COPY apps/storybook/package.json ./apps/storybook/
 COPY packages/types/package.json ./packages/types/
 COPY packages/db/package.json ./packages/db/
 COPY packages/ui/package.json ./packages/ui/
@@ -12,16 +11,8 @@ RUN bun install
 
 COPY packages/ ./packages/
 COPY apps/platform/ ./apps/platform/
-COPY apps/storybook/ ./apps/storybook/
 
-RUN bun run build:platform && bun run build:storybook
-
-FROM builder AS storybook
-WORKDIR /app/apps/storybook
-ENV HOST=0.0.0.0
-ENV PORT=4321
-EXPOSE 4321/tcp
-CMD ["bun", "run", "preview", "--", "--host", "0.0.0.0"]
+RUN bun run build:platform
 
 FROM oven/bun:1.4.4-alpine AS runner
 WORKDIR /app
