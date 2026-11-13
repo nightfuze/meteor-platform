@@ -5,3 +5,4 @@ export * from "./repositories/group.ts";
 export * from "./repositories/favorites.ts";
 export * from "./repositories/genre.ts";
 export * from "./repositories/user.ts";
+export * from "./repositories/notification.ts";

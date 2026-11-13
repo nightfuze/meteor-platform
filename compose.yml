@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: nightfuze/mispisit-lab1:0.0.4
+    image: nightfuze/mispisit-lab1:0.0.5
     restart: unless-stopped
     ports:
       - "${PORT:-8000}:8000"

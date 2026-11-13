@@ -1,6 +1,7 @@
 import { defineAction, ActionError } from "astro:actions";
 import { z } from "zod";
 import { favoriteRepository, OBJECT_ID_REGEX } from "@meteor/db";
+import { notifications } from "@/api/notifications";
 import { gameFormSchema, games } from "@/api/games";
 import { getCurrentUserId } from "@/api/auth";
 
@@ -27,6 +28,18 @@ export const server = {
     accept: "form",
     input: gameFormSchema,
     handler: async () => ({ valid: true }),
+  }),
+
+  markAllNotificationsRead: defineAction({
+    accept: "form",
+    input: z.object({}),
+    handler: async () => ({ success: true, updated: await notifications.markAllRead() }),
+  }),
+
+  markNotificationRead: defineAction({
+    accept: "form",
+    input: z.object({ notificationId: z.string().regex(OBJECT_ID_REGEX) }),
+    handler: async ({ notificationId }) => ({ success: await notifications.markRead(notificationId) }),
   }),
 
   toggleFavorite: defineAction({
