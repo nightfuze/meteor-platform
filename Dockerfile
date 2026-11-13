@@ -12,7 +12,7 @@ RUN bun install
 COPY packages/ ./packages/
 COPY apps/platform/ ./apps/platform/
 
-RUN bun run build:platform && bun run build:storybook
+RUN bun run build:platform
 
 FROM oven/bun:1.4.4-alpine AS runner
 WORKDIR /app
