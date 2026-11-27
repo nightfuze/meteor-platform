@@ -6,7 +6,7 @@ import Bell from '@lucide/astro/icons/bell';
 import ThumbsUp from '@lucide/astro/icons/thumbs-up';
 import ThumbsDown from '@lucide/astro/icons/thumbs-down';
 import BadgeCheck from '@lucide/astro/icons/badge-check';
-import { asset, formatNumber, getRating } from '@/api/games';
+import { asset, formatNumber, formatSession, getRating } from '@/api/games';
 import { getCurrentUserId } from '@/api/auth';
 import { favoriteRepository } from '@meteor/db';
 import { Badge, Button } from '@meteor/ui';
@@ -77,6 +77,7 @@ try {
     <div class="game-hero__badges">
       <Badge variant="success">Рейтинг {rating}%</Badge>
       <Badge variant="secondary">{game.genre}</Badge>
+      <Badge variant="secondary">{formatSession(game.sessionMinutes)}</Badge>
     </div>
 
     <div class="game-hero__actions">

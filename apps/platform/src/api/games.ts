@@ -12,6 +12,7 @@ export type GameFormInput = {
   description: string;
   genre: string;
   maxPlayers: string;
+  sessionMinutes: string;
   creatorName: string;
 };
 
@@ -20,16 +21,18 @@ export const EMPTY_PAYLOAD: GameFormInput = {
   description: '',
   genre: '',
   maxPlayers: '30',
+  sessionMinutes: '0',
   creatorName: '',
 };
 
-export const FIELD_KEYS = ['name', 'description', 'genre', 'maxPlayers', 'creatorName'] as const;
+export const FIELD_KEYS = ['name', 'description', 'genre', 'maxPlayers', 'sessionMinutes', 'creatorName'] as const;
 
 export const FIELD_LABELS: Record<(typeof FIELD_KEYS)[number], string> = {
   name: 'Название игры',
   description: 'Описание',
   genre: 'Жанр',
   maxPlayers: 'Игроков в сессии',
+  sessionMinutes: 'Длительность сессии',
   creatorName: 'Разработчик или студия',
 };
 
@@ -39,6 +42,7 @@ export function readForm(formData: FormData): GameFormInput {
     description: String(formData.get('description') ?? ''),
     genre: String(formData.get('genre') ?? ''),
     maxPlayers: String(formData.get('maxPlayers') ?? ''),
+    sessionMinutes: String(formData.get('sessionMinutes') ?? ''),
     creatorName: String(formData.get('creatorName') ?? ''),
   };
 }
@@ -54,6 +58,7 @@ export const GENRES = [
 
 export const asset = (path: string): string => (path.startsWith("/") ? path : `/${path}`);
 export const formatNumber = (value: number): string => new Intl.NumberFormat("ru-RU").format(value);
+export const formatSession = (minutes: number | undefined): string => `${minutes ?? 0} мин`;
 export const formatDate = (iso: string): string =>
   new Date(iso).toLocaleDateString("ru-RU", { day: "2-digit", month: "long", year: "numeric" });
 export const getRating = (id: string): number => 88 + (id.charCodeAt(id.length - 1) % 12);
@@ -91,6 +96,17 @@ export const gameFormSchema = z.object({
       .refine(
         (n) => !Number.isNaN(n) && Number.isInteger(n) && n >= 2 && n <= 50,
         'Укажите целое число от 2 до 50 игроков.'
+      )
+  ),
+  sessionMinutes: z.preprocess(
+    cleanString,
+    z
+      .string()
+      .min(1, 'Укажите длительность сессии.')
+      .transform(Number)
+      .refine(
+        (n) => !Number.isNaN(n) && Number.isInteger(n) && n >= 0 && n <= 1440,
+        'Укажите целое число от 0 до 1440 минут.'
       )
   ),
   creatorName: z.preprocess(

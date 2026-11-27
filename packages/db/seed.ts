@@ -59,6 +59,7 @@ try {
         favoritedCount: det.favoritedCount,
       },
       maxPlayers: det.maxPlayers,
+      sessionMinutes: 0,
       price: det.price,
       images: {
         icon: cat.images.icon,

@@ -106,6 +106,7 @@ export class GameRepository {
           favoritedCount: 1,
         },
         maxPlayers: data.maxPlayers,
+        sessionMinutes: data.sessionMinutes,
         price: null,
         images: {
           icon: "/images/default/icon.svg",

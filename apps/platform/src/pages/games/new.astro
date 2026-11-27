@@ -173,6 +173,23 @@ const hasErrors = Object.keys(errors).length > 0;
           <FieldDescription class="form-message--hint" id="maxPlayers-hint">От 2 до 50 игроков.</FieldDescription>
           <FieldError class="form-message--error" id="maxPlayers-error" messageSource="children">{errors.maxPlayers ?? ''}</FieldError>
         </Field>
+
+        <Field data-field="sessionMinutes">
+          <Label for="sessionMinutes">Длительность сессии, мин <span class="req">*</span></Label>
+          <Input
+            id="sessionMinutes"
+            name="sessionMinutes"
+            type="number"
+            step="1"
+            inputmode="numeric"
+            value={payload.sessionMinutes}
+            placeholder="0"
+            aria-invalid={Boolean(errors.sessionMinutes)}
+            aria-describedby="sessionMinutes-hint sessionMinutes-error"
+          />
+          <FieldDescription class="form-message--hint" id="sessionMinutes-hint">От 0 до 1440 минут. 0 — не указана.</FieldDescription>
+          <FieldError class="form-message--error" id="sessionMinutes-error" messageSource="children">{errors.sessionMinutes ?? ''}</FieldError>
+        </Field>
       </div>
 
       <Field data-field="creatorName">
@@ -207,6 +224,7 @@ const hasErrors = Object.keys(errors).length > 0;
     description: 'Описание',
     genre: 'Жанр',
     maxPlayers: 'Игроков в сессии',
+    sessionMinutes: 'Длительность сессии',
     creatorName: 'Разработчик или студия',
   };
 

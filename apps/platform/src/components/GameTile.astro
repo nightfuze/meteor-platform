@@ -1,7 +1,8 @@
 ---
 import ThumbsUp from '@lucide/astro/icons/thumbs-up';
 import Users from '@lucide/astro/icons/users';
-import { asset, formatNumber, getRating, type CatalogEntry } from '@/api/games';
+import Clock from '@lucide/astro/icons/clock';
+import { asset, formatNumber, formatSession, getRating, type CatalogEntry } from '@/api/games';
 
 interface Props {
   game: CatalogEntry;
@@ -22,6 +23,10 @@ const rating = getRating(game.id);
     <span class="meta__item">
       <ThumbsUp size={13} stroke-width={2} />
       {rating}%
+    </span>
+    <span class="meta__item">
+      <Clock size={13} stroke-width={2} />
+      {formatSession(game.sessionMinutes)}
     </span>
     {withPlayers && (
       <span class="meta__item">
