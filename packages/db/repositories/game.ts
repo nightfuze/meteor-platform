@@ -16,30 +16,9 @@ interface GameDoc extends Omit<Game, "id" | "createdAt" | "updatedAt" | "creator
 }
 
 export class GameRepository {
-  private indexesInitialized = false;
-
   private async getCol(): Promise<Collection<GameDoc>> {
     const db = await getDatabase();
-    const col = db.collection<GameDoc>("games");
-
-    if (!this.indexesInitialized) {
-      this.indexesInitialized = true;
-      this.initIndexes().catch((err) => {
-        console.error("Не удалось инициализировать индексы для games:", err);
-      });
-    }
-
-    return col;
-  }
-
-  async initIndexes(): Promise<void> {
-    const db = await getDatabase();
-    const col = db.collection<GameDoc>("games");
-    await col.createIndex({ name: 1 }, { unique: true });
-    await col.createIndex({ "metrics.playing": -1 });
-    await col.createIndex({ "metrics.visits": -1 });
-    await col.createIndex({ genre: 1, "metrics.playing": -1 });
-    await col.createIndex({ "creator.name": 1 });
+    return db.collection<GameDoc>("games");
   }
 
   private map(doc: GameDoc): Game {
@@ -127,6 +106,7 @@ export class GameRepository {
           favoritedCount: 1,
         },
         maxPlayers: data.maxPlayers,
+        sessionMinutes: data.sessionMinutes,
         price: null,
         images: {
           icon: "/images/default/icon.svg",

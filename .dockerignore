@@ -5,3 +5,4 @@ dist
 .astro
 .git
 .gitignore
+backup

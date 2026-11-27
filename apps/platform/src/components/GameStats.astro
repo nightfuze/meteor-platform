@@ -1,5 +1,5 @@
 ---
-import { formatDate, formatNumber } from '@/api/games';
+import { formatDate, formatNumber, formatSession } from '@/api/games';
 import type { Game } from '@meteor/types';
 
 interface Props {
@@ -25,6 +25,10 @@ const { game } = Astro.props;
   <div class="game-stats__item">
     <dt class="game-stats__term">Лимит игроков</dt>
     <dd class="game-stats__desc">{game.maxPlayers}</dd>
+  </div>
+  <div class="game-stats__item">
+    <dt class="game-stats__term">Длительность сессии</dt>
+    <dd class="game-stats__desc">{formatSession(game.sessionMinutes)}</dd>
   </div>
   <div class="game-stats__item">
     <dt class="game-stats__term">Цена</dt>

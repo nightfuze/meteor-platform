@@ -32,6 +32,7 @@ export interface Game {
   creator: Creator;
   metrics: GameMetrics;
   maxPlayers: number;
+  sessionMinutes: number;
   price: number | null;
   images: GameImages;
   createdAt: string;
@@ -116,6 +117,7 @@ export interface CreateGamePayload {
   description: string;
   genre: string;
   maxPlayers: number;
+  sessionMinutes: number;
   creatorName: string;
 }
 

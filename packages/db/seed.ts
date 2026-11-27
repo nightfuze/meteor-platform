@@ -2,8 +2,6 @@ import { ObjectId } from "mongodb";
 import { connectToDatabase, closeConnection, getDatabase } from "./client.ts";
 import { groupRepository } from "./repositories/group.ts";
 import { genreRepository } from "./repositories/genre.ts";
-import { gameRepository } from "./repositories/game.ts";
-import { favoriteRepository } from "./repositories/favorites.ts";
 
 import catalogData from "./data/games_catalog.json";
 import detailsData from "./data/games_details.json";
@@ -20,9 +18,6 @@ try {
   await db.collection("users").deleteMany({});
   await db.collection("favorites").deleteMany({});
   await db.collection("notifications").deleteMany({});
-
-  await gameRepository.initIndexes();
-  await favoriteRepository.initIndexes();
 
   const GENRES = ["Town and City", "RPG", "Adventure", "FPS", "Horror", "Strategy"];
   await genreRepository.seedGenres(GENRES);
@@ -64,6 +59,7 @@ try {
         favoritedCount: det.favoritedCount,
       },
       maxPlayers: det.maxPlayers,
+      sessionMinutes: 0,
       price: det.price,
       images: {
         icon: cat.images.icon,
@@ -97,8 +93,6 @@ try {
   });
   if (notifications.length) {
     await db.collection("notifications").insertMany(notifications);
-    await db.collection("notifications").createIndex({ createdAt: -1 });
-    await db.collection("notifications").createIndex({ status: 1, createdAt: -1 });
   }
 
   console.log(`Успешно импортировано ${catalogData.length} игры, группы и жанры, а также ${notifications.length} тестовых уведомлений.`);

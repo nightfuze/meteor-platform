@@ -1,9 +1,10 @@
 {
   "name": "@meteor/platform",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "packageManager": "bun@1.4.5",
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -15,10 +16,15 @@
     "dev:storybook": "bun --filter @meteor/storybook dev",
     "build:storybook": "bun --filter @meteor/storybook build",
     "preview:storybook": "bun --filter @meteor/storybook preview",
+    "db:migrate": "bunx --bun --no-install migrate-mongo up --file migrations/migrate-mongo-config.js --migrations-dir migrations/files",
+    "db:migrate:down": "bunx --bun --no-install migrate-mongo down --file migrations/migrate-mongo-config.js --migrations-dir migrations/files",
+    "db:migrate:status": "bunx --bun --no-install migrate-mongo status --file migrations/migrate-mongo-config.js --migrations-dir migrations/files",
     "db:seed": "bun --filter @meteor/db db:seed"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "migrate-mongo": "14.0.7",
+    "mongodb": "7.9.1"
   },
   "peerDependencies": {
     "typescript": "^7"

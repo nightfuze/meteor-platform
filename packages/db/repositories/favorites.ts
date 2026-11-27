@@ -11,27 +11,9 @@ interface FavoriteDoc {
 }
 
 export class FavoriteRepository {
-  private indexesInitialized = false;
-
   private async getCol(): Promise<Collection<FavoriteDoc>> {
     const db = await getDatabase();
-    const col = db.collection<FavoriteDoc>("favorites");
-
-    if (!this.indexesInitialized) {
-      this.indexesInitialized = true;
-      this.initIndexes().catch((err) => {
-        console.error("Не удалось инициализировать индексы для favorites:", err);
-      });
-    }
-
-    return col;
-  }
-
-  async initIndexes(): Promise<void> {
-    const db = await getDatabase();
-    const col = db.collection<FavoriteDoc>("favorites");
-    await col.createIndex({ userId: 1, gameId: 1 }, { unique: true });
-    await col.createIndex({ userId: 1, createdAt: -1 });
+    return db.collection<FavoriteDoc>("favorites");
   }
 
   async toggle(userIdStr: string, gameIdStr: string): Promise<boolean> {

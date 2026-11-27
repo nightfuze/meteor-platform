@@ -19,17 +19,8 @@ export interface NotificationDoc {
 }
 
 export class NotificationRepository {
-  private indexesInitialized = false;
   private async getCol(): Promise<Collection<NotificationDoc>> {
-    const col = (await getDatabase()).collection<NotificationDoc>("notifications");
-    if (!this.indexesInitialized) {
-      this.indexesInitialized = true;
-      await Promise.all([
-        col.createIndex({ createdAt: -1 }),
-        col.createIndex({ status: 1, createdAt: -1 }),
-      ]);
-    }
-    return col;
+    return (await getDatabase()).collection<NotificationDoc>("notifications");
   }
 
   async createGamePublished(gameId: string, gameName: string, actorName: string): Promise<void> {
