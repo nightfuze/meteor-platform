@@ -2,10 +2,7 @@ name: mispisit-vasilev
 
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: nightfuze/mispisit-lab1:0.0.5
+    image: nightfuze/mispisit-lab1:0.0.6
     restart: unless-stopped
     ports:
       - "${PORT:-8000}:8000"
@@ -39,6 +36,46 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+
+  backup:
+    image: mongo:9.0.4
+    profiles: ["tools"]
+    user: root
+    environment:
+      MONGO_ROOT_USER: ${MONGO_ROOT_USER:-root}
+      MONGO_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:-example}
+      DATABASE_NAME: ${DATABASE_NAME:-meteor-platform}
+    volumes:
+      - ./backup:/backup
+    command: >
+      sh -c 'mongodump --host mongo
+      -u "$$MONGO_ROOT_USER" -p "$$MONGO_ROOT_PASSWORD"
+      --authenticationDatabase admin
+      --db "$$DATABASE_NAME"
+      --archive=/backup/app.archive'
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+  restore:
+    image: mongo:9.0.4
+    profiles: ["tools"]
+    user: root
+    environment:
+      MONGO_ROOT_USER: ${MONGO_ROOT_USER:-root}
+      MONGO_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:-example}
+      DATABASE_NAME: ${DATABASE_NAME:-meteor-platform}
+    volumes:
+      - ./backup:/backup
+    command: >
+      sh -c 'mongorestore --host mongo
+      -u "$$MONGO_ROOT_USER" -p "$$MONGO_ROOT_PASSWORD"
+      --authenticationDatabase admin
+      --drop
+      --archive=/backup/app.archive'
+    depends_on:
+      mongo:
+        condition: service_healthy
 
 volumes:
   mongo_prod_data:

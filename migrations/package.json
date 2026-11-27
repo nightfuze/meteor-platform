@@ -1,0 +1,15 @@
+{
+  "name": "@meteor/migrations",
+  "version": "0.0.6",
+  "private": true,
+  "scripts": {
+    "up": "migrate-mongo up",
+    "down": "migrate-mongo down",
+    "status": "migrate-mongo status",
+    "create": "migrate-mongo create"
+  },
+  "dependencies": {
+    "migrate-mongo": "14.0.7",
+    "mongodb": "7.7.0"
+  }
+}

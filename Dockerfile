@@ -14,6 +14,17 @@ COPY apps/platform/ ./apps/platform/
 
 RUN bun run build:platform
 
+FROM --platform=$BUILDPLATFORM oven/bun:1.4.4-alpine AS migrator
+WORKDIR /app/migrator
+
+COPY migrations/package.json ./
+RUN bun install --production
+
+COPY migrations/migrate-mongo-config.js ./
+COPY migrations/docker-entrypoint.sh ./entrypoint.sh
+COPY migrations/files ./files
+RUN chmod +x ./entrypoint.sh
+
 FROM oven/bun:1.4.4-alpine AS runner
 WORKDIR /app
 
@@ -23,8 +34,9 @@ ENV PORT=8000
 
 COPY --from=builder /app/apps/platform/dist ./dist
 COPY --from=builder /app/apps/platform/package.json ./package.json
+COPY --from=migrator /app/migrator /app/migrator
 
 USER bun
 EXPOSE 8000/tcp
 
-CMD ["bun", "./dist/server/entry.mjs"]
+CMD ["sh", "/app/migrator/entrypoint.sh"]

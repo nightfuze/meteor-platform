@@ -10,12 +10,7 @@ import MenuIcon from '@lucide/astro/icons/menu';
 import { Button, Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@meteor/ui';
 import { notifications } from '@/api/notifications';
 
-let unreadCount = 0;
-try {
-  unreadCount = await notifications.getUnreadCount();
-} catch {
-  /* database may be unavailable */
-}
+const unreadCount = await notifications.getUnreadCount().catch(() => 0);
 
 const path = Astro.url.pathname;
 const active = (matches: string | string[]) => {

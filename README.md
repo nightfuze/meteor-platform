@@ -1,33 +1,27 @@
 # Платформа для многопользовательских браузерных игр
 
-Лабораторная работа №5 по дисциплине «Методы и средства проектирования информационных систем и технологий».  
+Лабораторная работа №6 по дисциплине «Методы и средства проектирования информационных систем и технологий».  
 Студент: Васильев Д.С., группа ИСТбд-41.
+
+Версия 0.0.6. Журнал версий в [CHANGELOG.md](./CHANGELOG.md).
 
 ## Требования
 
 - Docker с Docker Compose
 - Для локальной разработки и заполнения базы данных: Bun 1.4.4
 
-## Запуск через Docker Compose
+## Запуск
 
-Создайте `.env`:
-
-```bash
-cp .env.example .env
-```
-
-Соберите и запустите приложение:
+Приложение запускается из опубликованного образа `nightfuze/mispisit-lab1:0.0.6`.
+Файл `.env` нужно заполнить: значения по умолчанию заданы в `compose.yml`.
 
 ```bash
-docker compose up --build -d
+docker compose up -d
 ```
 
-Адреса по умолчанию:
+При старте контейнера приложения автоматически применяются миграции MongoDB.
 
-- Платформа: http://localhost:8000
-- Storybook: http://localhost:4321
-
-Порты на хосте можно переопределить в `.env` переменными `PORT`, `STORYBOOK_PORT` и `MONGO_PORT`.
+Платформа: http://localhost:8000
 
 Остановить сервисы:
 
@@ -35,11 +29,30 @@ docker compose up --build -d
 docker compose down
 ```
 
-Чтобы также удалить данные MongoDB:
+Удалить данные MongoDB:
 
 ```bash
 docker compose down -v
 ```
+
+## Резервная копия и восстановление
+
+Копия сохраняется в `backup/app.archive`.
+
+```bash
+docker compose run --rm backup
+```
+
+Восстановление в чистую базу:
+
+```bash
+docker compose down -v
+docker compose up -d mongo
+docker compose run --rm restore
+docker compose up -d
+```
+
+Сервисы `backup` и `restore` не запускаются при обычном `docker compose up -d`: у них профиль `tools`.
 
 ## Локальная разработка
 
@@ -70,11 +83,24 @@ bun build:storybook
 bun preview:storybook
 ```
 
-В Docker Compose Storybook собирается в образе и запускается командой preview.
+Storybook запускается локально.
 
 ## Заполнение базы тестовыми данными
 
-При запущенной MongoDB выполните из корня проекта:
+Сначала установите зависимости и примените миграции из корня проекта:
+
+```bash
+bun install
+bun run db:migrate
+```
+
+Проверить применённые миграции:
+
+```bash
+bun run db:migrate:status
+```
+
+Затем заполните базу:
 
 ```bash
 bun db:seed
