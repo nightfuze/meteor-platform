@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM oven/bun:1.4.4-alpine AS builder
+FROM --platform=$BUILDPLATFORM oven/bun:1.4.5-alpine AS builder
 WORKDIR /app
 
 COPY package.json bun.lock* ./
@@ -14,7 +14,7 @@ COPY apps/platform/ ./apps/platform/
 
 RUN bun run build:platform
 
-FROM --platform=$BUILDPLATFORM oven/bun:1.4.4-alpine AS migrator
+FROM --platform=$BUILDPLATFORM oven/bun:1.4.5-alpine AS migrator
 WORKDIR /app/migrator
 
 COPY migrations/package.json ./
@@ -25,7 +25,7 @@ COPY migrations/docker-entrypoint.sh ./entrypoint.sh
 COPY migrations/files ./files
 RUN chmod +x ./entrypoint.sh
 
-FROM oven/bun:1.4.4-alpine AS runner
+FROM oven/bun:1.4.5-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
